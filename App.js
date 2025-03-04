@@ -13,6 +13,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import CameraScreen from "./screens/CameraScreen";
 
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -47,7 +48,8 @@ export default function App() {
         <Stack.Screen name="ProfileEdition" component={ProfileEditionScreen} />
         <Stack.Screen name="ChatList" component={ChatListScreen} />
         <Stack.Screen name="ChatConversation" component={ChatConversationScreen} />
-
+        <Stack.Screen name="SignIn" component={SignInScreen} />
+        <Stack.Screen name="Camera" component={CameraScreen} />
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>

@@ -13,8 +13,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
+import { updatePosition } from "../reducers/user";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+
 
 export default function HomeScreen({ navigation }) {
+  const dispatch = useDispatch();
+
   const [currentPosition, setCurrentPosition] = useState({
     latitude: 0,
     longitude: 0,
@@ -30,9 +35,27 @@ export default function HomeScreen({ navigation }) {
           const latitude = location.coords.latitude;
           const longitude = location.coords.longitude;
           setCurrentPosition({ latitude: latitude, longitude: longitude });
+          dispatch(updatePosition(currentPosition));
         });
       }
     })();
+  }, []);
+
+// Bouton recentrer à faire
+  const handleCenter = () => {
+  };
+
+  // Bouton filtres à faire
+  const handleFilter = () => {
+  };
+
+// Afficher les restaurants à proximité
+  useEffect(() => {
+    fetch(``)
+      .then((response) => response.json())
+      .then((data) => {
+        data.result
+      });
   }, []);
 
   return (
@@ -43,13 +66,13 @@ export default function HomeScreen({ navigation }) {
             latitude: currentPosition.latitude,
             longitude: currentPosition.longitude,
           },
+          // Pitch: batiments en 3D
           pitch: 45,
           heading: 0,
-          // Only on iOS MapKit, in meters. The property is ignored by Google Maps.
+          // Altitude: Only on iOS MapKit, in meters. The property is ignored by Google Maps.
           altitude: 500,
-          // Only when using Google Maps.
+          // Zoom: Only when using Google Maps.
           zoom: 18,
-          markers: []
         }}
         style={styles.map}
       >
@@ -61,13 +84,19 @@ export default function HomeScreen({ navigation }) {
           />
         )}
       </MapView>
-      <View style={{ position: 'absolute', top: 40, width: '95%' }}>
-    <TextInput
-      style={styles.searchBar}
-      placeholder={'Rechercher un restaurant ou un buddy'}
-      placeholderTextColor={'#666'}
-    />
-  </View>
+      <View style={{ position: "absolute", top: 40, width: "95%" }}>
+        <TextInput
+          style={styles.searchBar}
+          placeholder={"Rechercher un restaurant ou un buddy"}
+          placeholderTextColor={"#666"}
+        />
+        <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleCenter()}>
+        <FontAwesome name="location-arrow" size={25} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleFilter()}>
+           <FontAwesome name="sliders" size={25} color="black" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -86,11 +115,16 @@ const styles = StyleSheet.create({
   searchBar: {
     borderRadius: 10,
     margin: 10,
-    color: '#000',
-    borderColor: '#666',
-    backgroundColor: '#FFF',
+    color: "#000",
+    borderColor: "#666",
+    backgroundColor: "#FFF",
     height: 45,
     paddingHorizontal: 10,
     fontSize: 15,
+  },
+  button: {
+    top: 450,
+    left: 330,
+    margin: 5,
   },
 });
