@@ -18,9 +18,10 @@ import CameraScreen from "./screens/CameraScreen";
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
+import reservations from './reducers/reservations';
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user , reservations},
 });
 
 const Stack = createNativeStackNavigator();
