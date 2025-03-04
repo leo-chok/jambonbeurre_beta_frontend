@@ -24,6 +24,7 @@ export default function HomeScreen({ navigation }) {
     latitude: 0,
     longitude: 0,
   });
+  const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -36,10 +37,39 @@ export default function HomeScreen({ navigation }) {
           const longitude = location.coords.longitude;
           setCurrentPosition({ latitude: latitude, longitude: longitude });
           dispatch(updatePosition(currentPosition));
+
+          fetch(
+            "http://10.1.2.153:3000/restaurants/near/500?longitude=" +
+              latitude +
+              "&latitude=" +
+              longitude
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("STOOOOOP");
+              //console.log(data.restaurantsList[0].location.coordinates);
+
+              if (data.restaurantsList) {
+                setMarkers(
+                  data.restaurantsList.map((info, i) => ({
+                    id: i,
+                    latitude: info.location.coordinates[1],
+                    longitude: info.location.coordinates[0],
+                    name: info.name,
+                  }))
+                );
+              }
+            });
         });
       }
     })();
   }, []);
+
+  //console.log(JSON.stringify(markers, null, 2));
+
+  console.log(currentPosition);
+
+
 
 // Bouton recentrer à faire
   const handleCenter = () => {
@@ -83,6 +113,18 @@ export default function HomeScreen({ navigation }) {
             pinColor="red"
           />
         )}
+        {markers.map((marker) => (
+          <Marker
+            key={marker.id}
+            coordinate={{
+              latitude: marker.longitude,
+              longitude: marker.latitude,
+            }}
+            title={marker.name}
+            pinColor="green"
+          />
+        ))}
+
       </MapView>
       <View style={{ position: "absolute", top: 40, width: "95%" }}>
         <TextInput
@@ -115,6 +157,9 @@ const styles = StyleSheet.create({
   searchBar: {
     borderRadius: 10,
     margin: 10,
+    color: "#000",
+    borderColor: "#666",
+    backgroundColor: "#FFF",
     color: "#000",
     borderColor: "#666",
     backgroundColor: "#FFF",
