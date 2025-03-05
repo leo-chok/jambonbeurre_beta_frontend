@@ -15,7 +15,7 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { updatePosition } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-
+import { BACKEND_ADRESS } from "../.config";
 
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -39,7 +39,8 @@ export default function HomeScreen({ navigation }) {
           dispatch(updatePosition(currentPosition));
 
           fetch(
-            "http://10.1.2.153:3000/restaurants/near/500?longitude=" +
+            BACKEND_ADRESS +
+              "/restaurants/near/500?longitude=" +
               latitude +
               "&latitude=" +
               longitude
@@ -69,22 +70,18 @@ export default function HomeScreen({ navigation }) {
 
   console.log(currentPosition);
 
-
-
-// Bouton recentrer à faire
-  const handleCenter = () => {
-  };
+  // Bouton recentrer à faire
+  const handleCenter = () => {};
 
   // Bouton filtres à faire
-  const handleFilter = () => {
-  };
+  const handleFilter = () => {};
 
-// Afficher les restaurants à proximité
+  // Afficher les restaurants à proximité
   useEffect(() => {
     fetch(``)
       .then((response) => response.json())
       .then((data) => {
-        data.result
+        data.result;
       });
   }, []);
 
@@ -124,7 +121,6 @@ export default function HomeScreen({ navigation }) {
             pinColor="green"
           />
         ))}
-
       </MapView>
       <View style={{ position: "absolute", top: 40, width: "95%" }}>
         <TextInput
@@ -132,11 +128,19 @@ export default function HomeScreen({ navigation }) {
           placeholder={"Rechercher un restaurant ou un buddy"}
           placeholderTextColor={"#666"}
         />
-        <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleCenter()}>
-        <FontAwesome name="location-arrow" size={25} color="black" />
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.8}
+          onPress={() => handleCenter()}
+        >
+          <FontAwesome name="location-arrow" size={25} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleFilter()}>
-           <FontAwesome name="sliders" size={25} color="black" />
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.8}
+          onPress={() => handleFilter()}
+        >
+          <FontAwesome name="sliders" size={25} color="black" />
         </TouchableOpacity>
       </View>
     </View>

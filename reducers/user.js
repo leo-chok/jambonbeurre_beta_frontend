@@ -79,8 +79,17 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+
+    updateProfile: (state, action) => {
+      state.value.infos = action.payload.infos;
+      state.value.description = action.payload.description;
+      state.value.preferences = action.payload.preferences
+    },
+
     updateLunchTime: (state, action) => {
-      state.value.preferences.lunchtime = action.payload;},
+      state.value.preferences.lunchtime = action.payload;
+    },
+    
     updatePosition: (state, action) => {
       state.value.curentPosition = action.payload;
     },
@@ -93,5 +102,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { updatePosition, addPhoto, removePhoto, updateLunchTime } = userSlice.actions;
+export const { updatePosition, addPhoto, removePhoto,updateLunchTime, updateProfile } = userSlice.actions;
 export default userSlice.reducer;
