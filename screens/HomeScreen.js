@@ -46,7 +46,7 @@ export default function HomeScreen({ navigation }) {
           )
             .then((response) => response.json())
             .then((data) => {
-              console.log("STOOOOOP");
+              // console.log("STOOOOOP");
               //console.log(data.restaurantsList[0].location.coordinates);
 
               if (data.restaurantsList) {
