@@ -15,10 +15,15 @@ export default function ProfileScreen({ navigation }) {
     navigation.navigate('ProfileEdition');
   };
 
+  const handleCamera = () => {
+    navigation.navigate('Camera');
+  };
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <Text style={styles.title}>Profile</Text>
               <Text style={styles.textButton} onPress={() => handleSubmit()}>Modifier</Text>
+              <Text style={styles.textButton} onPress={() => handleCamera()}>Camera</Text>
     </KeyboardAvoidingView>
   )
 }

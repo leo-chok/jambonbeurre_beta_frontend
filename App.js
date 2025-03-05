@@ -65,7 +65,7 @@ export default function App() {
               component={ChatConversationScreen}
             />
             <Stack.Screen name="SignIn" component={SignInScreen} />
-            <Stack.Screen name="Camera" component={CameraScreen} />{" "}
+            <Stack.Screen name="Camera" component={CameraScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
