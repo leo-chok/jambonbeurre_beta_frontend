@@ -34,13 +34,44 @@ export default function HomeScreen({ navigation }) {
 
   // Enregistrer les données du restaurant sélectionné dans un setter, qui sera utilisé en props du composants restaurant
   const [dataRestaurant, setDataRestaurant] = useState({});
+
   // Fonction pour ouvrir une modale au clic sur un marker de restaurant
   const showRestaurantModal = (name) => {
     fetch(`http://10.1.2.153:3000/restaurants/search/${name}`)
       .then((response) => response.json())
-      .then((data) => {
-        setDataRestaurant(data);
+      .then((info) => {
+        // console.log(JSON.stringify(info, null, 2)); // Sera utile pour les réservations
+        let openInfos = info.data.openingHours;
+        const isOpenNow = (openInfos) => {
+          const now = new Date();
+          const currentDay = now.getDay(); // Jour actuel (0 = Dimanche, 6 = Samedi)
+          const currentHour = now.getHours(); // Heure actuelle
+          const currentMinute = now.getMinutes(); // Minute actuelle
+
+          return openInfos.some(({ open, close }) => {
+            if (open.day === currentDay) {
+              const openTime = open.hour * 60 + open.minute; // Convertit en minutes totales
+              const closeTime = close.hour * 60 + close.minute;
+              const nowTime = currentHour * 60 + currentMinute;
+
+              return nowTime >= openTime && nowTime <= closeTime; // Vérifie si on est dans l'intervalle
+            }
+            return false;
+          });
+        };
+
+        setDataRestaurant({
+          name: info.data.name,
+          type: info.data.type,
+          priceLevel: info?.data?.priceLevel,
+          address: info.data.address,
+          rating: info.data.rating,
+          location: info.data.location.coordinates,
+          website: info?.data?.website,
+          openingHours: isOpenNow(openInfos),
+        });
       });
+
     // Rendre visible la modale qui est cachée par défaut
     setVisible(true);
   };
@@ -95,6 +126,8 @@ export default function HomeScreen({ navigation }) {
           longitude: currentPosition.longitude,
         },
         //on conserve le zoom initial
+        altitude: 500,
+        pitch: 45,
         zoom: 18,
       });
     }
@@ -120,8 +153,18 @@ export default function HomeScreen({ navigation }) {
           onDismiss={hideRestaurantModal}
           style={styles.modalStyle}
         >
-          // Affichage du composant Restaurant avec les données du restaurant sélectionné grâce aux props
-          <Restaurant data={dataRestaurant} />;
+          {/* // Affichage du composant Restaurant avec les données du restaurant
+          sélectionné grâce aux props */}
+          <Restaurant
+            name={dataRestaurant.name}
+            type={dataRestaurant.type}
+            address={dataRestaurant.address}
+            rating={dataRestaurant.rating}
+            website={dataRestaurant.website}
+            location={dataRestaurant.location}
+            priceLevel={dataRestaurant.priceLevel}
+            isopen={dataRestaurant.openingHours}
+          />
         </Modal>
       </Portal>
       <MapView
@@ -172,14 +215,14 @@ export default function HomeScreen({ navigation }) {
           activeOpacity={0.8}
           onPress={() => handleCenter()}
         >
-          <FontAwesome name="location-arrow" size={25} color="black" />
+          <FontAwesome name="location-arrow" size={40} color="black" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.8}
           onPress={() => handleFilter()}
         >
-          <FontAwesome name="sliders" size={25} color="black" />
+          <FontAwesome name="sliders" size={40} color="black" />
         </TouchableOpacity>
       </View>
     </View>
@@ -219,6 +262,6 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "white",
     padding: 20,
-    height: "70%",
+    height: "80%",
   },
 });
