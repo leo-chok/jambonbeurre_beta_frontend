@@ -1,13 +1,11 @@
+import * as React from "react";
 import { useState, useEffect } from "react";
 import {
   Image,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  Text,
-  TextInput,
   TouchableOpacity,
-  Modal,
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +13,8 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { updatePosition } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { TextInput, Modal, Button, Portal, Text } from "react-native-paper";
+import Restaurant from "../components/Restaurant";
 import { BACKEND_ADRESS } from "../.config";
 
 export default function HomeScreen({ navigation }) {
@@ -24,8 +24,60 @@ export default function HomeScreen({ navigation }) {
     latitude: 0,
     longitude: 0,
   });
+  const mapRef = React.useRef(null);
+
+  // Paramétrer les états pour les markers des restaurants
   const [markers, setMarkers] = useState([]);
 
+  // Paramétrer les états pour la modale (visible et invisible)
+  const [visible, setVisible] = React.useState(false);
+  const hideRestaurantModal = () => setVisible(false);
+
+  // Enregistrer les données du restaurant sélectionné dans un setter, qui sera utilisé en props du composants restaurant
+  const [dataRestaurant, setDataRestaurant] = useState({});
+
+  // Fonction pour ouvrir une modale au clic sur un marker de restaurant
+  const showRestaurantModal = (name) => {
+    fetch(`http://10.1.2.153:3000/restaurants/search/${name}`)
+      .then((response) => response.json())
+      .then((info) => {
+        // console.log(JSON.stringify(info, null, 2)); // Sera utile pour les réservations
+        let openInfos = info.data.openingHours;
+        const isOpenNow = (openInfos) => {
+          const now = new Date();
+          const currentDay = now.getDay(); // Jour actuel (0 = Dimanche, 6 = Samedi)
+          const currentHour = now.getHours(); // Heure actuelle
+          const currentMinute = now.getMinutes(); // Minute actuelle
+
+          return openInfos.some(({ open, close }) => {
+            if (open.day === currentDay) {
+              const openTime = open.hour * 60 + open.minute; // Convertit en minutes totales
+              const closeTime = close.hour * 60 + close.minute;
+              const nowTime = currentHour * 60 + currentMinute;
+
+              return nowTime >= openTime && nowTime <= closeTime; // Vérifie si on est dans l'intervalle
+            }
+            return false;
+          });
+        };
+
+        setDataRestaurant({
+          name: info.data.name,
+          type: info.data.type,
+          priceLevel: info?.data?.priceLevel,
+          address: info.data.address,
+          rating: info.data.rating,
+          location: info.data.location.coordinates,
+          website: info?.data?.website,
+          openingHours: isOpenNow(openInfos),
+        });
+      });
+
+    // Rendre visible la modale qui est cachée par défaut
+    setVisible(true);
+  };
+
+  // Récupérer la localisation, en temps réel, de l'utilisateur
   useEffect(() => {
     (async () => {
       const result = await Location.requestForegroundPermissionsAsync();
@@ -38,6 +90,7 @@ export default function HomeScreen({ navigation }) {
           setCurrentPosition({ latitude: latitude, longitude: longitude });
           dispatch(updatePosition(currentPosition));
 
+          // Récupérer les restaurants, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
           fetch(
             BACKEND_ADRESS +
               "/restaurants/near/500?longitude=" +
@@ -47,9 +100,7 @@ export default function HomeScreen({ navigation }) {
           )
             .then((response) => response.json())
             .then((data) => {
-              // console.log("STOOOOOP");
-              //console.log(data.restaurantsList[0].location.coordinates);
-
+              // Si des restaurants sont trouvés, les affichés individuellement sur la carte, sous forme de markers
               if (data.restaurantsList) {
                 setMarkers(
                   data.restaurantsList.map((info, i) => ({
@@ -66,12 +117,23 @@ export default function HomeScreen({ navigation }) {
     })();
   }, []);
 
-  //console.log(JSON.stringify(markers, null, 2));
-
-  console.log(currentPosition);
-
-  // Bouton recentrer à faire
-  const handleCenter = () => {};
+  // Bouton pour recentrer la map selon la position de l'utilisateur, en temps réel
+  const handleCenter = () => {
+    if (currentPosition.latitude !== 0 && currentPosition.longitude !== 0) {
+      //mapRef.current?.animateCamera({...}) assure que la carte est bien référencée avant d'exécuter l'animation
+      //La fonction handleCenter utilise animateCamera pour déplacer la vue de la carte vers la position actuelle de l'utilisateur avec un zoom adapté.
+      mapRef.current?.animateCamera({
+        center: {
+          latitude: currentPosition.latitude,
+          longitude: currentPosition.longitude,
+        },
+        //on conserve le zoom initial
+        altitude: 500,
+        pitch: 45,
+        zoom: 18,
+      });
+    }
+  };
 
   // Bouton filtres à faire
   const handleFilter = () => {};
@@ -87,7 +149,28 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Portal>
+        <Modal
+          visible={visible}
+          onDismiss={hideRestaurantModal}
+          style={styles.modalStyle}
+        >
+          {/* // Affichage du composant Restaurant avec les données du restaurant
+          sélectionné grâce aux props */}
+          <Restaurant
+            name={dataRestaurant.name}
+            type={dataRestaurant.type}
+            address={dataRestaurant.address}
+            rating={dataRestaurant.rating}
+            website={dataRestaurant.website}
+            location={dataRestaurant.location}
+            priceLevel={dataRestaurant.priceLevel}
+            isopen={dataRestaurant.openingHours}
+          />
+        </Modal>
+      </Portal>
       <MapView
+        ref={mapRef}
         camera={{
           center: {
             latitude: currentPosition.latitude,
@@ -110,15 +193,16 @@ export default function HomeScreen({ navigation }) {
             pinColor="red"
           />
         )}
-        {markers.map((marker) => (
+        {markers.map((data, i) => (
           <Marker
-            key={marker.id}
+            key={i}
             coordinate={{
-              latitude: marker.longitude,
-              longitude: marker.latitude,
+              latitude: data.longitude,
+              longitude: data.latitude,
             }}
-            title={marker.name}
+            title={data.name}
             pinColor="green"
+            onPress={() => showRestaurantModal(data.name)}
           />
         ))}
       </MapView>
@@ -133,14 +217,14 @@ export default function HomeScreen({ navigation }) {
           activeOpacity={0.8}
           onPress={() => handleCenter()}
         >
-          <FontAwesome name="location-arrow" size={25} color="black" />
+          <FontAwesome name="location-arrow" size={40} color="black" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.8}
           onPress={() => handleFilter()}
         >
-          <FontAwesome name="sliders" size={25} color="black" />
+          <FontAwesome name="sliders" size={40} color="black" />
         </TouchableOpacity>
       </View>
     </View>
@@ -175,5 +259,11 @@ const styles = StyleSheet.create({
     top: 450,
     left: 330,
     margin: 5,
+  },
+
+  modalStyle: {
+    backgroundColor: "white",
+    padding: 20,
+    height: "80%",
   },
 });
