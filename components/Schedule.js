@@ -17,7 +17,6 @@ export default function Schedule(props) {
     }))
   );
 
-  const saveSchedule = () => {
     
 
   const handleCheckboxPress = (index) => {
