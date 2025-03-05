@@ -85,10 +85,10 @@ export const userSlice = createSlice({
       state.value.curentPosition = action.payload;
     },
     addPhoto: (state, action) => {
-      state.value.photo.push(action.payload);
+      state.value.infos.avatar = action.payload;
     },
     removePhoto: (state, action) => {
-      state.value.photo = state.value.photo.filter((data) => data !== action.payload);
+      state.value.infos.avatar = state.value.infos.avatar.filter((data) => data !== action.payload);
     },
   },
 });

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { CameraView, Camera } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Image,
@@ -12,17 +12,18 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { addPhoto, removePhoto } from "../reducers/user";
 
 export default function CameraScreen({ navigation }) {
+  const token = "AMjuKpw88GsQKbg59HCfnOuFNpsF7cTV";
   const dispatch = useDispatch();
   const cameraRef = useRef(null);
   const isFocused = useIsFocused();
   const [hasPermission, setHasPermission] = useState(false);
-  const [facing, setFacing] = useState("back");
+  const [facing, setFacing] = useState("front");
   const [flashStatus, setFlashStatus] = useState("off");
 
   useEffect(() => {
@@ -36,12 +37,6 @@ export default function CameraScreen({ navigation }) {
     return <View />;
   }
 
-  const takePicture = async () => {
-    const photo = await cameraRef.current?.takePictureAsync({ quality: 0.3 });
-    photo && console.log(photo);
-    console.log(photo.uri);
-  };
-
   const toggleCameraFacing = () => {
     setFacing((current) => (current === "back" ? "front" : "back"));
   };
@@ -50,33 +45,41 @@ export default function CameraScreen({ navigation }) {
     setFlashStatus((current) => (current === "off" ? "on" : "off"));
   };
 
-  // enregistrer la photo
-//   const formData = new FormData();
-//   formData.append("photoFromFront", {
-//     uri: photo?.uri,
-//     name: "photo.jpg",
-//     type: "image/jpeg",
-//   });
-// console.log('test')
-//   fetch("http://10.1.3.69:3000/upload", {
-//     method: "POST",
-//     body: formData,
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       photo && dispatch(addPhoto(photo.uri));
-//       console.log(data)
-//     })
-//     .catch(e => console.log(e))
-// };
+  const takePicture = async () => {
+    const photo = await cameraRef.current?.takePictureAsync({ quality: 0.3 });
+
+    // enregistrer la photo sur cloudinary + sur BDD
+    const formData = new FormData();
+    formData.append("photoFromFront", {
+      uri: photo?.uri,
+      name: "photo.jpg",
+      type: "image/jpeg",
+    });
+    fetch("http://10.1.3.69:3000/avatar/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        dispatch(addPhoto(data.url));
+        
+        const dataUpdate = { token: token, avatar: data.url };
+        
+        fetch("http://10.1.3.69:3000/users/update", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dataUpdate),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        });
+      })
+      .catch((e) => console.log(e));
+    };
 
   return (
-    <CameraView
-      style={styles.camera}
-      ref={(ref) => (cameraRef.current = ref)}
-      facing={facing}
-      flash={flashStatus}
-    >
+    <View style={styles.container}>
       <SafeAreaView style={styles.settingContainer}>
         <TouchableOpacity
           style={styles.settingButton}
@@ -85,30 +88,51 @@ export default function CameraScreen({ navigation }) {
           <FontAwesome
             name="flash"
             size={25}
-            color={flashStatus === "on" ? "#e8be4b" : "white"}
+            color={flashStatus === "on" ? "#e8be4b" : "black"}
           />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.settingButton}
           onPress={toggleCameraFacing}
         >
-          <FontAwesome name="rotate-right" size={25} color="white" />
+          <FontAwesome name="rotate-right" size={25} color="black" />
         </TouchableOpacity>
       </SafeAreaView>
+      <View style={styles.preview}>
+        <CameraView
+          style={styles.camera}
+          ref={(ref) => (cameraRef.current = ref)}
+          facing={facing}
+          flash={flashStatus}
+        ></CameraView>
+      </View>
       <View style={styles.snapContainer}>
         <TouchableOpacity style={styles.snapButton} onPress={takePicture}>
-          <FontAwesome name="circle-thin" size={95} color="white" />
+          <FontAwesome name="circle-thin" size={95} color="black" />
         </TouchableOpacity>
       </View>
-    </CameraView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  camera: {
+  container: {
+    backgroundColor: "pink",
     flex: 1,
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  preview: {
+    height: 300,
+    width: 300,
+    borderRadius: 150,
+    overflow: "hidden",
+  },
+  camera: {
+    flex: 1,
+    height: 300,
+    width: 300,
   },
   settingContainer: {
     flexDirection: "row",
