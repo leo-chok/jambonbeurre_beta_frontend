@@ -17,7 +17,17 @@ export default function Schedule(props) {
     }))
   );
 
+  useEffect(() => {
+    //Deep copy the schedule array
+    const deepCopySchedule = schedule.map((day) => ({
+      ...day,
+      start: day.start,
+      stop: day.stop,
+      worked: day.worked,
+    }));
     
+    dispatch(updateLunchTime(deepCopySchedule));
+  }, [schedule]);
 
   const handleCheckboxPress = (index) => {
     setSchedule((prevSchedule) => {
@@ -39,7 +49,6 @@ export default function Schedule(props) {
     { length: 24 },
     (_, i) => i.toString().padStart(2, "0") + ":00"
   );
-
 
   return (
     <ScrollView style={styles.container}>

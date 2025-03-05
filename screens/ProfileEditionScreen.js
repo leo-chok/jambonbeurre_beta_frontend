@@ -16,14 +16,23 @@ import {
   Text,
   Divider,
   Button,
+  Switch,
   Chip,
 } from "react-native-paper";
 
 import Schedule from "../components/Schedule";
 import foodType from "../assets/data/foodTypes";
 import hobbiesList from "../assets/data/hobbiesList";
+import languagesList from "../assets/data/languagesList";
+import { BACKEND_ADRESS } from "../.config";
+
+import { updateProfile } from "../reducers/user";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ProfileEditionScreen({ navigation }) {
+  const dispatch = useDispatch();
+  const token = "KiXwiK-Q1n7JJVyzcbeGKUJ_fJ3CJltk";
+
   const [userData, setUserData] = useState({});
   const [username, setUsername] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -32,23 +41,44 @@ export default function ProfileEditionScreen({ navigation }) {
   const [bio, setBio] = useState("");
   const [favFood, setFavFood] = useState([]);
   const [hobbies, setHobbies] = useState([]);
-  const [lunchTime, setLunchTime] = useState([]);
+  const [languages, setLanguages] = useState([]);
+  const [vacancy, setVacancy] = useState(false);
 
+  // On récupère le lunchtime depuis le reducer car il est modifié dans le composant Schedule
+  const lastLunchTime = useSelector(
+    (state) => state.user.value.preferences.lunchtime
+  );
+
+  const onToggleSwitch = () => setVacancy(!vacancy);
+  console.log(vacancy);
+
+  // On vient récupérer les informations de l'utilisateur pour les afficher dans les champs
   useEffect(() => {
     // fetch user data
-    fetch("http://10.230.187.71:3000/users/t1HwP0cTMuMK3IGu4DRXzQqf4XToT_EO")
+    fetch(BACKEND_ADRESS + "/users/" + token)
       .then((response) => response.json())
       .then((data) => {
+        console.log("User found");
         setUserData(data.userInfos[0]);
-        setUsername(userData.infos.username);
-        setFirstname(userData.infos.firstname);
-        setLastname(userData.infos.lastname);
-        setWork(userData.description.work);
-        setBio(userData.description.bio);
-        setFavFood(userData.preferences.favFood);
       });
   }, []);
 
+  // On vient actualiser tous les setters des que UserData est modifié
+  useEffect(() => {
+    if (Object.keys(userData).length > 0) {
+      setUsername(userData.infos.username);
+      setFirstname(userData.infos.firstname);
+      setLastname(userData.infos.lastname);
+      setWork(userData.description.work);
+      setBio(userData.description.bio);
+      setFavFood(userData.preferences.favFood);
+      setHobbies(userData.preferences.hobbies);
+      setLanguages(userData.preferences.languages);
+      setVacancy(userData.preferences.holidays);
+    }
+  }, [userData]);
+
+  // On vient ajouter ou retirer un type de cuisine dans le tableau favFood
   function addTypeFood(type) {
     if (favFood.includes(type)) {
       setFavFood(favFood.filter((e) => e !== type));
@@ -56,7 +86,7 @@ export default function ProfileEditionScreen({ navigation }) {
       setFavFood([...favFood, type]);
     }
   }
-
+  // On vient ajouter ou retirer un hobby dans le tableau hobbies
   function addHobbies(type) {
     if (hobbies.includes(type)) {
       setHobbies(hobbies.filter((e) => e !== type));
@@ -64,12 +94,20 @@ export default function ProfileEditionScreen({ navigation }) {
       setHobbies([...hobbies, type]);
     }
   }
+  // On vient ajouter ou retirer une langue dans le tableau languages
+  function addLanguages(type) {
+    if (languages.includes(type)) {
+      setLanguages(languages.filter((e) => e !== type));
+    } else {
+      setLanguages([...languages, type]);
+    }
+  }
 
+  // On vient envoyer les données modifiées au reducer User & au backend (BDD)
   function handleSubmit() {
 
-   
-
-    const data = {
+    
+    const dataReducer = {
       infos: {
         username: username,
         firstname: firstname,
@@ -80,10 +118,46 @@ export default function ProfileEditionScreen({ navigation }) {
         bio: bio,
       },
       preferences: {
+        holidays: vacancy,
+        lunchtime: lastLunchTime,
         favFood: favFood,
         hobbies: hobbies,
+        languages: languages,
       },
     };
+
+    const dataBDD = {
+      token: token,
+      username: username,
+      firstname: firstname,
+      lastname: lastname,
+      work: work,
+      bio: bio,
+      holidays: vacancy,
+      lunchtime: lastLunchTime,
+      favFood: favFood,
+      hobbies: hobbies,
+      languages: languages,
+    };
+
+    // On envoie les données modifiées au reducer User
+    dispatch(updateProfile(dataReducer));
+    console.log("User updated in reducer");
+
+    // On envoie les données modifiées au backend
+
+    fetch(BACKEND_ADRESS + "/users/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataBDD),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("User updated in BDD")
+        console.log(data);
+      });
   }
 
   return (
@@ -91,7 +165,7 @@ export default function ProfileEditionScreen({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Text style={styles.title}>Profile Editor</Text>
+      <Text style={styles.title}>Modifiez vos informations</Text>
       <ScrollView style={styles.inputs_container}>
         <Text style={styles.title}>Comment vous appelez vous ?</Text>
         <TextInput
@@ -127,16 +201,18 @@ export default function ProfileEditionScreen({ navigation }) {
           onChangeText={(bio) => setBio(bio)}
           style={styles.inputField}
         />
-
-
-
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-        <Text style={styles.title}>Vous déjeunez à quelle heure ?</Text>
-        <List.Accordion title="Créneaux Déjeuner" style={styles.inputList}>
-          <Schedule data={userData?.preferences?.lunchtime} />
-        </List.Accordion>
 
-
+        <Text style={styles.title}>Indiquez vos disponibilités.</Text>
+        <View style={styles.vacancesContainer}>
+          <Text>Mode vacances</Text>
+          <Switch value={vacancy} onValueChange={onToggleSwitch} />
+        </View>
+        {!vacancy && (
+          <List.Accordion title="Créneaux Déjeuner" style={styles.inputList}>
+            <Schedule data={userData?.preferences?.lunchtime} />
+          </List.Accordion>
+        )}
 
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
         <Text style={styles.title}>Type de cuisine préférée</Text>
@@ -144,15 +220,24 @@ export default function ProfileEditionScreen({ navigation }) {
           {foodType.map((type) => (
             <Button
               key={type}
-              // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
               mode={(favFood.includes(type) && "contained") || "outlined"}
               onPress={() => addTypeFood(type)}
-              style={styles.typeFoodButton}
+              style={styles.badgeButton}
             >
-              {type}
+              <Text
+                style={[
+                  styles.badgeButtonActive,
+                  favFood.includes(type)
+                    ? styles.badgeButtonActive
+                    : styles.badgeButtonDisable,
+                ]}
+              >
+                {type}
+              </Text>
             </Button>
           ))}
         </View>
+
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
         <Text style={styles.title}>Vos centre d'intérêts</Text>
         <View style={styles.hobbiesContainer}>
@@ -162,16 +247,50 @@ export default function ProfileEditionScreen({ navigation }) {
               // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
               mode={(hobbies.includes(type) && "contained") || "outlined"}
               onPress={() => addHobbies(type)}
-              style={styles.hobbiesButton}
+              style={styles.badgeButton}
             >
-              {type}
+              <Text
+                style={[
+                  styles.badgeButtonActive,
+                  hobbies.includes(type)
+                    ? styles.badgeButtonActive
+                    : styles.badgeButtonDisable,
+                ]}
+              >
+                {type}
+              </Text>
+            </Button>
+          ))}
+        </View>
+
+        <Divider style={{ marginTop: 20, marginBottom: 20 }} />
+        <Text style={styles.title}>Do you speak English ?</Text>
+        <View style={styles.hobbiesContainer}>
+          {languagesList.map((type) => (
+            <Button
+              key={type}
+              // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
+              mode={(languages.includes(type) && "contained") || "outlined"}
+              onPress={() => addLanguages(type)}
+              style={styles.badgeButton}
+            >
+              <Text
+                style={[
+                  styles.badgeButtonActive,
+                  languages.includes(type)
+                    ? styles.badgeButtonActive
+                    : styles.badgeButtonDisable,
+                ]}
+              >
+                {type}
+              </Text>
             </Button>
           ))}
         </View>
       </ScrollView>
       <View style={styles.submitContainer}>
         <Button mode="contained" onPress={() => handleSubmit()}>
-          Submit
+          <Text style={{ color: "white" }}>Submit</Text>
         </Button>
       </View>
     </KeyboardAvoidingView>
@@ -201,6 +320,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: "100%",
   },
+  vacancesContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   inputList: {
     marginTop: 10,
     width: "100%",
@@ -224,9 +349,6 @@ const styles = StyleSheet.create({
     gap: 10,
     marginTop: 10,
   },
-  typeFoodButton: {
-    width: "40%",
-  },
   hobbiesContainer: {
     width: "100%",
     display: "flex",
@@ -237,9 +359,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 50,
   },
-  hobbiesButton: {
-    width: "40%",
-  },
   submitContainer: {
     width: "100%",
     display: "flex",
@@ -248,5 +367,14 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 20,
     boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)",
+  },
+  badgeButton: {
+    width: "40%",
+  },
+  badgeButtonActive: {
+    color: "white",
+  },
+  badgeButtonDisable: {
+    color: "black",
   },
 });
