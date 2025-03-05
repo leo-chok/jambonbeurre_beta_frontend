@@ -3,6 +3,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -18,20 +19,18 @@ import {
 
 export default function AgendaScreen({ navigation }) {
   const reservations = useSelector(
-    (state) => state.reservations.value.reservations);
+    (state) => state.reservations.value.reservations
+  );
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [token, setToken] = useState("");
   const [date, setDate] = useState("");
   const [conversation, setConversation] = useState("");
   const [reservation, setReservation] = useState("");
-  // console.log("Nom:", name);
-  // console.log("Token:", token);
-  // console.log("Date:", date);
-  // console.log("Conversation:", conversation);
 
+  const user = { _id: "67c8328fd39cf888fb710f59" };
   useEffect(() => {
-    const token = "t1HwP0cTMuMK3IGu4DRXzQqf4XToT_EO";
+    const token = "KiXwiK-Q1n7JJVyzcbeGKUJ_fJ3CJltk";
     fetch(`http://10.1.0.166:3000/reservations/${token}`)
       .then((response) => response.json())
       .then((data) => {
@@ -40,14 +39,14 @@ export default function AgendaScreen({ navigation }) {
           dispatch(displayReservations(data.data));
         }
       });
-  }, [token, dispatch]);
+  }, []);
 
-  //Ajouter une reservation
+  //------- Ajouter une reservation
   const handleAddReservation = () => {
     fetch("http://10.1.0.166:3000/reservations/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, token, date, conversation }),
+      body: JSON.stringify({ restaurantId, userId: user._id, date }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -58,7 +57,26 @@ export default function AgendaScreen({ navigation }) {
         }
       });
   };
-// FUNCTION RETIRER RESERVATION
+
+  //------ Quitter une reservation
+  const leaveReservation = (reservationId, userId) => {
+    fetch("http://10.1.0.166:3000/reservations/leaveReservation", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reservationId, userId }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(deleteReservation(reservationId, userId));
+          console.log("Reservation quittée");
+          return "Reservation quittée";
+        } else {
+          console.error(data.error);
+        }
+      });
+  };
+  //------ Supprimer une reservation
   const handleDeleteReservation = (reservationId) => {
     fetch("http://10.1.0.166:3000/reservations/deleteUser", {
       method: "DELETE",
@@ -67,43 +85,50 @@ export default function AgendaScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         if (data.result) {
           dispatch(deleteReservation(reservationId));
+          return "Reservation supprimée";
         } else {
           console.error(data.error);
         }
       });
   };
-  console.log(reservations);
-  const display = reservations.map((reservation) => {
-    return (
-      <View key={reservation._id}>
-        <Text style={styles.textName}>{reservation.name}</Text>
-        <Text style={styles.textDate}>{reservation.date} {formatDate(reservation.date)}</Text>
-        <Text style={styles.textConversation}>{reservation.conversation}</Text>
-        <TouchableOpacity
-          style={styles.btnDelete}
-          onPress={() => handleDeleteReservation(reservation)}
-        >
-          <Text style={styles.btnText}>Delete</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  });
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      {display}
-
+      <ScrollView style={styles.scrollView}>
+        {reservations.map((reservation) => (
+          <View key={reservation._id} style={styles.reservationContainer}>
+            <Text style={styles.textName}>{reservation.name}</Text>
+            <Text style={styles.textDate}>{reservation.date}</Text>
+            <Text style={styles.textConversation}>
+              {reservation.conversation}
+            </Text>
+            <TouchableOpacity
+              style={styles.btnDelete}
+              onPress={() => handleDeleteReservation(reservation._id)}
+            >
+              <Text style={styles.btnText}>Delete</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.btnLeaveReservation}
+              onPress={() => leaveReservation(reservation._id, user._id)}
+            >
+              <Text style={styles.title}>Leave</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </ScrollView>
       <TouchableOpacity
         style={styles.btnAddReservation}
         onPress={() => handleAddReservation()}
       >
         <Text style={styles.title}>Add</Text>
       </TouchableOpacity>
-     
     </KeyboardAvoidingView>
   );
 }
@@ -114,22 +139,46 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
+    paddingVertical: 100,
+  },
+  reservationContainer: {
+    width: 250,
+    backgroundColor: "pink",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    alignItems: "center",
+    marginBottom: 15,
+    paddingBottom: 20,
   },
   btnAddReservation: {
-    width: "30%",
-    height: "5%",
+    width: 70,
+    height: 30,
     alignItems: "center",
     paddingTop: 8,
     borderRadius: 10,
     backgroundColor: "red",
+    marginBottom: "20%",
   },
   btnDelete: {
-    width: "60%",
-    height: "20%",
+    width: 70,
+    height: 30,
     paddingTop: 8,
     borderRadius: 10,
     alignItems: "center",
-backgroundColor: 'green',
+    backgroundColor: "green",
+    marginLeft: 90,
+  },
+  btnLeaveReservation: {
+    width: 70,
+    height: 30,
+    paddingTop: 8,
+    borderRadius: 10,
+    alignItems: "center",
+    backgroundColor: "orange",
+  marginRight: 90,
+  marginTop: -30,
   },
   textName: {
     fontSize: 20,
