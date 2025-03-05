@@ -58,7 +58,7 @@ export default function AgendaScreen({ navigation }) {
         }
       });
   };
-
+// FUNCTION RETIRER RESERVATION
   const handleDeleteReservation = (reservationId) => {
     fetch("http://10.1.0.166:3000/reservations/deleteUser", {
       method: "DELETE",
