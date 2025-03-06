@@ -24,6 +24,7 @@ import {
 import Restaurant from "../components/Restaurant";
 import restaurantsTypes from "../assets/data/restaurantsTypes";
 import { BACKEND_ADRESS } from "../.config";
+import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -74,6 +75,7 @@ export default function HomeScreen({ navigation }) {
                 longitude: info.location.coordinates[0],
                 latitude: info.location.coordinates[1],
                 name: info.name,
+                type: info.type,
               }))
             );
           }
@@ -184,19 +186,19 @@ export default function HomeScreen({ navigation }) {
 
   const handleSearch = () => {
     if (!searchQuery.trim()) return; // Éviter les recherches vides
-  
+
     fetch(BACKEND_ADRESS + `/restaurants/search/${searchQuery}`)
       .then((response) => response.json())
       .then((info) => {
         if (!info.data) return; // Vérifier si des données sont retournées
-  
+
         let openInfos = info.data.openingHours;
         const isOpenNow = (openInfos) => {
           const now = new Date();
           const currentDay = now.getDay();
           const currentHour = now.getHours();
           const currentMinute = now.getMinutes();
-  
+
           return openInfos.some(({ open, close }) => {
             if (open.day === currentDay) {
               const openTime = open.hour * 60 + open.minute;
@@ -207,24 +209,40 @@ export default function HomeScreen({ navigation }) {
             return false;
           });
         };
-  
+
+        const restaurantLocation = info.data.location.coordinates;
+        const latitude = restaurantLocation[1]; // latitude du restaurant
+        const longitude = restaurantLocation[0]; // longitude du restaurant
+
         setDataRestaurant({
           name: info.data.name,
           type: info.data.type,
           priceLevel: info?.data?.priceLevel,
           address: info.data.address,
           rating: info.data.rating,
-          location: info.data.location.coordinates,
+          location: restaurantLocation,
           website: info?.data?.website,
           openingHours: isOpenNow(openInfos),
         });
-  
+
         setVisible(true); // Afficher la modale
+
+        // Décaler la vue vers le haut pour éviter que le marker soit caché
+        if (restaurantLocation) {
+          mapRef.current?.animateCamera({
+            center: {
+              latitude: latitude - 0.00099, // Ajuste cette valeur si nécessaire
+              longitude: longitude,
+            },
+            altitude: 500,
+            pitch: 45,
+            zoom: 18,
+          });
+        }
       })
       .catch((error) => console.error("Erreur lors de la recherche :", error));
   };
-  
-  
+
   // Bouton filtres à faire
   const handleFilter = () => {};
 
@@ -363,11 +381,14 @@ export default function HomeScreen({ navigation }) {
         {restaurantsMarkers}
         {nearUsersMarkers}
       </MapView>
-      <View style={{ position: "absolute", top: 40, width: "95%" }}>
+      <View
+        style={{ position: "absolute", top: 40, width: "92%", paddingTop: 16 }}
+      >
         <Searchbar
           placeholder="Rechercher un restaurant ou un buddy"
           onChangeText={setSearchQuery}
           onIconPress={handleSearch}
+          onSubmitEditing={handleSearch}
           value={searchQuery}
         />
         <TouchableOpacity
@@ -375,14 +396,14 @@ export default function HomeScreen({ navigation }) {
           activeOpacity={0.8}
           onPress={() => handleCenter()}
         >
-          <FontAwesome name="location-arrow" size={40} color="black" />
+          <Ionicons name="locate" size={32} color="#202020" />;
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.8}
           onPress={() => handleFilter()}
         >
-          <FontAwesome name="sliders" size={40} color="black" />
+          <Ionicons name="options-outline" size={32} color="#202020" />;
         </TouchableOpacity>
       </View>
     </View>
@@ -409,7 +430,8 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "white",
     padding: 20,
-    height: "80%",
+    height: "50%",
+    marginTop: "87%",
   },
   restaurantmarker: {
     width: 60,
