@@ -44,5 +44,6 @@ const styles = StyleSheet.create({
   },
   textButton: {
     color: '#ec6e5b',
+    margin:'15'
   }
 });
