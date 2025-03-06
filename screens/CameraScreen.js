@@ -55,7 +55,7 @@ export default function CameraScreen({ navigation }) {
       name: "photo.jpg",
       type: "image/jpeg",
     });
-    fetch("http://10.1.3.69:3000/avatar/upload", {
+    fetch(BACKEND_ADRESS + "/avatar/upload", {
       method: "POST",
       body: formData,
     })
@@ -65,7 +65,7 @@ export default function CameraScreen({ navigation }) {
         
         const dataUpdate = { token: token, avatar: data.url };
         
-        fetch("http://10.1.3.69:3000/users/update", {
+        fetch(BACKEND_ADRESS + "/users/update", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dataUpdate),

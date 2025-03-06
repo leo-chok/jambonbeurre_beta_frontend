@@ -15,6 +15,10 @@ export default function SignUpScreen({ navigation }) {
     navigation.navigate('TabNavigator', { screen: 'Home' });
   };
 
+  const handleSignUp = () => {
+    navigation.navigate('SignUp1');
+  };
+
   const handleSignIn = () => {
     navigation.navigate('SignIn');
   };
@@ -24,6 +28,9 @@ export default function SignUpScreen({ navigation }) {
       <Text style={styles.title}>Bienvenue sur Jambon Beurre</Text>
       <TouchableOpacity style={styles.button} activeOpacity={0.8}>
         <Text style={styles.textButton} onPress={() => handleSubmit()}>Menu</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} activeOpacity={0.8}>
+      <Text style={styles.text}>Création de compte </Text><Text style={styles.textButton} onPress={() => handleSignUp()}>Par Email</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} activeOpacity={0.8}>
       <Text style={styles.text}>Vous avez déjà un compte? </Text><Text style={styles.textButton} onPress={() => handleSignIn()}>Se connecter</Text>

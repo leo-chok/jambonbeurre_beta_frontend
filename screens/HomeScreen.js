@@ -38,7 +38,7 @@ export default function HomeScreen({ navigation }) {
 
   // Fonction pour ouvrir une modale au clic sur un marker de restaurant
   const showRestaurantModal = (name) => {
-    fetch(`http://10.1.2.153:3000/restaurants/search/${name}`)
+    fetch(BACKEND_ADRESS + `/restaurants/search/${name}`)
       .then((response) => response.json())
       .then((info) => {
         // console.log(JSON.stringify(info, null, 2)); // Sera utile pour les réservations
