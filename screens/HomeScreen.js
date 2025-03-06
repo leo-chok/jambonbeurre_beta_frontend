@@ -15,6 +15,7 @@ import { updatePosition } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { TextInput, Modal, Button, Portal, Text } from "react-native-paper";
 import Restaurant from "../components/Restaurant";
+import restaurantsTypes from "../assets/data/restaurantsTypes";
 import { BACKEND_ADRESS } from "../.config";
 
 export default function HomeScreen({ navigation }) {
@@ -30,7 +31,7 @@ export default function HomeScreen({ navigation }) {
   const [markers, setMarkers] = useState([]);
 
   // Paramétrer les états pour la modale (visible et invisible)
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
   const hideRestaurantModal = () => setVisible(false);
 
   // Enregistrer les données du restaurant sélectionné dans un setter, qui sera utilisé en props du composants restaurant
@@ -38,7 +39,7 @@ export default function HomeScreen({ navigation }) {
 
   // Fonction pour ouvrir une modale au clic sur un marker de restaurant
   const showRestaurantModal = (name) => {
-    fetch(`http://10.1.2.153:3000/restaurants/search/${name}`)
+    fetch(BACKEND_ADRESS + `/restaurants/search/${name}`)
       .then((response) => response.json())
       .then((info) => {
         // console.log(JSON.stringify(info, null, 2)); // Sera utile pour les réservations
@@ -93,7 +94,7 @@ export default function HomeScreen({ navigation }) {
           // Récupérer les restaurants, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
           fetch(
             BACKEND_ADRESS +
-              "/restaurants/near/500?longitude=" +
+              "/restaurants/near/1000?longitude=" +
               latitude +
               "&latitude=" +
               longitude
@@ -108,6 +109,7 @@ export default function HomeScreen({ navigation }) {
                     latitude: info.location.coordinates[1],
                     longitude: info.location.coordinates[0],
                     name: info.name,
+                    type: info.type,
                   }))
                 );
               }
@@ -146,6 +148,79 @@ export default function HomeScreen({ navigation }) {
         data.result;
       });
   }, []);
+
+
+
+const restaurantsMarkers = markers.map((data, i) => {
+  let pinColor = 'red';
+  if (data.type === "hamburger_restaurant") {
+    pinColor = "brown";
+  } else if (data.type === "bakery") {
+    pinColor = "orange";
+  } else if (data.type === "sports_activity_location") {
+    pinColor = "blue";
+  } else if (data.type === "coffee_shop") {
+    pinColor = "black";
+  } else if (data.type === "video_arcade") {
+    pinColor = "purple";
+  } else if (data.type === "hotel") {
+    pinColor = "grey";
+  } else if (data.type === "bar") {
+    pinColor = "yellow";
+  } else if (data.type === "italian_restaurant") {
+    pinColor = "green";
+  } else if (data.type === "movie_theater") {
+    pinColor = "pink";
+  } else if (data.type === "shopping_mall") {
+    pinColor = "red";
+  } else if (data.type === "supermarket") {
+    pinColor = "blue";
+  } else if (data.type === "store") {
+    pinColor = "orange";
+  } else if (data.type === "brunch_restaurant") {
+    pinColor = "black";
+  } else if (data.type === "casino") {
+    pinColor = "purple";
+  } else if (data.type === "pizza_restaurant") {
+    pinColor = "grey";
+  } else if (data.type === "restaurant") {
+    pinColor = "yellow";
+  } else if (data.type === "thai_restaurant") {
+    pinColor = "green";
+  } else if (data.type === "food_store") {
+    pinColor = "pink";
+  } else if (data.type === "chinese_restaurant") {
+    pinColor = "red";
+  } else if (data.type === "french_restaurant") {
+    pinColor = "blue";
+  } else if (data.type === "sandwich_shop") {
+    pinColor = "orange";
+  } else if (data.type === "fast_food_restaurant") {
+    pinColor = "black";
+  } else if (data.type === "tea_house") {
+    pinColor = "purple";
+  } else if (data.type === "meal_takeaway") {   
+    pinColor = "grey";
+  } else if (data.type === "japanese_restaurant") {
+    pinColor = "yellow";
+  } else {
+    pinColor = "red";
+  }
+
+  return (
+    <Marker
+      key={i}
+      coordinate={{
+        latitude: data.longitude,
+        longitude: data.latitude,
+      }}
+      title={data.name}
+      pinColor={pinColor}
+      onPress={() => showRestaurantModal(data.name)}
+    />
+  );
+});
+
 
   return (
     <View style={styles.container}>
@@ -193,18 +268,7 @@ export default function HomeScreen({ navigation }) {
             pinColor="red"
           />
         )}
-        {markers.map((data, i) => (
-          <Marker
-            key={i}
-            coordinate={{
-              latitude: data.longitude,
-              longitude: data.latitude,
-            }}
-            title={data.name}
-            pinColor="green"
-            onPress={() => showRestaurantModal(data.name)}
-          />
-        ))}
+        {restaurantsMarkers}
       </MapView>
       <View style={{ position: "absolute", top: 40, width: "95%" }}>
         <TextInput

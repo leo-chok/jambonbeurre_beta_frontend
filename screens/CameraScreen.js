@@ -16,9 +16,10 @@ import {
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { addPhoto, removePhoto } from "../reducers/user";
+import { BACKEND_ADRESS } from "../.config";
 
 export default function CameraScreen({ navigation }) {
-  const token = "AMjuKpw88GsQKbg59HCfnOuFNpsF7cTV";
+  const token = "KiXwiK-Q1n7JJVyzcbeGKUJ_fJ3CJltk";
   const dispatch = useDispatch();
   const cameraRef = useRef(null);
   const isFocused = useIsFocused();
@@ -55,7 +56,7 @@ export default function CameraScreen({ navigation }) {
       name: "photo.jpg",
       type: "image/jpeg",
     });
-    fetch("http://10.1.3.69:3000/avatar/upload", {
+    fetch(BACKEND_ADRESS + "/avatar/upload", {
       method: "POST",
       body: formData,
     })
@@ -65,7 +66,7 @@ export default function CameraScreen({ navigation }) {
         
         const dataUpdate = { token: token, avatar: data.url };
         
-        fetch("http://10.1.3.69:3000/users/update", {
+        fetch(BACKEND_ADRESS + "/users/update", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dataUpdate),

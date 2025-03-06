@@ -82,7 +82,7 @@ export default function ProfileScreen({ navigation }) {
   const handleEditAvatar = () => {
     navigation.navigate("Camera");
   }
-console.log(vacancy)
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
