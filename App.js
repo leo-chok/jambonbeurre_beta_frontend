@@ -14,6 +14,15 @@ import SettingsScreen from "./screens/SettingsScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import CameraScreen from "./screens/CameraScreen";
+import SignUp1Screen from "./screens/SignUp/SignUp1Screen";
+import SignUp2Screen from "./screens/SignUp/SignUp2Screen";
+import SignUp3Screen from "./screens/SignUp/SignUp3Screen";
+import SignUp4Screen from "./screens/SignUp/SignUp4Screen";
+import SignUp5Screen from "./screens/SignUp/SignUp5Screen";
+import SignUp6Screen from "./screens/SignUp/SignUp6Screen";
+import SignUp7Screen from "./screens/SignUp/SignUp7Screen";
+import SignUp8Screen from "./screens/SignUp/SignUp8Screen";
+import SignUp9Screen from "./screens/SignUp/SignUp9Screen";
 
 import { PaperProvider } from "react-native-paper";
 
@@ -66,6 +75,15 @@ export default function App() {
             />
             <Stack.Screen name="SignIn" component={SignInScreen} />
             <Stack.Screen name="Camera" component={CameraScreen} />
+            <Stack.Screen name="SignUp1" component={SignUp1Screen} />
+            <Stack.Screen name="SignUp2" component={SignUp2Screen} />
+            <Stack.Screen name="SignUp3" component={SignUp3Screen} />
+            <Stack.Screen name="SignUp4" component={SignUp4Screen} />
+            <Stack.Screen name="SignUp5" component={SignUp5Screen} />
+            <Stack.Screen name="SignUp6" component={SignUp6Screen} />
+            <Stack.Screen name="SignUp7" component={SignUp7Screen} />
+            <Stack.Screen name="SignUp8" component={SignUp8Screen} />
+            <Stack.Screen name="SignUp9" component={SignUp9Screen} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

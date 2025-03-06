@@ -99,8 +99,11 @@ export const userSlice = createSlice({
     removePhoto: (state, action) => {
       state.value.infos.avatar = state.value.infos.avatar.filter((data) => data !== action.payload);
     },
+    addToken: (state, action) => {
+      state.value.authentification.token = action.payload;
+    }
   },
 });
 
-export const { updatePosition, addPhoto, removePhoto,updateLunchTime, updateProfile } = userSlice.actions;
+export const { updatePosition, addPhoto, removePhoto,updateLunchTime, updateProfile, addToken } = userSlice.actions;
 export default userSlice.reducer;
