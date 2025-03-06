@@ -31,7 +31,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function ProfileEditionScreen({ navigation }) {
   const dispatch = useDispatch();
-  const token = "KiXwiK-Q1n7JJVyzcbeGKUJ_fJ3CJltk";
+  const token = "eyqL3bClggeslHRBVHIAAE5wkQoHyvzp";
 
   const [userData, setUserData] = useState({});
   const [username, setUsername] = useState("");
@@ -157,6 +157,7 @@ export default function ProfileEditionScreen({ navigation }) {
       .then((data) => {
         console.log("User updated in BDD")
         console.log(data);
+        navigation.navigate("Profile");
       });
   }
 

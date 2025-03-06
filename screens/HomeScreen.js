@@ -22,7 +22,7 @@ import {
   Searchbar,
 } from "react-native-paper";
 import Restaurant from "../components/Restaurant";
-import restaurantsTypes from "../assets/data/restaurantsTypes";
+import mapStyle from "../assets/data/mapStyle";
 import { BACKEND_ADRESS } from "../.config";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 
@@ -246,12 +246,12 @@ export default function HomeScreen({ navigation }) {
   // Bouton filtres à faire
   const handleFilter = () => {};
 
+  ////////////////////// CUSTOMISATION DES MARKERS DES UTILISATEURS  //////////////////////
   // Style des markers d'utilisateurs  sur la carte
   const nearUsersMarkers = usersMarkers.map((data, i) => {
     return (
       <Marker
         key={i}
-        pinColor="black"
         coordinate={{
           latitude: data.latitude,
           longitude: data.longitude,
@@ -261,74 +261,76 @@ export default function HomeScreen({ navigation }) {
     );
   });
 
+  ////////////////////// CUSTOMISATION DES MARKERS DES RESTAURANTS  //////////////////////
   // Style des markers de restaurants sur la carte
   const restaurantsMarkers = markers.map((data, i) => {
-    let pinColor = "red";
+    let imageMarker = require("../assets/restaurants_icons/restaurant.png");
     if (data.type === "hamburger_restaurant") {
-      pinColor = "brown";
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
     } else if (data.type === "bakery") {
-      pinColor = "orange";
+      imageMarker = require("../assets/restaurants_icons/brunch.png");
     } else if (data.type === "sports_activity_location") {
-      pinColor = "blue";
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
     } else if (data.type === "coffee_shop") {
-      pinColor = "black";
+      imageMarker = require("../assets/restaurants_icons/bar.png");
     } else if (data.type === "video_arcade") {
-      pinColor = "purple";
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
     } else if (data.type === "hotel") {
-      pinColor = "grey";
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
     } else if (data.type === "bar") {
-      pinColor = "yellow";
+      imageMarker = require("../assets/restaurants_icons/bar.png");
     } else if (data.type === "italian_restaurant") {
-      pinColor = "green";
+      imageMarker = require("../assets/restaurants_icons/italian.png");
     } else if (data.type === "movie_theater") {
-      pinColor = "pink";
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
     } else if (data.type === "shopping_mall") {
-      pinColor = "red";
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
     } else if (data.type === "supermarket") {
-      pinColor = "blue";
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
     } else if (data.type === "store") {
-      pinColor = "orange";
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
     } else if (data.type === "brunch_restaurant") {
-      pinColor = "black";
+      imageMarker = require("../assets/restaurants_icons/brunch.png");
     } else if (data.type === "casino") {
-      pinColor = "purple";
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
     } else if (data.type === "pizza_restaurant") {
-      pinColor = "grey";
+      imageMarker = require("../assets/restaurants_icons/italian.png");
     } else if (data.type === "restaurant") {
-      pinColor = "yellow";
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
     } else if (data.type === "thai_restaurant") {
-      pinColor = "green";
+      imageMarker = require("../assets/restaurants_icons/thai.png");
     } else if (data.type === "food_store") {
-      pinColor = "pink";
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
     } else if (data.type === "chinese_restaurant") {
-      pinColor = "red";
+      imageMarker = require("../assets/restaurants_icons/japanese.png");
     } else if (data.type === "french_restaurant") {
-      pinColor = "blue";
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
     } else if (data.type === "sandwich_shop") {
-      pinColor = "orange";
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
     } else if (data.type === "fast_food_restaurant") {
-      pinColor = "black";
+      imageMarker = require("../assets/restaurants_icons/burger.png");
     } else if (data.type === "tea_house") {
-      pinColor = "purple";
+      imageMarker = require("../assets/restaurants_icons/brunch.png");
     } else if (data.type === "meal_takeaway") {
-      pinColor = "grey";
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
     } else if (data.type === "japanese_restaurant") {
-      pinColor = "yellow";
+      imageMarker = require("../assets/restaurants_icons/japanese.png");
     } else {
-      pinColor = "red";
     }
 
     return (
       <Marker
+  
         key={i}
         coordinate={{
           latitude: data.latitude,
           longitude: data.longitude,
         }}
         title={data.name}
-        pinColor={pinColor}
+        image={imageMarker}
         onPress={() => showRestaurantModal(data.name)}
-      />
+      >
+      </Marker>
     );
   });
 
@@ -370,13 +372,10 @@ export default function HomeScreen({ navigation }) {
           zoom: 18,
         }}
         style={styles.map}
+        customMapStyle={mapStyle}
       >
         {currentPosition && (
-          <Marker
-            coordinate={currentPosition}
-            title="Ma Position"
-            pinColor="red"
-          />
+          <Marker coordinate={currentPosition} title="Ma Position" />
         )}
         {restaurantsMarkers}
         {nearUsersMarkers}
@@ -433,8 +432,10 @@ const styles = StyleSheet.create({
     height: "50%",
     marginTop: "87%",
   },
-  restaurantmarker: {
-    width: 60,
-    height: 60,
-  },
+  markerRestaurants: {
+    backgroundColor: "white",
+    borderRadius: 50,
+    width: 200,
+    height: 200,
+  }
 });
