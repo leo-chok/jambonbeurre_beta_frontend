@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AgendaScreen from "./screens/AgendaScreen";
+import AgendaInvitListScreen from "./screens/AgendaInvitListScreen";
 import ChatConversationScreen from "./screens/ChatConversationScreen";
 import ChatListScreen from "./screens/ChatListScreen";
 import ChatScreen from "./screens/ChatScreen";
@@ -95,6 +96,8 @@ export default function App() {
               name="ChatConversation"
               component={ChatConversationScreen}
             />
+            <Stack.Screen name="AgendaInvitListScreen" component={AgendaInvitListScreen} />
+            <Stack.Screen name="AgendaScreen" component={AgendaScreen} />
             <Stack.Screen name="SignIn" component={SignInScreen} />
             <Stack.Screen name="Camera" component={CameraScreen} />
             <Stack.Screen name="SignUp1" component={SignUp1Screen} />
