@@ -13,7 +13,14 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { updatePosition } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { TextInput, Modal, Button, Portal, Text } from "react-native-paper";
+import {
+  TextInput,
+  Modal,
+  Button,
+  Portal,
+  Text,
+  Searchbar,
+} from "react-native-paper";
 import Restaurant from "../components/Restaurant";
 import restaurantsTypes from "../assets/data/restaurantsTypes";
 import { BACKEND_ADRESS } from "../.config";
@@ -45,6 +52,8 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   //////////////////////AFFICHER LES RESTAURANTS A PROXIMITE//////////////////////
+  // Paramétrer les états pour les markers des restaurants
+  const [markers, setMarkers] = useState([]);
   useEffect(() => {
     (async () => {
       // Récupérer les restaurants, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
@@ -73,20 +82,30 @@ export default function HomeScreen({ navigation }) {
   }, [currentPosition]);
 
   //////////////////////AFFICHER LES UTILISATEURS A PROXIMITE//////////////////////
+  // Paramétrer les états pour les markers des restaurants
+  const [usersMarkers, setUsersMarkers] = useState([]);
   useEffect(() => {
     (async () => {
-      // Récupérer les restaurants, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
+      // Récupérer les autres utilisateurs, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
       fetch(
         BACKEND_ADRESS +
-          "/users/near/500?longitude=" +
+          "/users/near/5000?longitude=" +
           currentPosition.longitude +
           "&latitude=" +
           currentPosition.latitude
       )
         .then((response) => response.json())
         .then((data) => {
-          // Si des restaurants sont trouvés, les affichés individuellement sur la carte, sous forme de markers
+          // Si des utilisateurs sont trouvés, les affichés individuellement sur la carte, sous forme de markers
           if (data) {
+            setUsersMarkers(
+              data.listUsers.map((info, i) => ({
+                id: i,
+                longitude: info.infos.location.coordinates[0],
+                latitude: info.infos.location.coordinates[1],
+                username: info.infos.username,
+              }))
+            );
           }
         });
     })();
@@ -111,9 +130,6 @@ export default function HomeScreen({ navigation }) {
   };
 
   //////////////////////MODALE POUR AFFICHER LES RESTAURANTS AU CLIC//////////////////////
-
-  // Paramétrer les états pour les markers des restaurants
-  const [markers, setMarkers] = useState([]);
 
   // Paramétrer les états pour la modale (visible et invisible)
   const [visible, setVisible] = useState(false);
@@ -163,124 +179,122 @@ export default function HomeScreen({ navigation }) {
     setVisible(true);
   };
 
-  // Récupérer la localisation, en temps réel, de l'utilisateur
-  useEffect(() => {
-    (async () => {
-      const result = await Location.requestForegroundPermissionsAsync();
-      const status = result?.status;
+  //////////////////////BARRE DE RECHERCHE//////////////////////
+  const [searchQuery, setSearchQuery] = React.useState("");
 
-      if (status === "granted") {
-        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-          const latitude = location.coords.latitude;
-          const longitude = location.coords.longitude;
-          setCurrentPosition({ latitude: latitude, longitude: longitude });
-          dispatch(updatePosition(currentPosition));
-
-          // Récupérer les restaurants, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
-          fetch(
-            BACKEND_ADRESS +
-              "/restaurants/near/1000?longitude=" +
-              longitude +
-              "&latitude=" +
-              latitude
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              // Si des restaurants sont trouvés, les affichés individuellement sur la carte, sous forme de markers
-              if (data.restaurantsList) {
-                setMarkers(
-                  data.restaurantsList.map((info, i) => ({
-                    id: i,
-                    latitude: info.location.coordinates[1],
-                    longitude: info.location.coordinates[0],
-                    name: info.name,
-                    type: info.type,
-                  }))
-                );
-              }
-            });
+  const handleSearch = () => {
+    if (!searchQuery.trim()) return; // Éviter les recherches vides
+  
+    fetch(BACKEND_ADRESS + `/restaurants/search/${searchQuery}`)
+      .then((response) => response.json())
+      .then((info) => {
+        if (!info.data) return; // Vérifier si des données sont retournées
+  
+        let openInfos = info.data.openingHours;
+        const isOpenNow = (openInfos) => {
+          const now = new Date();
+          const currentDay = now.getDay();
+          const currentHour = now.getHours();
+          const currentMinute = now.getMinutes();
+  
+          return openInfos.some(({ open, close }) => {
+            if (open.day === currentDay) {
+              const openTime = open.hour * 60 + open.minute;
+              const closeTime = close.hour * 60 + close.minute;
+              const nowTime = currentHour * 60 + currentMinute;
+              return nowTime >= openTime && nowTime <= closeTime;
+            }
+            return false;
+          });
+        };
+  
+        setDataRestaurant({
+          name: info.data.name,
+          type: info.data.type,
+          priceLevel: info?.data?.priceLevel,
+          address: info.data.address,
+          rating: info.data.rating,
+          location: info.data.location.coordinates,
+          website: info?.data?.website,
+          openingHours: isOpenNow(openInfos),
         });
-      }
-    })();
-  }, []);
+  
+        setVisible(true); // Afficher la modale
+      })
+      .catch((error) => console.error("Erreur lors de la recherche :", error));
+  };
+  
+  
+  // Bouton filtres à faire
+  const handleFilter = () => {};
 
+  // Style des markers d'utilisateurs  sur la carte
+  const nearUsersMarkers = usersMarkers.map((data, i) => {
+    return (
+      <Marker
+        key={i}
+        pinColor="black"
+        coordinate={{
+          latitude: data.latitude,
+          longitude: data.longitude,
+        }}
+        title={data.username}
+      />
+    );
+  });
 
-
+  // Style des markers de restaurants sur la carte
   const restaurantsMarkers = markers.map((data, i) => {
-    let imageMarker = require("../assets/restaurants_icons/restaurant.png");
+    let pinColor = "red";
     if (data.type === "hamburger_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      pinColor = "brown";
     } else if (data.type === "bakery") {
-      imageMarker = require("../assets/restaurants_icons/brunch.png");
       pinColor = "orange";
     } else if (data.type === "sports_activity_location") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
       pinColor = "blue";
     } else if (data.type === "coffee_shop") {
-      imageMarker = require("../assets/restaurants_icons/bar.png");
       pinColor = "black";
     } else if (data.type === "video_arcade") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
       pinColor = "purple";
     } else if (data.type === "hotel") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
       pinColor = "grey";
     } else if (data.type === "bar") {
-      imageMarker = require("../assets/restaurants_icons/bar.png");
       pinColor = "yellow";
     } else if (data.type === "italian_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/italian.png");
       pinColor = "green";
     } else if (data.type === "movie_theater") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
       pinColor = "pink";
     } else if (data.type === "shopping_mall") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
       pinColor = "red";
     } else if (data.type === "supermarket") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
       pinColor = "blue";
     } else if (data.type === "store") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
       pinColor = "orange";
     } else if (data.type === "brunch_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/brunch.png");
       pinColor = "black";
     } else if (data.type === "casino") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
       pinColor = "purple";
     } else if (data.type === "pizza_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/italian.png");
       pinColor = "grey";
     } else if (data.type === "restaurant") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
       pinColor = "yellow";
     } else if (data.type === "thai_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/thai.png");
       pinColor = "green";
     } else if (data.type === "food_store") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
       pinColor = "pink";
     } else if (data.type === "chinese_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/japanese.png");
       pinColor = "red";
     } else if (data.type === "french_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
       pinColor = "blue";
     } else if (data.type === "sandwich_shop") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
       pinColor = "orange";
     } else if (data.type === "fast_food_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/burger.png");
       pinColor = "black";
     } else if (data.type === "tea_house") {
-      imageMarker = require("../assets/restaurants_icons/brunch.png");
       pinColor = "purple";
     } else if (data.type === "meal_takeaway") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
       pinColor = "grey";
     } else if (data.type === "japanese_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/japanese.png");
       pinColor = "yellow";
     } else {
       pinColor = "red";
@@ -293,13 +307,10 @@ export default function HomeScreen({ navigation }) {
           latitude: data.latitude,
           longitude: data.longitude,
         }}
-        scale={0.5}
         title={data.name}
-        image={imageMarker}
-        style={styles.restaurantmarker}
         pinColor={pinColor}
         onPress={() => showRestaurantModal(data.name)}
-      ></Marker>
+      />
     );
   });
 
@@ -350,12 +361,14 @@ export default function HomeScreen({ navigation }) {
           />
         )}
         {restaurantsMarkers}
+        {nearUsersMarkers}
       </MapView>
       <View style={{ position: "absolute", top: 40, width: "95%" }}>
-        <TextInput
-          style={styles.searchBar}
-          placeholder={"Rechercher un restaurant ou un buddy"}
-          placeholderTextColor={"#666"}
+        <Searchbar
+          placeholder="Rechercher un restaurant ou un buddy"
+          onChangeText={setSearchQuery}
+          onIconPress={handleSearch}
+          value={searchQuery}
         />
         <TouchableOpacity
           style={styles.button}
@@ -386,19 +399,6 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
     width: "100%",
-  },
-  searchBar: {
-    borderRadius: 10,
-    margin: 10,
-    color: "#000",
-    borderColor: "#666",
-    backgroundColor: "#FFF",
-    color: "#000",
-    borderColor: "#666",
-    backgroundColor: "#FFF",
-    height: 45,
-    paddingHorizontal: 10,
-    fontSize: 15,
   },
   button: {
     top: 450,
