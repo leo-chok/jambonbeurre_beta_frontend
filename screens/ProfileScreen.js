@@ -29,7 +29,7 @@ import { useIsFocused } from "@react-navigation/native";
 export default function ProfileScreen({ navigation }) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const token = "KiXwiK-Q1n7JJVyzcbeGKUJ_fJ3CJltk";
+  const token = "eyqL3bClggeslHRBVHIAAE5wkQoHyvzp";
   const [userData, setUserData] = useState({});
   const [username, setUsername] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -46,7 +46,6 @@ export default function ProfileScreen({ navigation }) {
   const lastLunchTime = useSelector(
     (state) => state.user.value.preferences.lunchtime
   );
-
 
   // On vient récupérer les informations de l'utilisateur pour les afficher dans les champs
   useEffect(() => {
@@ -81,7 +80,7 @@ export default function ProfileScreen({ navigation }) {
 
   const handleEditAvatar = () => {
     navigation.navigate("Camera");
-  }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -94,10 +93,11 @@ export default function ProfileScreen({ navigation }) {
           Modifier
         </Text>
       </View>
-      <TouchableOpacity 
-      onPress={() => handleEditAvatar()}
-      style={styles.avatarContainer}>
-      <Image style={styles.avatar} source={avatar && {uri : `${avatar}`}} />
+      <TouchableOpacity
+        onPress={() => handleEditAvatar()}
+        style={styles.avatarContainer}
+      >
+        <Image style={styles.avatar} source={avatar && { uri: `${avatar}` }} />
       </TouchableOpacity>
       <ScrollView style={styles.inputs_container}>
         <Text style={styles.title}>Mes informations:</Text>

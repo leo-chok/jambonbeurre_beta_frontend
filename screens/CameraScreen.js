@@ -17,15 +17,17 @@ import {
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { addPhoto, removePhoto } from "../reducers/user";
 import { BACKEND_ADRESS } from "../.config";
+import { ActivityIndicator, MD2Colors } from "react-native-paper";
 
 export default function CameraScreen({ navigation }) {
-  const token = "KiXwiK-Q1n7JJVyzcbeGKUJ_fJ3CJltk";
+  const token = "eyqL3bClggeslHRBVHIAAE5wkQoHyvzp";
   const dispatch = useDispatch();
   const cameraRef = useRef(null);
   const isFocused = useIsFocused();
   const [hasPermission, setHasPermission] = useState(false);
   const [facing, setFacing] = useState("front");
   const [flashStatus, setFlashStatus] = useState("off");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -48,6 +50,7 @@ export default function CameraScreen({ navigation }) {
 
   const takePicture = async () => {
     const photo = await cameraRef.current?.takePictureAsync({ quality: 0.3 });
+    setIsLoading(true);
 
     // enregistrer la photo sur cloudinary + sur BDD
     const formData = new FormData();
@@ -63,25 +66,27 @@ export default function CameraScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         dispatch(addPhoto(data.url));
-        
+
         const dataUpdate = { token: token, avatar: data.url };
-        
+
         fetch(BACKEND_ADRESS + "/users/update", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dataUpdate),
         })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-        });
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            setIsLoading(false);
+            navigation.navigate("Profile");
+          });
       })
       .catch((e) => console.log(e));
-    };
+  };
 
   return (
-    <View style={styles.container}>
-      <SafeAreaView style={styles.settingContainer}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.settingContainer}>
         <TouchableOpacity
           style={styles.settingButton}
           onPress={toggleFlashStatus}
@@ -98,31 +103,39 @@ export default function CameraScreen({ navigation }) {
         >
           <FontAwesome name="rotate-right" size={25} color="black" />
         </TouchableOpacity>
-      </SafeAreaView>
-      <View style={styles.preview}>
-        <CameraView
-          style={styles.camera}
-          ref={(ref) => (cameraRef.current = ref)}
-          facing={facing}
-          flash={flashStatus}
-        ></CameraView>
       </View>
+      {!isLoading && (
+        <View style={styles.preview}>
+          <CameraView
+            style={styles.camera}
+            ref={(ref) => (cameraRef.current = ref)}
+            facing={facing}
+            flash={flashStatus}
+          ></CameraView>
+        </View>
+      )}
+      {isLoading && (
+        <ActivityIndicator size = {120} animating={true} color={"white"} />
+      )}
       <View style={styles.snapContainer}>
         <TouchableOpacity style={styles.snapButton} onPress={takePicture}>
           <FontAwesome name="circle-thin" size={95} color="black" />
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "pink",
     flex: 1,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "pink",
     flexDirection: "column",
-    alignItems: "center",
     justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: 50,
   },
   preview: {
     height: 300,
@@ -138,8 +151,8 @@ const styles = StyleSheet.create({
   settingContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    marginHorizontal: 20,
+    alignItems: "space-around",
+    width: "60%",
   },
   settingButton: {
     width: 40,
