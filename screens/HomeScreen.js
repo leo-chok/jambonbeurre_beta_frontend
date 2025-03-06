@@ -57,7 +57,6 @@ export default function HomeScreen({ navigation }) {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           // Si des restaurants sont trouvés, les affichés individuellement sur la carte, sous forme de markers
           if (data.restaurantsList) {
             setMarkers(
@@ -88,8 +87,6 @@ export default function HomeScreen({ navigation }) {
         .then((data) => {
           // Si des restaurants sont trouvés, les affichés individuellement sur la carte, sous forme de markers
           if (data) {
-            console.log(currentPosition);
-            console.log(JSON.stringify(data, null, 2));
           }
         });
     })();
@@ -112,8 +109,6 @@ export default function HomeScreen({ navigation }) {
       });
     }
   };
-
-
 
   //////////////////////MODALE POUR AFFICHER LES RESTAURANTS AU CLIC//////////////////////
 
@@ -210,90 +205,103 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
 
-  // Bouton filtres à faire
-  const handleFilter = () => {};
 
-  // Afficher les restaurants à proximité
-  useEffect(() => {
-    fetch(``)
-      .then((response) => response.json())
-      .then((data) => {
-        data.result;
-      });
-  }, []);
+  const restaurantsMarkers = markers.map((data, i) => {
+    let imageMarker = require("../assets/restaurants_icons/restaurant.png");
+    if (data.type === "hamburger_restaurant") {
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
+    } else if (data.type === "bakery") {
+      imageMarker = require("../assets/restaurants_icons/brunch.png");
+      pinColor = "orange";
+    } else if (data.type === "sports_activity_location") {
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      pinColor = "blue";
+    } else if (data.type === "coffee_shop") {
+      imageMarker = require("../assets/restaurants_icons/bar.png");
+      pinColor = "black";
+    } else if (data.type === "video_arcade") {
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      pinColor = "purple";
+    } else if (data.type === "hotel") {
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      pinColor = "grey";
+    } else if (data.type === "bar") {
+      imageMarker = require("../assets/restaurants_icons/bar.png");
+      pinColor = "yellow";
+    } else if (data.type === "italian_restaurant") {
+      imageMarker = require("../assets/restaurants_icons/italian.png");
+      pinColor = "green";
+    } else if (data.type === "movie_theater") {
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      pinColor = "pink";
+    } else if (data.type === "shopping_mall") {
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      pinColor = "red";
+    } else if (data.type === "supermarket") {
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      pinColor = "blue";
+    } else if (data.type === "store") {
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      pinColor = "orange";
+    } else if (data.type === "brunch_restaurant") {
+      imageMarker = require("../assets/restaurants_icons/brunch.png");
+      pinColor = "black";
+    } else if (data.type === "casino") {
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      pinColor = "purple";
+    } else if (data.type === "pizza_restaurant") {
+      imageMarker = require("../assets/restaurants_icons/italian.png");
+      pinColor = "grey";
+    } else if (data.type === "restaurant") {
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      pinColor = "yellow";
+    } else if (data.type === "thai_restaurant") {
+      imageMarker = require("../assets/restaurants_icons/thai.png");
+      pinColor = "green";
+    } else if (data.type === "food_store") {
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      pinColor = "pink";
+    } else if (data.type === "chinese_restaurant") {
+      imageMarker = require("../assets/restaurants_icons/japanese.png");
+      pinColor = "red";
+    } else if (data.type === "french_restaurant") {
+      imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      pinColor = "blue";
+    } else if (data.type === "sandwich_shop") {
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      pinColor = "orange";
+    } else if (data.type === "fast_food_restaurant") {
+      imageMarker = require("../assets/restaurants_icons/burger.png");
+      pinColor = "black";
+    } else if (data.type === "tea_house") {
+      imageMarker = require("../assets/restaurants_icons/brunch.png");
+      pinColor = "purple";
+    } else if (data.type === "meal_takeaway") {
+      imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      pinColor = "grey";
+    } else if (data.type === "japanese_restaurant") {
+      imageMarker = require("../assets/restaurants_icons/japanese.png");
+      pinColor = "yellow";
+    } else {
+      pinColor = "red";
+    }
 
-
-
-const restaurantsMarkers = markers.map((data, i) => {
-  let pinColor = 'red';
-  if (data.type === "hamburger_restaurant") {
-    pinColor = "brown";
-  } else if (data.type === "bakery") {
-    pinColor = "orange";
-  } else if (data.type === "sports_activity_location") {
-    pinColor = "blue";
-  } else if (data.type === "coffee_shop") {
-    pinColor = "black";
-  } else if (data.type === "video_arcade") {
-    pinColor = "purple";
-  } else if (data.type === "hotel") {
-    pinColor = "grey";
-  } else if (data.type === "bar") {
-    pinColor = "yellow";
-  } else if (data.type === "italian_restaurant") {
-    pinColor = "green";
-  } else if (data.type === "movie_theater") {
-    pinColor = "pink";
-  } else if (data.type === "shopping_mall") {
-    pinColor = "red";
-  } else if (data.type === "supermarket") {
-    pinColor = "blue";
-  } else if (data.type === "store") {
-    pinColor = "orange";
-  } else if (data.type === "brunch_restaurant") {
-    pinColor = "black";
-  } else if (data.type === "casino") {
-    pinColor = "purple";
-  } else if (data.type === "pizza_restaurant") {
-    pinColor = "grey";
-  } else if (data.type === "restaurant") {
-    pinColor = "yellow";
-  } else if (data.type === "thai_restaurant") {
-    pinColor = "green";
-  } else if (data.type === "food_store") {
-    pinColor = "pink";
-  } else if (data.type === "chinese_restaurant") {
-    pinColor = "red";
-  } else if (data.type === "french_restaurant") {
-    pinColor = "blue";
-  } else if (data.type === "sandwich_shop") {
-    pinColor = "orange";
-  } else if (data.type === "fast_food_restaurant") {
-    pinColor = "black";
-  } else if (data.type === "tea_house") {
-    pinColor = "purple";
-  } else if (data.type === "meal_takeaway") {   
-    pinColor = "grey";
-  } else if (data.type === "japanese_restaurant") {
-    pinColor = "yellow";
-  } else {
-    pinColor = "red";
-  }
-
-  return (
-    <Marker
-      key={i}
-      coordinate={{
-        latitude: data.latitude,
-        longitude: data.longitude,
-      }}
-      title={data.name}
-      pinColor={pinColor}
-      onPress={() => showRestaurantModal(data.name)}
-    />
-  );
-});
-
+    return (
+      <Marker
+        key={i}
+        coordinate={{
+          latitude: data.latitude,
+          longitude: data.longitude,
+        }}
+        scale={0.5}
+        title={data.name}
+        image={imageMarker}
+        style={styles.restaurantmarker}
+        pinColor={pinColor}
+        onPress={() => showRestaurantModal(data.name)}
+      ></Marker>
+    );
+  });
 
   return (
     <View style={styles.container}>
@@ -402,5 +410,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     height: "80%",
+  },
+  restaurantmarker: {
+    width: 60,
+    height: 60,
   },
 });
