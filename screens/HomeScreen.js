@@ -26,6 +26,97 @@ export default function HomeScreen({ navigation }) {
   });
   const mapRef = React.useRef(null);
 
+  //////////////////////RECUPERER LA LOCALISATION EN TEMPS REEL//////////////////////
+  useEffect(() => {
+    (async () => {
+      const result = await Location.requestForegroundPermissionsAsync();
+      const status = result?.status;
+
+      if (status === "granted") {
+        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
+          const latitude = location.coords.latitude;
+          const longitude = location.coords.longitude;
+          setCurrentPosition({ latitude: latitude, longitude: longitude });
+          dispatch(updatePosition(currentPosition));
+        });
+      }
+    })();
+  }, []);
+
+  //////////////////////AFFICHER LES RESTAURANTS A PROXIMITE//////////////////////
+  useEffect(() => {
+    (async () => {
+      // Récupérer les restaurants, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
+      fetch(
+        BACKEND_ADRESS +
+          "/restaurants/near/500?longitude=" +
+          currentPosition.longitude +
+          "&latitude=" +
+          currentPosition.latitude
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          // Si des restaurants sont trouvés, les affichés individuellement sur la carte, sous forme de markers
+          if (data.restaurantsList) {
+            setMarkers(
+              data.restaurantsList.map((info, i) => ({
+                id: i,
+                longitude: info.location.coordinates[0],
+                latitude: info.location.coordinates[1],
+                name: info.name,
+              }))
+            );
+          }
+        });
+    })();
+  }, [currentPosition]);
+
+  //////////////////////AFFICHER LES UTILISATEURS A PROXIMITE//////////////////////
+  useEffect(() => {
+    (async () => {
+      // Récupérer les restaurants, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
+      fetch(
+        BACKEND_ADRESS +
+          "/users/near/500?longitude=" +
+          currentPosition.latitude +
+          "&latitude=" +
+          currentPosition.longitude
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          // Si des restaurants sont trouvés, les affichés individuellement sur la carte, sous forme de markers
+          if (data) {
+            console.log(currentPosition);
+            console.log(JSON.stringify(data, null, 2));
+          }
+        });
+    })();
+  }, [currentPosition]);
+
+  // Bouton pour recentrer la map selon la position de l'utilisateur, en temps réel
+  const handleCenter = () => {
+    if (currentPosition.latitude !== 0 && currentPosition.longitude !== 0) {
+      //mapRef.current?.animateCamera({...}) assure que la carte est bien référencée avant d'exécuter l'animation
+      //La fonction handleCenter utilise animateCamera pour déplacer la vue de la carte vers la position actuelle de l'utilisateur avec un zoom adapté.
+      mapRef.current?.animateCamera({
+        center: {
+          latitude: currentPosition.latitude,
+          longitude: currentPosition.longitude,
+        },
+        //on conserve le zoom initial
+        altitude: 500,
+        pitch: 45,
+        zoom: 18,
+      });
+    }
+  };
+
+  // Bouton filtres à faire
+  const handleFilter = () => {};
+
+  //////////////////////MODALE POUR AFFICHER LES RESTAURANTS AU CLIC//////////////////////
+
   // Paramétrer les états pour les markers des restaurants
   const [markers, setMarkers] = useState([]);
 
@@ -38,10 +129,10 @@ export default function HomeScreen({ navigation }) {
 
   // Fonction pour ouvrir une modale au clic sur un marker de restaurant
   const showRestaurantModal = (name) => {
-    fetch(`http://10.1.2.153:3000/restaurants/search/${name}`)
+    fetch(BACKEND_ADRESS + `/restaurants/search/${name}`)
       .then((response) => response.json())
       .then((info) => {
-        // console.log(JSON.stringify(info, null, 2)); // Sera utile pour les réservations
+        //console.log(JSON.stringify(info, null, 2)); // Sera utile pour les réservations
         let openInfos = info.data.openingHours;
         const isOpenNow = (openInfos) => {
           const now = new Date();
@@ -76,76 +167,6 @@ export default function HomeScreen({ navigation }) {
     // Rendre visible la modale qui est cachée par défaut
     setVisible(true);
   };
-
-  // Récupérer la localisation, en temps réel, de l'utilisateur
-  useEffect(() => {
-    (async () => {
-      const result = await Location.requestForegroundPermissionsAsync();
-      const status = result?.status;
-
-      if (status === "granted") {
-        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-          const latitude = location.coords.latitude;
-          const longitude = location.coords.longitude;
-          setCurrentPosition({ latitude: latitude, longitude: longitude });
-          dispatch(updatePosition(currentPosition));
-
-          // Récupérer les restaurants, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
-          fetch(
-            BACKEND_ADRESS +
-              "/restaurants/near/500?longitude=" +
-              latitude +
-              "&latitude=" +
-              longitude
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              // Si des restaurants sont trouvés, les affichés individuellement sur la carte, sous forme de markers
-              if (data.restaurantsList) {
-                setMarkers(
-                  data.restaurantsList.map((info, i) => ({
-                    id: i,
-                    latitude: info.location.coordinates[1],
-                    longitude: info.location.coordinates[0],
-                    name: info.name,
-                  }))
-                );
-              }
-            });
-        });
-      }
-    })();
-  }, []);
-
-  // Bouton pour recentrer la map selon la position de l'utilisateur, en temps réel
-  const handleCenter = () => {
-    if (currentPosition.latitude !== 0 && currentPosition.longitude !== 0) {
-      //mapRef.current?.animateCamera({...}) assure que la carte est bien référencée avant d'exécuter l'animation
-      //La fonction handleCenter utilise animateCamera pour déplacer la vue de la carte vers la position actuelle de l'utilisateur avec un zoom adapté.
-      mapRef.current?.animateCamera({
-        center: {
-          latitude: currentPosition.latitude,
-          longitude: currentPosition.longitude,
-        },
-        //on conserve le zoom initial
-        altitude: 500,
-        pitch: 45,
-        zoom: 18,
-      });
-    }
-  };
-
-  // Bouton filtres à faire
-  const handleFilter = () => {};
-
-  // Afficher les restaurants à proximité
-  useEffect(() => {
-    fetch(``)
-      .then((response) => response.json())
-      .then((data) => {
-        data.result;
-      });
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -197,8 +218,9 @@ export default function HomeScreen({ navigation }) {
           <Marker
             key={i}
             coordinate={{
-              latitude: data.longitude,
-              longitude: data.latitude,
+              longitude: data.longitude,
+
+              latitude: data.latitude,
             }}
             title={data.name}
             pinColor="green"
