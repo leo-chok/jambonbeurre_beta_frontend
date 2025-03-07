@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useSelector } from "react";
 import { View, ScrollView, StyleSheet, Image, Linking } from "react-native";
 import { Checkbox, List, RadioButton, Divider, Text } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
@@ -63,6 +63,17 @@ export default function Restaurant(props) {
   String.prototype.Capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
   };
+
+  
+  // Créer la navigation vers le restaurant depuis Google maps
+
+    
+  // Calculer la distance entre l'utilisateur et le restaurant affiché dans la modale
+
+  const { calculateDistance } = require("../modules/calculateDistance");
+  const userLocation = useSelector((state) => state.user.value.location);
+  console.log(calculateDistance(props.location, userLocation))
+
 
   return (
     <View style={styles.container}>
