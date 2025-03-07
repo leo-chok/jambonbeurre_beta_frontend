@@ -5,59 +5,59 @@ import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 
 export default function Restaurant(props) {
   // Image sur la modale
-  let restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
-  if (props.type === "hamburger_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
-  } else if (props.type === "bakery") {
-    restaurantImage = require("../assets/restaurants_img/brunch.png");
-  } else if (props.type === "sports_activity_location") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
-  } else if (props.type === "coffee_shop") {
-    restaurantImage = require("../assets/restaurants_img/bar.png");
-  } else if (props.type === "video_arcade") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
-  } else if (props.type === "hotel") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
-  } else if (props.type === "bar") {
-    restaurantImage = require("../assets/restaurants_img/bar.png");
-  } else if (props.type === "italian_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/italian.png");
-  } else if (props.type === "movie_theater") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
-  } else if (props.type === "shopping_mall") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
-  } else if (props.type === "supermarket") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
-  } else if (props.type === "store") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
-  } else if (props.type === "brunch_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/brunch.png");
-  } else if (props.type === "casino") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
-  } else if (props.type === "pizza_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/italian.png");
-  } else if (props.type === "restaurant") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
-  } else if (props.type === "thai_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/thai.png");
-  } else if (props.type === "food_store") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
-  } else if (props.type === "chinese_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/japanese.png");
-  } else if (props.type === "french_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
-  } else if (props.type === "sandwich_shop") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
-  } else if (props.type === "fast_food_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/burger.png");
-  } else if (props.type === "tea_house") {
-    restaurantImage = require("../assets/restaurants_img/brunch.png");
-  } else if (props.type === "meal_takeaway") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
-  } else if (props.type === "japanese_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/japanese.png");
-  } else {
-  }
+  // let restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
+  // if (props.type === "hamburger_restaurant") {
+  //   restaurantImage = require("../assets/restaurants_img/restaurant.png");
+  // } else if (props.type === "bakery") {
+  //   restaurantImage = require("../assets/restaurants_img/brunch.png");
+  // } else if (props.type === "sports_activity_location") {
+  //   restaurantImage = require("../assets/restaurants_img/restaurant.png");
+  // } else if (props.type === "coffee_shop") {
+  //   restaurantImage = require("../assets/restaurants_img/bar.png");
+  // } else if (props.type === "video_arcade") {
+  //   restaurantImage = require("../assets/restaurants_img/restaurant.png");
+  // } else if (props.type === "hotel") {
+  //   restaurantImage = require("../assets/restaurants_img/restaurant.png");
+  // } else if (props.type === "bar") {
+  //   restaurantImage = require("../assets/restaurants_img/bar.png");
+  // } else if (props.type === "italian_restaurant") {
+  //   restaurantImage = require("../assets/restaurants_img/italian.png");
+  // } else if (props.type === "movie_theater") {
+  //   restaurantImage = require("../assets/restaurants_img/restaurant.png");
+  // } else if (props.type === "shopping_mall") {
+  //   restaurantImage = require("../assets/restaurants_img/fastfood.png");
+  // } else if (props.type === "supermarket") {
+  //   restaurantImage = require("../assets/restaurants_img/fastfood.png");
+  // } else if (props.type === "store") {
+  //   restaurantImage = require("../assets/restaurants_img/fastfood.png");
+  // } else if (props.type === "brunch_restaurant") {
+  //   restaurantImage = require("../assets/restaurants_img/brunch.png");
+  // } else if (props.type === "casino") {
+  //   restaurantImage = require("../assets/restaurants_img/fastfood.png");
+  // } else if (props.type === "pizza_restaurant") {
+  //   restaurantImage = require("../assets/restaurants_img/italian.png");
+  // } else if (props.type === "restaurant") {
+  //   restaurantImage = require("../assets/restaurants_img/restaurant.png");
+  // } else if (props.type === "thai_restaurant") {
+  //   restaurantImage = require("../assets/restaurants_img/thai.png");
+  // } else if (props.type === "food_store") {
+  //   restaurantImage = require("../assets/restaurants_img/fastfood.png");
+  // } else if (props.type === "chinese_restaurant") {
+  //   restaurantImage = require("../assets/restaurants_img/japanese.png");
+  // } else if (props.type === "french_restaurant") {
+  //   restaurantImage = require("../assets/restaurants_img/restaurant.png");
+  // } else if (props.type === "sandwich_shop") {
+  //   restaurantImage = require("../assets/restaurants_img/fastfood.png");
+  // } else if (props.type === "fast_food_restaurant") {
+  //   restaurantImage = require("../assets/restaurants_img/burger.png");
+  // } else if (props.type === "tea_house") {
+  //   restaurantImage = require("../assets/restaurants_img/brunch.png");
+  // } else if (props.type === "meal_takeaway") {
+  //   restaurantImage = require("../assets/restaurants_img/fastfood.png");
+  // } else if (props.type === "japanese_restaurant") {
+  //   restaurantImage = require("../assets/restaurants_img/japanese.png");
+  // } else {
+  // }
 
 
   // Modifier le titre du restaurant
