@@ -1,8 +1,11 @@
 import { StatusBar } from "expo-status-bar";
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React, { useEffect } from "react";
 import AgendaScreen from "./screens/AgendaScreen";
 import AgendaInvitListScreen from "./screens/AgendaInvitListScreen";
 import ChatConversationScreen from "./screens/ChatConversationScreen";
@@ -80,7 +83,26 @@ const TabNavigator = () => {
   );
 };
 
+SplashScreen.preventAutoHideAsync();
+
+
 export default function App() {
+  const [loaded, error] = useFonts({
+    'OldStandard-Bold': require('./assets/fonts/OldStandardTT-Bold.ttf'),
+    'Montserrat-Medium': require('./assets/fonts/Montserrat-Medium.ttf'),
+    'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
+    'Montserrat-Bold': require('./assets/fonts/Montserrat-Bold.ttf'),
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
   return (
     <Provider store={store}>
       <PaperProvider>
@@ -135,6 +157,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginBottom: 24,
     marginHorizontal: 8,
+    zIndex: 1,
   },
 
   tabBarIcon: {
