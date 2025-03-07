@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   textmessage: {
     width: 240,
-    backgroundColor: "green",
+    backgroundColor: "pink",
     borderRadius: 8,
     textAlign: "left",
   },

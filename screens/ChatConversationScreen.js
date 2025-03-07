@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   myMessage: {
     width: 250,
-    backgroundColor: "blue",
+    backgroundColor: "pink",
     borderRadius: 8,
     textAlign: "right",
     alignSelf: "flex-end",
