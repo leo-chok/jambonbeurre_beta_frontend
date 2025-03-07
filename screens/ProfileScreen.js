@@ -29,7 +29,7 @@ import { useIsFocused } from "@react-navigation/native";
 export default function ProfileScreen({ navigation }) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const token = "eyqL3bClggeslHRBVHIAAE5wkQoHyvzp";
+  const token = useSelector((state) => state.user.value.authentification.token);
   const [userData, setUserData] = useState({});
   const [username, setUsername] = useState("");
   const [firstname, setFirstname] = useState("");

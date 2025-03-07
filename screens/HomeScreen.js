@@ -340,8 +340,6 @@ export default function HomeScreen({ navigation }) {
         <Modal
           visible={visible}
           onDismiss={hideRestaurantModal}
-
-
           contentContainerStyle={styles.modalStyle}
         >
           <Restaurant
@@ -353,7 +351,6 @@ export default function HomeScreen({ navigation }) {
             location={dataRestaurant.location}
             priceLevel={dataRestaurant.priceLevel}
             isopen={dataRestaurant.openingHours}
-
           />
         </Modal>
       </Portal>

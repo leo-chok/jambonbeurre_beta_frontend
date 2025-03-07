@@ -46,6 +46,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -69,7 +70,7 @@ const TabNavigator = () => {
             iconName = focused ? "settings" : "settings-outline";
           }
 
-          return <Ionicons name={iconName} size={28} color={color} />;
+          return <Ionicons name={iconName} size={20} color={color} />;
         },
         tabBarActiveTintColor: "#FF6C47",
         tabBarInactiveTintColor: "#202020",
@@ -194,15 +195,15 @@ export default function App() {
 
 const styles = StyleSheet.create({
   tabBar: {
+    display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    position: "absolute",
-    height: 60,
+    alignItems: "center",
+    height: 80,
     backgroundColor: "#fff",
     borderRadius: 50,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.5,
     shadowRadius: 6,
     elevation: 5,
     marginBottom: 24,
@@ -211,6 +212,10 @@ const styles = StyleSheet.create({
   },
 
   tabBarIcon: {
-    marginBottom: -24, // Ajustement fin pour bien centrer
+    display: "flex",
+    flexDirection: "row",
+    width: 20,
+    height: 20,
+    marginBottom: -20,
   },
 });

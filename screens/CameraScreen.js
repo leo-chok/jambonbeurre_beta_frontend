@@ -28,7 +28,7 @@ export default function CameraScreen({ navigation }) {
   const [facing, setFacing] = useState("front");
   const [flashStatus, setFlashStatus] = useState("off");
   const [isLoading, setIsLoading] = useState(false);
-  const goBack = navigation.getState().routes[0].name;
+  const { goBack } = navigation;
   console.log(goBack);
   useEffect(() => {
     (async () => {
@@ -79,11 +79,7 @@ export default function CameraScreen({ navigation }) {
           .then((data) => {
             console.log(data);
             setIsLoading(false);
-            if (goBack === "SignUp2") {
-              navigation.navigate("SignUp3");
-            } else {
-              navigation.navigate("Profile");
-            }
+            goBack();
           });
       })
       .catch((e) => console.log(e));
