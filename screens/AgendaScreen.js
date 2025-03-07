@@ -5,29 +5,36 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import {
+  TextInput,
+  Modal,
+  Button,
+  Portal,
+  Text,
+} from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewReservation,
   deleteReservation,
   displayReservations,
 } from "../reducers/reservations";
+import { BACKEND_ADRESS } from "../.config";
+
 
 export default function AgendaScreen({ navigation }) {
   const reservations = useSelector(
     (state) => state.reservations.value.reservations
   );
   const dispatch = useDispatch();
-  const user = { _id: "67c8328fd39cf888fb710f59" };
+  const user = { _id: "67c979961277b8acd792fee2" };
 
-  //------- Permet de refresh les reservations à chaque ajout
+  //------- Permet de refresh les reservations après une action
   const refreshReservations = () => {
-    const token = "tZz3VkDLAWtSCoQiQqzxDFya4yRletps";
-    fetch(`http://10.1.0.166:3000/reservations/${token}`)
+    const token = "3MRzICAiqSm9TvxI_qXMyxzEcraBr4O7";
+    fetch(BACKEND_ADRESS + `/reservations/${token}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -36,25 +43,30 @@ export default function AgendaScreen({ navigation }) {
         }
       });
   };
+
+
 //------- Permet de récupérer les reservations
   useEffect(() => {
-    const token = "tZz3VkDLAWtSCoQiQqzxDFya4yRletps";
-    fetch(`http://10.1.0.166:3000/reservations/${token}`)
+    const token = "3MRzICAiqSm9TvxI_qXMyxzEcraBr4O7";
+    fetch(BACKEND_ADRESS + `/reservations/${token}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
         if (data.result) {
           dispatch(displayReservations(data.data));
+          refreshReservations();
         }
       });
   }, []);
 
+
+
   //------- Ajouter une reservation
   const handleAddReservation = () => {
-    fetch("http://10.1.0.166:3000/reservations/add", {
+    fetch(BACKEND_ADRESS + "/reservations/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ restaurantId, userId: user._id, date }),
+      body: JSON.stringify({ restaurantId, userId: user._id, date, conversationId }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -67,9 +79,12 @@ export default function AgendaScreen({ navigation }) {
       });
   };
 
+
+
+
   //------ Quitter une reservation
   const leaveReservation = (reservationId, userId) => {
-    fetch("http://10.1.0.166:3000/reservations/leaveReservation", {
+    fetch( BACKEND_ADRESS + "/reservations/leaveReservation", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ reservationId, userId }),
@@ -88,7 +103,7 @@ export default function AgendaScreen({ navigation }) {
   };
   //------ Supprimer une reservation
   const handleDeleteReservation = (reservationId) => {
-    fetch("http://10.1.0.166:3000/reservations/deleteUser", {
+    fetch(BACKEND_ADRESS + "/reservations/deleteUser", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ reservationId }),
@@ -127,35 +142,39 @@ export default function AgendaScreen({ navigation }) {
             <Text style={styles.textConversation}>
               {reservation.conversation}
             </Text>
-            <TouchableOpacity
+            {/* <Button
               style={styles.btnDelete}
+              mode={"contained"}
               onPress={() => handleDeleteReservation(reservation._id)}
             >
               <Text style={styles.btnText}>Delete</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.btnLeaveReservation}
-              onPress={() => leaveReservation(reservation._id, user._id)}
-            >
-              <Text style={styles.title}>Leave</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity
+            </Button> */}
+            <Button
             style={styles.btnInvite}
         title="Go to AgendaInvitList"
+        mode={"contained"}
         onPress={() => navigation.navigate("AgendaInvitListScreen")}
       >
         <Text style={styles.title}> + Inviter</Text>
-      </TouchableOpacity>
+      </Button>
+            <Button
+              style={styles.btnLeaveReservation}
+              mode={"contained"}
+              onPress={() => leaveReservation(reservation._id, user._id)}
+            >
+              <Text style={styles.title}>Quitter la réservation</Text>
+            </Button>
+            
           </View>
         ))}
       </ScrollView>
-      <TouchableOpacity
+      <Button
         style={styles.btnAddReservation}
+        mode={"contained"}
         onPress={() => handleAddReservation()}
       >
         <Text style={styles.title}>New Reservation ?</Text>
-      </TouchableOpacity>
+      </Button>
     </KeyboardAvoidingView>
   );
 }
@@ -163,10 +182,10 @@ export default function AgendaScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    marginTop: 90,
+    backgroundColor: "#f5f5DC",
     alignItems: "center",
     justifyContent: "center",
-  
   },
   header: {
     width: "100%",
@@ -176,15 +195,15 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
   },
   headerText: {
-    marginTop: 50,
+    marginTop: 32,
     fontSize: 24,
     fontWeight: "bold",
     color: "#FF7F50", 
   },
   reservationContainer: {
-    width: 250,
-    backgroundColor: "pink",
-    borderRadius: 8,
+    width: 330,
+    backgroundColor: "#FF7F50",
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -193,41 +212,18 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   btnAddReservation: {
-    width: 130,
-    height: 30,
-    alignItems: "center",
-    paddingTop: 8,
-    borderRadius: 10,
-    backgroundColor: "red",
-    marginBottom: "20%",
+    marginBottom: 120,
   },
   btnDelete: {
-    width: 70,
-    height: 30,
-    paddingTop: 8,
-    borderRadius: 10,
-    alignItems: "center",
-    backgroundColor: "green",
-    marginLeft: 90,
+  
   },
   btnLeaveReservation: {
-    width: 70,
-    height: 30,
-    paddingTop: 8,
-    borderRadius: 10,
-    alignItems: "center",
-    backgroundColor: "orange",
-    marginRight: 90,
-    marginTop: -30,
+    marginTop: -40,
+    marginRight: 120,
   },
   btnInvite: {
-    width: 70,
-    height: 30,
-    paddingTop: 8,
-    borderRadius: 10,
-    alignItems: "center",
-    backgroundColor: "purple",
-    marginTop: 3,
+marginTop: 10,
+marginLeft: 200,
   },
   textName: {
     fontSize: 20,
