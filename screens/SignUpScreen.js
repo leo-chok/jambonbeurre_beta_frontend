@@ -1,52 +1,102 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  Text,
-  TextInput,
   TouchableOpacity,
-} from 'react-native';
+} from "react-native";
+import {
+  TextInput,
+  List,
+  RadioButton,
+  Checkbox,
+  Text,
+  Divider,
+  Button,
+  Switch,
+  Chip,
+  Snackbar,
+} from "react-native-paper";
 
 export default function SignUpScreen({ navigation }) {
-
   const handleSubmit = () => {
-    navigation.navigate('TabNavigator', { screen: 'Home' });
+    navigation.navigate("TabNavigator", { screen: "Home" });
   };
 
   const handleSignUp = () => {
-    navigation.navigate('SignUp1');
+    navigation.navigate("SignUp1");
   };
 
   const handleSignIn = () => {
-    navigation.navigate('SignIn');
+    navigation.navigate("SignIn");
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <Text style={styles.title}>Bienvenue sur Jambon Beurre</Text>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+            <Text style={styles.title}>👋 Bienvenue sur</Text>
+      <Image source={require("../assets/logo/logo.png")} style={styles.logo} />
       <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-        <Text style={styles.textButton} onPress={() => handleSubmit()}>Menu</Text>
+        <Text style={styles.textButton} onPress={() => handleSubmit()}>
+          Menu [DEV]
+        </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-      <Text style={styles.text}>Création de compte </Text><Text style={styles.textButton} onPress={() => handleSignUp()}>Par Email</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-      <Text style={styles.text}>Vous avez déjà un compte? </Text><Text style={styles.textButton} onPress={() => handleSignIn()}>Se connecter</Text>
-      </TouchableOpacity>
+      <Button
+        onPress={() => handleSignUp()}
+        mode={"contained"}
+        style={styles.badgeButton}
+      >
+        <Text style={styles.badgeButtonActive}>Créé ton compte</Text>
+      </Button>
+      <Text style={styles.text}>ou</Text>
+      <Button
+        onPress={() => handleSignIn()}
+        mode={"contained"}
+        style={styles.badgeButton}
+      >
+        <Text style={styles.badgeButtonActive}>Connecte-toi</Text>
+      </Button>
     </KeyboardAvoidingView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#ffe5f6",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  title: {
+    fontSize: 35,
+    fontWeight: "bold",
+    color: "#fe5747",
+    fontFamily: "league-spartan",
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  text: {
+    fontSize: 20,
+  },
+  logo: {
+    width: 350,
+    height: 180,
+    marginBottom: 20,
+    marginTop: 20,
   },
   textButton: {
-    color: '#ec6e5b',
-  }
+    color: "#fe5747",
+  },
+  badgeButton: {
+    width: "60%",
+    margin: 10,
+    backgroundColor: "#fe5747",
+  },
+  badgeButtonActive: {
+    color: "white",
+    fontSize: 20,
+  },
 });

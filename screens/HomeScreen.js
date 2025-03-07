@@ -28,6 +28,8 @@ import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.user.value.authentification.token);
+  console.log(token);
 
   const [currentPosition, setCurrentPosition] = useState({
     latitude: 0,
