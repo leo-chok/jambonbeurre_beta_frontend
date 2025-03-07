@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { chargeDiscussion } from "../reducers/discussions";
+import { BACKEND_ADRESS } from "../.config";
 
 export default function ChatListScreen({ navigation }) {
   const discussions = useSelector(
@@ -25,7 +26,7 @@ export default function ChatListScreen({ navigation }) {
   useEffect(() => {
     console.log("hello chat");
     const token = "-iX_Q1hRBYopsMKtf7ZmMOcOgOBOxIow";
-    fetch(`http://192.168.45.244:3000/chats/getAllChat/`, {
+    fetch(`${BACKEND_ADRESS}/chats/getAllChat/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token: token }),
