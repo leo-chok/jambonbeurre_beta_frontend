@@ -32,10 +32,10 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
 import reservations from "./reducers/reservations";
-import discussions from './reducers/discussions';
+import discussions from "./reducers/discussions";
 
 const store = configureStore({
-  reducer: { user, reservations , discussions },
+  reducer: { user, reservations, discussions },
 });
 
 const Stack = createNativeStackNavigator();
@@ -46,9 +46,9 @@ const TabNavigator = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarShowLabel: false, 
+        tabBarShowLabel: false,
         tabBarStyle: styles.tabBar,
-        tabBarIconStyle: styles.tabBarIcon, 
+        tabBarIconStyle: styles.tabBarIcon,
 
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -97,7 +97,10 @@ export default function App() {
               name="ChatConversation"
               component={ChatConversationScreen}
             />
-            <Stack.Screen name="AgendaInvitListScreen" component={AgendaInvitListScreen} />
+            <Stack.Screen
+              name="AgendaInvitListScreen"
+              component={AgendaInvitListScreen}
+            />
             <Stack.Screen name="AgendaScreen" component={AgendaScreen} />
             <Stack.Screen name="SignIn" component={SignInScreen} />
             <Stack.Screen name="Camera" component={CameraScreen} />
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     position: "absolute",
-    height: 60, 
+    height: 60,
     backgroundColor: "#fff",
     borderRadius: 50,
     shadowColor: "#000",
@@ -133,7 +136,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     marginHorizontal: 8,
   },
-
 
   tabBarIcon: {
     marginBottom: -24, // Ajustement fin pour bien centrer

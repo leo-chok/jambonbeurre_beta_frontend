@@ -20,7 +20,7 @@ import { BACKEND_ADRESS } from "../.config";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 
 export default function CameraScreen({ navigation }) {
-  const token = "eyqL3bClggeslHRBVHIAAE5wkQoHyvzp";
+  const token = useSelector((state) => state.user.value.authentification.token);
   const dispatch = useDispatch();
   const cameraRef = useRef(null);
   const isFocused = useIsFocused();
@@ -28,7 +28,8 @@ export default function CameraScreen({ navigation }) {
   const [facing, setFacing] = useState("front");
   const [flashStatus, setFlashStatus] = useState("off");
   const [isLoading, setIsLoading] = useState(false);
-
+  const goBack = navigation.getState().routes[0].name;
+  console.log(goBack);
   useEffect(() => {
     (async () => {
       const result = await Camera.requestCameraPermissionsAsync();
@@ -78,7 +79,11 @@ export default function CameraScreen({ navigation }) {
           .then((data) => {
             console.log(data);
             setIsLoading(false);
-            navigation.navigate("Profile");
+            if (goBack === "SignUp2") {
+              navigation.navigate("SignUp3");
+            } else {
+              navigation.navigate("Profile");
+            }
           });
       })
       .catch((e) => console.log(e));
@@ -115,7 +120,7 @@ export default function CameraScreen({ navigation }) {
         </View>
       )}
       {isLoading && (
-        <ActivityIndicator size = {120} animating={true} color={"white"} />
+        <ActivityIndicator size={120} animating={true} color={"white"} />
       )}
       <View style={styles.snapContainer}>
         <TouchableOpacity style={styles.snapButton} onPress={takePicture}>
