@@ -6,20 +6,10 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import {
-  TextInput,
-  List,
-  RadioButton,
-  Checkbox,
-  Text,
-  Divider,
-  Button,
-  Switch,
-  Chip,
-  Snackbar,
-} from "react-native-paper";
+import { Text, Button, useTheme } from "react-native-paper";
 
 export default function SignUpScreen({ navigation }) {
+  const theme = useTheme();
   const handleSubmit = () => {
     navigation.navigate("TabNavigator", { screen: "Home" });
   };
@@ -34,10 +24,10 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={{ backgroundColor: theme.colors.primary }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-            <Text style={styles.title}>👋 Bienvenue sur</Text>
+      <Text style={styles.title}>👋 Bienvenue sur</Text>
       <Image source={require("../assets/logo/logo.png")} style={styles.logo} />
       <TouchableOpacity style={styles.button} activeOpacity={0.8}>
         <Text style={styles.textButton} onPress={() => handleSubmit()}>
@@ -66,7 +56,6 @@ export default function SignUpScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffe5f6",
     alignItems: "center",
     justifyContent: "center",
   },

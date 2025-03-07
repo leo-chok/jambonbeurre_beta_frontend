@@ -322,7 +322,6 @@ export default function HomeScreen({ navigation }) {
 
     return (
       <Marker
-  
         key={i}
         coordinate={{
           latitude: data.latitude,
@@ -331,8 +330,7 @@ export default function HomeScreen({ navigation }) {
         title={data.name}
         image={imageMarker}
         onPress={() => showRestaurantModal(data.name)}
-      >
-      </Marker>
+      ></Marker>
     );
   });
 
@@ -397,14 +395,14 @@ export default function HomeScreen({ navigation }) {
           activeOpacity={0.8}
           onPress={() => handleCenter()}
         >
-          <Ionicons name="locate" size={32} color="#202020" />;
+          <Ionicons name="locate" size={32} color="#202020" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.8}
           onPress={() => handleFilter()}
         >
-          <Ionicons name="options-outline" size={32} color="#202020" />;
+          <Ionicons name="options-outline" size={32} color="#202020" />
         </TouchableOpacity>
       </View>
     </View>
@@ -439,5 +437,5 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     width: 200,
     height: 200,
-  }
+  },
 });

@@ -42,6 +42,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -65,7 +66,7 @@ const TabNavigator = () => {
             iconName = focused ? "settings" : "settings-outline";
           }
 
-          return <Ionicons name={iconName} size={28} color={color} />;
+          return <Ionicons name={iconName} size={20} color={color} />;
         },
         tabBarActiveTintColor: "#FF6C47",
         tabBarInactiveTintColor: "#202020",
@@ -81,9 +82,56 @@ const TabNavigator = () => {
 };
 
 export default function App() {
+
+const theme = {
+  colors: {
+    "primary": "rgb(223, 130, 25)",
+    "onPrimary": "rgb(186, 131, 131)",
+    "primaryContainer": "rgb(255, 215, 244)",
+    "onPrimaryContainer": "rgb(56, 0, 55)",
+    "secondary": "rgb(182, 35, 27)",
+    "onSecondary": "rgb(255, 255, 255)",
+    "secondaryContainer": "rgb(255, 218, 213)",
+    "onSecondaryContainer": "rgb(65, 0, 1)",
+    "tertiary": "rgb(0, 108, 72)",
+    "onTertiary": "rgb(255, 255, 255)",
+    "tertiaryContainer": "rgb(141, 247, 194)",
+    "onTertiaryContainer": "rgb(0, 33, 19)",
+    "error": "rgb(186, 26, 26)",
+    "onError": "rgb(255, 255, 255)",
+    "errorContainer": "rgb(255, 218, 214)",
+    "onErrorContainer": "rgb(65, 0, 2)",
+    "background": "rgb(245, 236, 245)",
+    "onBackground": "rgb(31, 26, 29)",
+    "surface": "rgb(255, 251, 255)",
+    "onSurface": "rgb(31, 26, 29)",
+    "surfaceVariant": "rgb(234, 214, 186)",
+    "onSurfaceVariant": "rgb(78, 68, 75)",
+    "outline": "rgb(234, 175, 26)",
+    "outlineVariant": "rgb(209, 194, 203)",
+    "shadow": "rgb(0, 0, 0)",
+    "scrim": "rgb(0, 0, 0)",
+    "inverseSurface": "rgb(52, 47, 50)",
+    "inverseOnSurface": "rgb(186, 64, 113)",
+    "inversePrimary": "rgb(255, 171, 241)",
+    "elevation": {
+      "level0": "transparent",
+      "level1": "rgb(249, 242, 249)",
+      "level2": "rgb(246, 236, 245)",
+      "level3": "rgb(242, 231, 241)",
+      "level4": "rgb(241, 229, 240)",
+      "level5": "rgb(239, 225, 238)"
+    },
+    "surfaceDisabled": "rgba(31, 26, 29, 0.12)",
+    "onSurfaceDisabled": "rgba(31, 26, 29, 0.38)",
+    "backdrop": "rgba(55, 46, 52, 0.4)"
+  }, // Copy it from the color codes scheme and then use it here
+};
+
+
   return (
     <Provider store={store}>
-      <PaperProvider>
+      <PaperProvider  theme={theme}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="SignUp" component={SignUpScreen} />
@@ -122,22 +170,28 @@ export default function App() {
 
 const styles = StyleSheet.create({
   tabBar: {
+    display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    position: "absolute",
-    height: 60,
+    alignItems: "center",
+    height: 80,
     backgroundColor: "#fff",
     borderRadius: 50,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.5,
     shadowRadius: 6,
-    elevation: 5,
-    marginBottom: 24,
-    marginHorizontal: 8,
+    shadowOffset: {
+      height: 3,
+      width: 3,
+    },
+    margin: 10,
   },
 
   tabBarIcon: {
-    marginBottom: -24, // Ajustement fin pour bien centrer
+    display: "flex",
+    flexDirection: "row",
+    width: 20,
+    height: 20,
+    marginBottom: -20,
   },
 });

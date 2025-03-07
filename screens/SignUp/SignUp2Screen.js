@@ -21,6 +21,7 @@ import {
   Switch,
   Chip,
   Snackbar,
+  useTheme,
 } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 
@@ -33,22 +34,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function SignUp2Screen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
-  console.log(token);
-  let isValid = false;
-
-  const [image, setImage] = useState("");
+  const imageReducer = useSelector((state) => state.user.value.infos.avatar);
   const [isLoading, setIsLoading] = useState(false);
+  const theme = useTheme();
 
+  console.log(imageReducer);
+  // --------------------- FONCTION POUR CHOISIR UNE PHOTO DE SON TELEPHONE ---------------------------------
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [1, 1],
-      quality: .3,
+      quality: 0.3,
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
@@ -91,30 +90,31 @@ export default function SignUp2Screen({ navigation }) {
     }
   };
 
-  // Prendre une photo
+  // --------------------- FONCTION POUR PRENDRE UNE PHOTO ---------------------------------
+
   const handleTakePhoto = () => {
-    navigation.navigate("Camera", {from: "SignUp2"});
+    navigation.navigate("Camera", { from: "SignUp2" });
   };
 
-  const handleSuivant = () => {
-    navigation.navigate("SignUp3");
-  };
+  // --------------------- RENDER ---------------------------------
 
   return (
     <SafeAreaView
-      style={styles.container}
+      // style={styles.container}
+      style={{ backgroundColor: theme.colors.primary }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <Text style={styles.title}>Choisissez une photo de profil</Text>
       <View style={styles.main}>
         <View style={styles.containerImage}>
-          {!image && (
+          {imageReducer === "" ? (
             <Image
               source={require("../../assets/logo/avatar_defaut.png")}
               style={styles.image}
             />
+          ) : (
+            <Image source={{ uri: imageReducer }} style={styles.image} />
           )}
-          {image && <Image source={{ uri: image }} style={styles.image} />}
         </View>
         {isLoading && (
           <ActivityIndicator size={120} animating={true} color={"white"} />
