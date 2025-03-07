@@ -340,10 +340,16 @@ export default function HomeScreen({ navigation }) {
         <Modal
           visible={visible}
           onDismiss={hideRestaurantModal}
-
-
           contentContainerStyle={styles.modalStyle}
         >
+          <Ionicons
+            style={styles.closemodale}
+            name="close-outline"
+            size={40}
+            color="#20202"
+            onPress={hideRestaurantModal}
+          />
+
           <Restaurant
             name={dataRestaurant.name}
             type={dataRestaurant.type}
@@ -353,7 +359,6 @@ export default function HomeScreen({ navigation }) {
             location={dataRestaurant.location}
             priceLevel={dataRestaurant.priceLevel}
             isopen={dataRestaurant.openingHours}
-
           />
         </Modal>
       </Portal>
@@ -433,7 +438,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: -35,
     width: "100%",
-    height: "75%",
+    height: "83%",
+  },
+  closemodale: {
+    position: "absolute",
+    right: 14,
+    top: 14,
+    zIndex: 1,
   },
   markerRestaurants: {
     backgroundColor: "white",
