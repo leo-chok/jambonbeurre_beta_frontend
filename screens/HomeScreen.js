@@ -320,7 +320,6 @@ export default function HomeScreen({ navigation }) {
 
     return (
       <Marker
-  
         key={i}
         coordinate={{
           latitude: data.latitude,
@@ -329,8 +328,7 @@ export default function HomeScreen({ navigation }) {
         title={data.name}
         image={imageMarker}
         onPress={() => showRestaurantModal(data.name)}
-      >
-      </Marker>
+      ></Marker>
     );
   });
 
@@ -340,10 +338,10 @@ export default function HomeScreen({ navigation }) {
         <Modal
           visible={visible}
           onDismiss={hideRestaurantModal}
-          style={styles.modalStyle}
+
+
+          contentContainerStyle={styles.modalStyle}
         >
-          {/* // Affichage du composant Restaurant avec les données du restaurant
-          sélectionné grâce aux props */}
           <Restaurant
             name={dataRestaurant.name}
             type={dataRestaurant.type}
@@ -353,6 +351,7 @@ export default function HomeScreen({ navigation }) {
             location={dataRestaurant.location}
             priceLevel={dataRestaurant.priceLevel}
             isopen={dataRestaurant.openingHours}
+
           />
         </Modal>
       </Portal>
@@ -380,9 +379,7 @@ export default function HomeScreen({ navigation }) {
         {restaurantsMarkers}
         {nearUsersMarkers}
       </MapView>
-      <View
-        style={{ position: "absolute", top: 40, width: "92%", paddingTop: 16 }}
-      >
+      <View style={styles.wrapper}>
         <Searchbar
           placeholder="Rechercher un restaurant ou un buddy"
           onChangeText={setSearchQuery}
@@ -390,20 +387,14 @@ export default function HomeScreen({ navigation }) {
           onSubmitEditing={handleSearch}
           value={searchQuery}
         />
-        <TouchableOpacity
-          style={styles.button}
-          activeOpacity={0.8}
-          onPress={() => handleCenter()}
-        >
-          <Ionicons name="locate" size={32} color="#202020" />;
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          activeOpacity={0.8}
-          onPress={() => handleFilter()}
-        >
-          <Ionicons name="options-outline" size={32} color="#202020" />;
-        </TouchableOpacity>
+        <View style={styles.mapActions}>
+          <TouchableOpacity activeOpacity={0.8} onPress={() => handleCenter()}>
+            <Ionicons name="locate" size={32} color="#202020" />
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.8} onPress={() => handleFilter()}>
+            <Ionicons name="options-outline" size={32} color="#202020" />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -420,22 +411,32 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   },
-  button: {
-    top: 450,
-    left: 330,
-    margin: 5,
+  wrapper: {
+    position: "absolute",
+    top: 40,
+    width: "100%",
+    height: "100%",
+    padding: 16,
+    flexDirection: "column",
+    alignItems: "right",
+  },
+  mapActions: {
+    position: "absolute",
+    top: "65%",
+    right: 28,
+    gap: 16,
   },
 
   modalStyle: {
-    backgroundColor: "white",
-    padding: 20,
-    height: "50%",
-    marginTop: "87%",
+    position: "absolute",
+    bottom: -35,
+    width: "100%",
+    height: "75%",
   },
   markerRestaurants: {
     backgroundColor: "white",
     borderRadius: 50,
     width: 200,
     height: 200,
-  }
+  },
 });
