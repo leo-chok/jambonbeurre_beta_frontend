@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AgendaScreen from "./screens/AgendaScreen";
 import AgendaInvitListScreen from "./screens/AgendaInvitListScreen";
 import ChatConversationScreen from "./screens/ChatConversationScreen";
+import ChatNewConversationScreen from "./screens/ChatNewConversationScreen";
 import ChatListScreen from "./screens/ChatListScreen";
 import ChatScreen from "./screens/ChatScreen";
 import HomeScreen from "./screens/HomeScreen";
@@ -93,10 +94,15 @@ export default function App() {
               component={ProfileEditionScreen}
             />
             <Stack.Screen name="ChatList" component={ChatListScreen} />
-            <Stack.Screen
+            <Stack.Screen 
               name="ChatConversation"
               component={ChatConversationScreen}
             />
+            <Stack.Screen 
+              name="ChatNewConversation"
+              component={ChatNewConversationScreen}
+            />
+            
             <Stack.Screen name="AgendaInvitListScreen" component={AgendaInvitListScreen} />
             <Stack.Screen name="AgendaScreen" component={AgendaScreen} />
             <Stack.Screen name="SignIn" component={SignInScreen} />
