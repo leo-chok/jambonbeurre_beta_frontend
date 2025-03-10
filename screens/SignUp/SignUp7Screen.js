@@ -26,21 +26,32 @@ import {
 
 import { BACKEND_ADRESS } from "../../.config";
 import { useDispatch, useSelector } from "react-redux";
-import { addToken } from "../../reducers/user";
+import { addToken, updateProfile } from "../../reducers/user";
 
 export default function SignUp7Screen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
+  const userReducer = useSelector((state) => state.user.value);
   const theme = useTheme();
   const [bio, setBio] = useState("");
 
-  const userdata = { token: token, bio: bio };
+  console.log(userReducer);
 
   const handleSuivant = () => {
+    const dataReducer = {
+      description: {
+        bio: bio,
+      },
+    };
+    // On envoie les données modifiées au reducer User
+    dispatch(updateProfile(dataReducer));
+
+    // On enregistre sur la bdd
+    const dataBDD = { token: token, bio: bio };
     fetch(BACKEND_ADRESS + "/users/update", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userdata),
+      body: JSON.stringify(dataBDD),
     })
       .then((response) => response.json())
       .then((data) => {

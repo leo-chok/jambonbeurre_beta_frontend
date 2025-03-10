@@ -81,9 +81,9 @@ export const userSlice = createSlice({
   reducers: {
 
     updateProfile: (state, action) => {
-      state.value.infos = action.payload.infos;
-      state.value.description = action.payload.description;
-      state.value.preferences = action.payload.preferences
+      state.value.infos = {...state.value.infos, ...action.payload.infos} ;
+      state.value.description = {...state.value.description, ...action.payload.description};
+      state.value.preferences = {...state.value.preferences, ...action.payload.preferences}
     },
 
     updateLunchTime: (state, action) => {

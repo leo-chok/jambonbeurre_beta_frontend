@@ -31,7 +31,10 @@ import { addToken } from "../../reducers/user";
 export default function SignUp9Screen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
+  const userReducer = useSelector((state) => state.user.value);
   const theme = useTheme();
+
+  console.log(userReducer);
 
   const handleDemarrer = () => {
     navigation.navigate("TabNavigator", { screen: "Home" });
