@@ -48,8 +48,8 @@ export default function ChatNewConversationScreen({ navigation }) {
       .then((data) => {
         console.log("data conversation fetch : ");
         console.log(data);
-        console.log(data.idDiscussion);
-        navigation.navigate("ChatConversation", data.idDiscussion);
+        console.log(data.Discussion);
+        navigation.navigate("ChatConversation", data.Discussion);
       }); //then fetch
   } //function
 
