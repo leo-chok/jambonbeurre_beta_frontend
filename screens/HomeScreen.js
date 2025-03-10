@@ -20,15 +20,20 @@ import {
   Portal,
   Text,
   Searchbar,
+  useTheme
 } from "react-native-paper";
 import Restaurant from "../components/Restaurant";
 import mapStyle from "../assets/data/mapStyle";
 import { BACKEND_ADRESS } from "../.config";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
+import OthersProfileScreen from "./OthersProfileScreen";
 
 export default function HomeScreen({ navigation }) {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
+  const userAvatar = useSelector((state) => state.user.value.infos.avatar);
+  console.log(token);
 
   const [currentPosition, setCurrentPosition] = useState({
     latitude: 0,
@@ -97,7 +102,7 @@ export default function HomeScreen({ navigation }) {
       // Récupérer les autres utilisateurs, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
       fetch(
         BACKEND_ADRESS +
-          "/users/near/5000?longitude=" +
+          "/users/near/1000?longitude=" +
           currentPosition.longitude +
           "&latitude=" +
           currentPosition.latitude
@@ -107,17 +112,20 @@ export default function HomeScreen({ navigation }) {
           // Si des utilisateurs sont trouvés, les affichés individuellement sur la carte, sous forme de markers
           if (data) {
             setUsersMarkers(
-              data.listUsers.map((info, i) => ({
-                id: i,
-                longitude: info.infos.location.coordinates[0],
-                latitude: info.infos.location.coordinates[1],
-                username: info.infos.username,
+              data.listUsers.map((data) => ({
+                id: data._id,
+                longitude: data.infos.location.coordinates[0],
+                latitude: data.infos.location.coordinates[1],
+                username: data.infos.username,
+                avatar: data.infos.avatar,
               }))
             );
           }
         });
     })();
   }, [currentPosition]);
+
+  console.log(usersMarkers)
 
   // Bouton pour recentrer la map selon la position de l'utilisateur, en temps réel
   const handleCenter = () => {
@@ -268,7 +276,13 @@ export default function HomeScreen({ navigation }) {
           longitude: data.longitude,
         }}
         title={data.username}
-      />
+        onPress={() => navigation.navigate("OtherProfile", {userId : data.id})}
+      >
+        <Image
+          style={{ width: 50, height: 50, borderRadius:25, borderWidth: 5, borderColor: theme.colors.secondary }}
+          source={{ uri: data.avatar }}
+        />
+      </Marker>
     );
   });
 
@@ -393,7 +407,12 @@ export default function HomeScreen({ navigation }) {
         customMapStyle={mapStyle}
       >
         {currentPosition && (
-          <Marker coordinate={currentPosition} title="Ma Position" />
+          <Marker coordinate={currentPosition} title="Ma Position" >
+          <Image
+          style={{ width: 50, height: 50, borderRadius:25, borderWidth: 5, borderColor: theme.colors.secondary }}
+          source={{ uri: userAvatar }}
+        />
+          </Marker>
         )}
         {restaurantsMarkers}
         {nearUsersMarkers}

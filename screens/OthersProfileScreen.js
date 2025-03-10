@@ -20,17 +20,16 @@ import {
   Button,
   Switch,
   Chip,
-  useTheme
+  useTheme,
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../.config";
 import { useDispatch, useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 
-export default function ProfileScreen({ navigation }) {
+export default function OthersProfileScreen({ navigation, route }) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.user.value.authentification.token);
   const [userData, setUserData] = useState({});
   const [username, setUsername] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -52,11 +51,10 @@ export default function ProfileScreen({ navigation }) {
   // On vient récupérer les informations de l'utilisateur pour les afficher dans les champs
   useEffect(() => {
     // fetch user data
-    fetch(BACKEND_ADRESS + "/users/" + token)
+    fetch(BACKEND_ADRESS + "/users/other/" + route.params.userId)
       .then((response) => response.json())
       .then((data) => {
-        console.log("User found");
-        setUserData(data.userInfos[0]);
+        setUserData(data.userInfos);
       });
   }, [isFocused]);
 
@@ -75,14 +73,6 @@ export default function ProfileScreen({ navigation }) {
       setVacancy(userData.preferences.holidays);
     }
   }, [userData]);
-
-  const handleEditProfile = () => {
-    navigation.navigate("ProfileEdition");
-  };
-
-  const handleEditAvatar = () => {
-    navigation.navigate("SignUp2");
-  };
 
   const displayCreneaux = lastLunchTime.map((data, i) => {
     return (
@@ -106,19 +96,13 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      style={[styles.container, {backgroundColor: theme.colors.background}]}
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.topContainer}>
-        <Text style={styles.mainTitle}>Mon Profil 🧑‍💻</Text>
-        <Button mode="contained" onPress={() => handleEditProfile()}>
-          <Text style={{ color: "white" }}>Modifier</Text>
-        </Button>
+        <Text style={styles.mainTitle}>Profil de </Text>
       </View>
-      <TouchableOpacity
-        onPress={() => handleEditAvatar()}
-        style={styles.avatarContainer}
-      >
+      <TouchableOpacity style={styles.avatarContainer}>
         <Image style={styles.avatar} source={avatar && { uri: `${avatar}` }} />
       </TouchableOpacity>
       <ScrollView style={styles.inputs_container}>
@@ -231,7 +215,7 @@ const styles = StyleSheet.create({
   },
   infos_title: {
     display: "flex",
-    flexDirection: 'row',
+    flexDirection: "row",
     justifyContent: "flex-start",
     fontSize: 16,
     fontWeight: "bold",
@@ -239,7 +223,7 @@ const styles = StyleSheet.create({
   },
   infos_data: {
     display: "flex",
-    flexDirection: 'row',
+    flexDirection: "row",
     justifyContent: "center",
     fontSize: 14,
     fontWeight: 300,
