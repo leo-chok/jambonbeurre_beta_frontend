@@ -14,14 +14,14 @@ import {
   deleteReservation,
   displayReservations,
 } from "../reducers/reservations";
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { BACKEND_ADRESS } from "../.config";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
-
-export default function AgendaInvitListScreen({ navigation }) {
+export default function AgendaInvitListScreen({ route, navigation }) {
   const [users, setUsers] = useState([]);
-  const reservationId = route.params?.reservationId; // Récupère l'ID de la réservation
-
+  const { reservationId } = route.params;
+  const [modalVisible, setModalVisible] = useState(false);
   useEffect(() => {
     fetch(BACKEND_ADRESS + "/users/all")
       .then((response) => response.json())
@@ -40,36 +40,39 @@ export default function AgendaInvitListScreen({ navigation }) {
             }
             return { ...user, score }; //Ajoute le score à l'utilisateur
           })
-          //   .filter((user) => user.score > 0) //Garder uniquement ceux qui ont des similitudes
+          .filter((user) => user.score > 0) //Garder uniquement ceux qui ont des similitudes
           .sort((a, b) => b.score - a.score); //Trier par pertinence (score décroissant)
         setUsers(filteredUsers);
-      })
-      .catch((error) =>
-        console.error("Erreur lors de la récupération des utilisateurs", error)
-      );
+        if (filteredUsers.length === 0) {
+          setUsers(data.listUsers); // Affiche tous les utilisateurs si aucun n'a de score
+        } else {
+          setUsers(filteredUsers);
+        }
+      });
   }, []);
 
-    //------------------ Inviter un utilisateur à une reservation
-     const handleInviteUser = (userId) => {
-        if (!reservationId) {
-            console.error("Aucune réservation trouvée");
-            return;
-          }
-       fetch(BACKEND_ADRESS + "/reservations/invite", {
-         method: "POST",
-         headers: { "Content-Type": "application/json" },
-         body: JSON.stringify({ reservationId, userId }),
-       })
-         .then((response) => response.json())
-         .then((data) => {
-           if (data.result) {
-             console.log("Utilisateur ajouté à la réservation");
-             refreshReservations()
-           } else {
-             console.error("Erreur lors de l'invitation:", data.error);
-           }
-         });
-     };
+  //------------------ Inviter un utilisateur à une reservation ------------------------
+  const handleInviteUser = (reservationId, userId) => {
+    if (!reservationId) {
+      console.error("Aucune réservation trouvée");
+      return;
+    }
+    console.log(reservationId);
+    fetch(BACKEND_ADRESS + "/reservations/invite", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reservationId, userId }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.result) {
+          console.log("Utilisateur ajouté à la réservation");
+        } else {
+          console.error("Erreur lors de l'invitation:", data.error);
+        }
+      });
+  };
 
   return (
     <KeyboardAvoidingView
@@ -84,14 +87,18 @@ export default function AgendaInvitListScreen({ navigation }) {
         {users.length > 0 ? (
           users.map((user) => (
             <View key={user._id} style={styles.userItem}>
-                <Image source={{ uri: user.infos.avatar }} style={styles.avatar} />
+              <Image
+                source={{ uri: user.infos.avatar }}
+                style={styles.avatar}
+              />
 
-             
               <Button
                 style={styles.btnUsername}
-                mode="text" 
+                mode="text"
                 onPress={() =>
-                  navigation.navigate("ChatConversationScreen", { userId: user._id })
+                  navigation.navigate("ChatConversationScreen", {
+                    userId: user._id,
+                  })
                 }
               >
                 <Text style={styles.userText}>{user.infos.username}</Text>
@@ -99,9 +106,11 @@ export default function AgendaInvitListScreen({ navigation }) {
               <Button
                 style={styles.btnInvite}
                 mode={"contained"}
-                onPress={() => handleInviteUser(user._id)}
+                onPress={() => handleInviteUser(reservationId, user._id)}
               >
-                <Text style={styles.title}> + Inviter</Text>
+                <AntDesign name="adduser" size={21} color="black" />
+                <Text style={styles.title}></Text>
+
               </Button>
             </View>
           ))
@@ -117,7 +126,6 @@ export default function AgendaInvitListScreen({ navigation }) {
       >
         <Text style={styles.btnText}>Retour à l'agenda</Text>
       </Button>
-    
     </KeyboardAvoidingView>
   );
 }
@@ -127,6 +135,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#f5f5DC",
   },
   header: {
     width: "100%",
@@ -150,12 +159,12 @@ const styles = StyleSheet.create({
   userItem: {
     padding: 15,
     marginVertical: 5,
-    backgroundColor: "#FF7F50",
+    backgroundColor: "#FCD2DE",
     borderRadius: 10,
     alignItems: "center",
   },
   userText: {
-    marginTop: 40,
+    marginTop: 45,
     marginLeft: 30,
     color: "black",
     fontSize: 20,
@@ -163,6 +172,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     maxWidth: 200,
     textAlign: "center",
+    textDecorationLine: "underline",
   },
   noUsers: {
     textAlign: "center",
@@ -182,14 +192,13 @@ const styles = StyleSheet.create({
   },
   btnInvite: {
     marginRight: -220,
-    marginTop: 10,
+    marginTop: 7,
     borderRadius: 10,
-
   },
-    btnUsername: {
-        marginTop: -195,
-        marginBottom: 50,
-    },
+  btnUsername: {
+    marginTop: -195,
+    marginBottom: 50,
+  },
   avatar: {
     marginLeft: -250,
     width: 70,
@@ -197,5 +206,11 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginTop: -5,
     marginBottom: 10,
+  },
+  modalStyle: {
+    backgroundColor: "white",
+    padding: 20,
+    height: "50%",
+    marginTop: "87%",
   },
 });

@@ -179,9 +179,6 @@ export default function App() {
             />
             
             <Stack.Screen name="AgendaInvitListScreen" component={AgendaInvitListScreen} />
-            <Stack.Screen name="AgendaScreen" component={AgendaScreen} />
-            <Stack.Screen name="ChatConversationScreen" component={ChatConversationScreen} />
-            <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="SignIn" component={SignInScreen} />
             <Stack.Screen name="Camera" component={CameraScreen} />
             <Stack.Screen name="SignUp1" component={SignUp1Screen} />

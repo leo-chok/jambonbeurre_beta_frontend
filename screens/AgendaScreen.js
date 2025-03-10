@@ -15,8 +15,9 @@ import {
   deleteReservation,
   displayReservations,
 } from "../reducers/reservations";
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { BACKEND_ADRESS } from "../.config";
+import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function AgendaScreen({ navigation }) {
   const reservations = useSelector(
@@ -26,7 +27,7 @@ export default function AgendaScreen({ navigation }) {
   const user = { _id: "67cc823e7a93dd8322170c4f" };
   const token = "3XlSzQIc6xMoLXvDILbLu_MJBchj5n5e";
 
-  //------- Permet de refresh les reservations après une action
+  //------------------- Permet de refresh les reservations après une action ------------------------
   const refreshReservations = () => {
     fetch(BACKEND_ADRESS + `/reservations/${token}`)
       .then((response) => response.json())
@@ -38,7 +39,7 @@ export default function AgendaScreen({ navigation }) {
       });
   };
 
-  //------- Permet de récupérer les reservations
+  //------------------- Permet de récupérer les reservations ------------------------
   useEffect(() => {
     fetch(BACKEND_ADRESS + `/reservations/${token}`)
       .then((response) => response.json())
@@ -46,12 +47,12 @@ export default function AgendaScreen({ navigation }) {
         console.log(data);
         if (data.result) {
           dispatch(displayReservations(data.data));
-          refreshReservations();
+          refreshReservations()
         }
       });
   }, []);
 
-  //------- Ajouter une reservation
+  //------------------- Ajouter une reservation ------------------------
   const handleAddReservation = () => {
     fetch(BACKEND_ADRESS + "/reservations/add", {
       method: "POST",
@@ -74,7 +75,7 @@ export default function AgendaScreen({ navigation }) {
       });
   };
 
-  //------ Quitter une reservation
+  //------------------- Quitter une reservation ------------------------
   const leaveReservation = (reservationId, userId) => {
     fetch(BACKEND_ADRESS + "/reservations/leaveReservation", {
       method: "DELETE",
@@ -93,7 +94,7 @@ export default function AgendaScreen({ navigation }) {
         }
       });
   };
-  //------ Supprimer une reservation
+  //------------------- Supprimer une reservation ------------------------
   // const handleDeleteReservation = (reservationId) => {
   //   fetch(BACKEND_ADRESS + "/reservations/deleteUser", {
   //     method: "DELETE",
@@ -113,7 +114,7 @@ export default function AgendaScreen({ navigation }) {
   // };
 
  
-  // //----- Formatage de la date
+  // //------------------- Formatage de la date
   // const formatDate = (date) => {
   //   return new Date(date).toLocaleDateString("fr-FR"); // Formate en jj/mm/aaaa
   // };
@@ -126,7 +127,7 @@ export default function AgendaScreen({ navigation }) {
       <View style={styles.header}>
         <Text style={styles.headerText}>Mon Agenda</Text>
       </View>
-      <Text style={styles.section}> Réservation prévues : </Text>
+      <Text style={styles.section}> Réservation prévues : {reservations.length}</Text>
       <ScrollView style={styles.scrollView}>
         {reservations.map((reservation) => (
           <View key={reservation._id} style={styles.reservationContainer}>
@@ -147,15 +148,16 @@ export default function AgendaScreen({ navigation }) {
               mode={"contained"}
               onPress={() => navigation.navigate("AgendaInvitListScreen", { reservationId: reservation._id })}
             >
-              <Text style={styles.title} > + Inviter</Text>
+              <AntDesign name="adduser" size={21} color="black" />
+              <Text style={styles.title} > Inviter</Text>
             </Button>
             <Button
               style={styles.btnLeaveReservation}
               mode={"contained"}
               onPress={() => leaveReservation(reservation._id, user._id)}
-              
             >
-              <Text style={styles.title}  >Quitter la réservation</Text>
+              <FontAwesome name="remove" size={24} color="black" />
+              <Text style={styles.title}  > Quitter</Text>
             </Button>
           </View>
         ))}
@@ -164,9 +166,9 @@ export default function AgendaScreen({ navigation }) {
       <Button
         style={styles.btnAddReservation}
         mode={"contained"}
-        onPress={() => handleAddReservation()}
+        onPress={() => navigation.navigate("Home")}
       >
-        <Text style={styles.title}>New Reservation ?</Text>
+        <Text style={styles.title}>Nouvelle Reservation ?</Text>
       </Button>
     </KeyboardAvoidingView>
   );
@@ -213,7 +215,8 @@ const styles = StyleSheet.create({
     marginRight: 120,
   },
   btnInvite: {
-    marginLeft: 200,
+    marginLeft: 150,
+
   },
   textName: {
     fontSize: 20,
@@ -222,7 +225,7 @@ const styles = StyleSheet.create({
   section: {
     fontSize: 20,
     fontWeight: "bold",
-    marginTop: 20,
+    marginTop: 18,
   },
   section2: {
     fontSize: 20,
