@@ -183,6 +183,7 @@ export default function HomeScreen({ navigation }) {
         };
 
         setDataRestaurant({
+          id: info.data._id,
           name: info.data.name,
           type: info.data.type,
           priceLevel: info?.data?.priceLevel,
@@ -233,6 +234,7 @@ export default function HomeScreen({ navigation }) {
         const longitude = restaurantLocation[0]; // longitude du restaurant
 
         setDataRestaurant({
+          id: info.data._id,
           name: info.data.name,
           type: info.data.type,
           priceLevel: info?.data?.priceLevel,
@@ -375,6 +377,7 @@ export default function HomeScreen({ navigation }) {
 
           {Object.keys(dataRestaurant).length > 0 && (
             <Restaurant
+              id={dataRestaurant.id}
               name={dataRestaurant.name}
               type={dataRestaurant.type}
               address={dataRestaurant.address}
