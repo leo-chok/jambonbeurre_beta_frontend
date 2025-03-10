@@ -1,7 +1,23 @@
-import React, { useState, useSelector } from "react";
-import { View, ScrollView, StyleSheet, Image, Linking } from "react-native";
-import { Checkbox, List, RadioButton, Divider, Text } from "react-native-paper";
+import React, { useEffect } from "react";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Image,
+  Linking,
+  TouchableOpacity,
+} from "react-native";
+import {
+  Checkbox,
+  List,
+  RadioButton,
+  Divider,
+  Text,
+  Dialog,
+} from "react-native-paper";
+import { BACKEND_ADRESS } from "../.config";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
+import { useSelector } from "react-redux";
 
 export default function Restaurant(props) {
   // Image sur la modale
@@ -64,22 +80,52 @@ export default function Restaurant(props) {
     return this.charAt(0).toUpperCase() + this.slice(1);
   };
 
-  
   // Créer la navigation vers le restaurant depuis Google maps
 
-    
-  // Calculer la distance entre l'utilisateur et le restaurant affiché dans la modale
+  // // Calculer la distance entre l'utilisateur et le restaurant affiché dans la modale
 
   const { calculateDistance } = require("../modules/calculateDistance");
-  const userLocation = useSelector((state) => state.user.value.location);
-  console.log(calculateDistance(props.location, userLocation))
+  const userLocation = useSelector(
+    (state) => state.user.value.infos.location.coordinates
+  );
 
+  // Récupérer la distance et la convertir en m
+  let distance =
+    calculateDistance(
+      props.location[0],
+      props.location[1],
+      userLocation[0],
+      userLocation[1]
+    ) * 1000;
+
+  distance = Math.trunc(distance);
+
+  // Fonction pour ouvrir le restaurant dans google maps
+  const openURL = (url) => {
+    Linking.openURL(url).catch((err) =>
+      console.error("An error occurred", err)
+    );
+  };
+
+  // Récupérer les réservation
+  useEffect(() => {
+    const token = "tZz3VkDLAWtSCoQiQqzxDFya4yRletps";
+    fetch(BACKEND_ADRESS + `/reservation//${token}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.result) {
+          console.log("reservations are find !!!");
+          dispatch(displayReservations(data.data));
+        }
+      });
+  }, []);
 
   return (
     <View style={styles.container}>
       <Image source={restaurantImage} style={styles.image}></Image>
       <View style={styles.main}>
-        <Text style={styles.name}>{props.name}</Text>
+        <Text style={styles.h1}>{props.name}</Text>
 
         <View style={styles.header}>
           <View style={styles.left}>
@@ -106,16 +152,26 @@ export default function Restaurant(props) {
             </View>
             <Text style={styles.bodytext}>{props.address}</Text>
           </View>
-          <View style={styles.right}>
-            <Text style={styles.semibold}>{props.rating}</Text>
-            <Ionicons name="star" size={14} color="#026C5D" />
-          </View>
+          {props.rating && (
+            <View style={styles.right}>
+              <Text style={styles.semibold}>{props.rating}</Text>
+              <Ionicons name="star" size={14} color="#026C5D" />
+            </View>
+          )}
         </View>
         <View style={styles.moreInfos}>
-          <View style={styles.nav}>
-            <Ionicons name="navigate-outline" size={40} color="#fff" />
-          </View>
-          <View style={styles.website}>
+          <TouchableOpacity
+            style={styles.nav}
+            onPress={() => {
+              openURL(props.directionUri);
+            }}
+          >
+            <View>
+              <Ionicons name="navigate-outline" size={40} color="#fff" />
+              <Text style={styles.distance}>{distance}m</Text>
+            </View>
+          </TouchableOpacity>
+          <View style={styles.whitecard}>
             <View style={styles.websitewrapper}>
               <Text
                 style={styles.semibold}
@@ -128,6 +184,7 @@ export default function Restaurant(props) {
                 name="arrow-forward"
                 size={24}
                 color="#202020"
+                onPress={() => Linking.openURL(props.website)}
               />
             </View>
             <View style={styles.openNow}>
@@ -152,13 +209,26 @@ export default function Restaurant(props) {
             </View>
           </View>
         </View>
+        <View style={[styles.whitecard, styles.reservation]}>
+          <Text style={styles.h2}>Aucune réservation en cours</Text>
+          <View style={styles.gallery}>
+            <View>
+              <TouchableOpacity style={styles.registerbtn}>
+                <View style={styles.strokeborder}>
+                  <Ionicons name="add-outline" size={32} color="#FFF" />
+                </View>
+              </TouchableOpacity>
+              <Text style={styles.bodytext}>Je m'inscris</Text>
+            </View>
+            <TouchableOpacity style={[styles.registerbtn]}></TouchableOpacity>
+          </View>
+        </View>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-
   container: {
     position: "absolute",
     width: "100%",
@@ -181,9 +251,8 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     top: -100,
   },
-  name: {
+  h1: {
     fontSize: 26,
-    fontWeight: "bold",
     marginHorizontal: "auto",
     marginBottom: 8,
     fontFamily: "OldStandard-Bold",
@@ -206,7 +275,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   left: {
-    width: "70%",
+    width: "65%",
   },
   right: {
     width: "30%",
@@ -232,12 +301,12 @@ const styles = StyleSheet.create({
     gap: 16,
     width: "100%",
     alignItems: "center",
-    height: 110,
+    height: 105,
   },
   nav: {
     backgroundColor: "#026C5D",
     padding: 32,
-    width: "50%",
+    width: "47%",
     borderRadius: 32,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -3 },
@@ -248,11 +317,17 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     height: "100%",
+    gap: 6,
   },
-  website: {
+  distance: {
+    fontSize: 16,
+    fontFamily: "Montserrat-SemiBold",
+    color: "white",
+  },
+  whitecard: {
     backgroundColor: "#fff",
     padding: 32,
-    width: "50%",
+    width: "48%",
     borderRadius: 32,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -3 },
@@ -279,6 +354,42 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 8,
     gap: 4,
-    width: "85%",
+    width: "90%",
+  },
+  h2: {
+    fontSize: 16,
+    marginBottom: 8,
+    fontFamily: "Montserrat-SemiBold",
+  },
+  reservation: {
+    position: "relative",
+    height: "auto%",
+    width: "100%",
+    justifyContent: "top",
+    alignItems: "center",
+  },
+  registerbtn: {
+    backgroundColor: "#FF6C47",
+    width: 80,
+    height: 80,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  strokeborder: {
+    backgroundColor: "#transparent",
+    width: 64,
+    height: 64,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "#FFF",
+    borderWidth: 1.5,
+    borderStyle: "dashed",
+  },
+  gallery: {
+    flexDirection: "row",
+    gap: 16,
   },
 });

@@ -10,7 +10,7 @@ const initialState = {
       online: true,
       location: {
         type: "Point",
-        coordinates: [50.6490435, 3.0644092],
+        coordinates: [3.0644092, 50.6490435],
       },
     },
     authentification: {
@@ -91,7 +91,7 @@ export const userSlice = createSlice({
     },
     
     updatePosition: (state, action) => {
-      state.value.curentPosition = action.payload;
+      state.value.infos.location.coordinates = action.payload;
     },
     addPhoto: (state, action) => {
       state.value.infos.avatar = action.payload;
