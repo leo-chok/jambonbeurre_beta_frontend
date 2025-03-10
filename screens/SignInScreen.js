@@ -27,6 +27,7 @@ import {
 import { BACKEND_ADRESS } from "../.config";
 import { useDispatch, useSelector } from "react-redux";
 import { addToken } from "../reducers/user";
+import Gif from "../components/Gif";
 
 export default function SignInScreen({ navigation }) {
   const theme = useTheme();
@@ -63,10 +64,9 @@ export default function SignInScreen({ navigation }) {
       style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Image
-        source={require("../assets/logo/logoGifOrange.gif")}
-        style={styles.logo}
-      />
+      <View style={{ width: 180, height: 180 }}>
+      <Gif/>
+      </View>
       <Text style={styles.title}>Connecte-toi 👍</Text>
       <Text style={styles.fieldTitle}>Ton adresse e-mail</Text>
       <TextInput

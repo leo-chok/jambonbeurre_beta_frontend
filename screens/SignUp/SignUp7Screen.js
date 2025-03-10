@@ -77,6 +77,7 @@ export default function SignUp7Screen({ navigation }) {
           value={bio}
           onChangeText={(e) => setBio(e)}
           style={styles.inputField}
+          underlineColor="transparent"
         />
          <Button
                 onPress={() => handleSuivant()}
@@ -99,14 +100,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    marginTop: 150,
     fontSize: 35,
     fontWeight: "bold",
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",
     letterSpacing: -1,
-    marginBottom: 20,
-    marginTop: 20,
     textAlign: "center",
   },
   text: {
@@ -127,5 +125,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: 300,
     height: 200,
+    borderRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
   },
 });

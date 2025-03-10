@@ -77,6 +77,7 @@ export default function SignUp3Screen({ navigation }) {
           value={pseudo}
           onChangeText={(e) => setPseudo(e)}
           style={styles.inputField}
+          underlineColor="transparent"
         />
           <Button
                 onPress={() => handleSuivant()}
@@ -98,13 +99,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
     title: {
-      marginTop: 150,
       fontSize: 35,
       fontWeight: "bold",
       color: "#fe5747",
       fontFamily: "LeagueSpartan-Bold",
       letterSpacing: -1,
-      marginBottom: 20,
       marginTop: 20,
       textAlign: "center",
     },
@@ -117,6 +116,7 @@ const styles = StyleSheet.create({
     badgeButton: {
       width: 250,
       margin: 30,
+      marginHorizontal: "auto",
     },
     badgeButtonActive: {
       color: "white",
@@ -124,7 +124,11 @@ const styles = StyleSheet.create({
     },
   inputField: {
     marginTop: 10,
-    width: 300,
-    height: 50,
+    marginHorizontal: "auto",
+      width: 350,
+      height: 50,
+      borderRadius: 20,
+      borderTopRightRadius: 20,
+      borderTopLeftRadius: 20,
   },
 });

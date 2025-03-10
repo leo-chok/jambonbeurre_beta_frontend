@@ -1,0 +1,1 @@
+export const TABBAR_SIZE = 70;

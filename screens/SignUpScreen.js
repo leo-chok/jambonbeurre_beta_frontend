@@ -74,8 +74,6 @@ const styles = StyleSheet.create({
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",
     letterSpacing: -1,
-    marginBottom: 10,
-    marginTop: 10,
   },
   text: {
     fontSize: 20,

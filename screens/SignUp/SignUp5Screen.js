@@ -68,6 +68,7 @@ export default function SignUp5Screen({ navigation }) {
           value={work}
           onChangeText={(e) => setWork(e)}
           style={styles.inputField}
+          underlineColor="transparent"
         />
          <Button
                 onPress={() => handleSuivant()}
@@ -90,14 +91,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    marginTop: 150,
     fontSize: 35,
     fontWeight: "bold",
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",
     letterSpacing: -1,
-    marginBottom: 20,
-    marginTop: 20,
     textAlign: "center",
   },
   text: {
@@ -108,15 +106,19 @@ const styles = StyleSheet.create({
   },
   badgeButton: {
     width: 250,
-    margin: 30,
+    marginVertical: 30,
+    marginHorizontal: "auto",
   },
   badgeButtonActive: {
     color: "white",
     fontSize: 20,
   },
   inputField: {
-    marginTop: 10,
-    width: 300,
+    width: 350,
     height: 50,
-  },
+    marginTop: 20,
+    borderRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    },
 });

@@ -4,6 +4,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -24,6 +25,7 @@ import {
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../.config";
+import { TABBAR_SIZE } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 
@@ -105,10 +107,11 @@ export default function ProfileScreen({ navigation }) {
   });
 
   return (
-    <KeyboardAvoidingView
+    <SafeAreaView
       style={[styles.container, {backgroundColor: theme.colors.background}]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+            <View style={styles.mainContainer}>
       <View style={styles.topContainer}>
         <Text style={styles.mainTitle}>Mon Profil 🧑‍💻</Text>
         <Button mode="contained" onPress={() => handleEditProfile()}>
@@ -122,7 +125,7 @@ export default function ProfileScreen({ navigation }) {
         <Image style={styles.avatar} source={avatar && { uri: `${avatar}` }} />
       </TouchableOpacity>
       <ScrollView style={styles.inputs_container}>
-        <Text style={styles.title}>Mes informations:</Text>
+        <Text style={styles.title}>Mes informations</Text>
         <Text style={styles.infos_title}>Pseudo</Text>
         <Text style={styles.infos_data}>{username}</Text>
         <Text style={styles.infos_title}>Nom</Text>
@@ -130,7 +133,7 @@ export default function ProfileScreen({ navigation }) {
         <Text style={styles.infos_title}>Prénom</Text>
         <Text style={styles.infos_data}>{lastname}</Text>
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-        <Text style={styles.title}>Un peu plus sur moi:</Text>
+        <Text style={styles.title}>Un peu plus sur moi</Text>
         <Text style={styles.infos_title}>Mon travail / Mes études :</Text>
         <Text style={styles.infos_data}>{work}</Text>
         <Text style={styles.infos_title}>Ma bio :</Text>
@@ -143,7 +146,7 @@ export default function ProfileScreen({ navigation }) {
         </View>
         {!vacancy && displayCreneaux}
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-        <Text style={styles.title}>Type de cuisine préférée</Text>
+        <Text style={styles.title}>Type de cuisine préféré</Text>
         <View style={styles.typeFoodContainer}>
           {favFood.map((type) => (
             <Button key={type} mode={"contained"} style={styles.badgeButton}>
@@ -153,7 +156,7 @@ export default function ProfileScreen({ navigation }) {
         </View>
 
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-        <Text style={styles.title}>Vos centre d'intérêts</Text>
+        <Text style={styles.title}>Mes centres d'intérêts</Text>
         <View style={styles.hobbiesContainer}>
           {hobbies.map((type) => (
             <Button
@@ -169,7 +172,7 @@ export default function ProfileScreen({ navigation }) {
 
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
         <Text style={styles.title}>Mes langues</Text>
-        <View style={styles.hobbiesContainer}>
+        <View style={styles.languageContainer}>
           {languages.map((type) => (
             <Button
               key={type}
@@ -182,7 +185,8 @@ export default function ProfileScreen({ navigation }) {
           ))}
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -194,11 +198,16 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
   },
+  mainContainer: {
+    flex: 1,
+    alignItems: "center",
+    marginBottom: TABBAR_SIZE,
+  },
   topContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 20,
     marginBottom: 20,
   },
   avatarContainer: {
@@ -241,7 +250,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: 'row',
     justifyContent: "center",
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: 300,
     width: "100%",
     textAlign: "right",
@@ -302,7 +311,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 10,
     marginTop: 10,
-    marginBottom: 50,
+  },
+  languageContainer: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 10,
+    marginTop: 10,
+    marginBottom: 20,
   },
   submitContainer: {
     width: "100%",

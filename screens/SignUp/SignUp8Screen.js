@@ -29,6 +29,7 @@ import {
 import foodType from "../../assets/data/foodTypes";
 import hobbiesList from "../../assets/data/hobbiesList";
 import languagesList from "../../assets/data/languagesList";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SignUp8Screen({ navigation }) {
   const dispatch = useDispatch();
@@ -103,17 +104,16 @@ export default function SignUp8Screen({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView
+    <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View>
-        <Text style={styles.title}>Ton profil 🧑‍💻</Text>
+        <Text style={styles.mainTitle}>Ton profil 🧑‍💻</Text>
         <Text style={styles.text}>
           Dernière étape ! {"\n"}Aide-nous à te trouver le buddy idéal !
         </Text>
         <ScrollView style={styles.inputs_container}>
-          <Text style={styles.title}>Type de cuisine préférée</Text>
+          <Text style={styles.title}>Type de cuisine préféré</Text>
           <View style={styles.typeFoodContainer}>
             {foodType.map((type) => (
               <Button
@@ -137,7 +137,7 @@ export default function SignUp8Screen({ navigation }) {
           </View>
 
           <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-          <Text style={styles.title}>Vos centre d'intérêts</Text>
+          <Text style={styles.title}>Tes centres d'intérêts</Text>
           <View style={styles.hobbiesContainer}>
             {hobbiesList.map((type) => (
               <Button
@@ -163,7 +163,7 @@ export default function SignUp8Screen({ navigation }) {
 
           <Divider style={{ marginTop: 20, marginBottom: 20 }} />
           <Text style={styles.title}>Do you speak English ?</Text>
-          <View style={styles.hobbiesContainer}>
+          <View style={styles.languageContainer}>
             {languagesList.map((type) => (
               <Button
                 key={type}
@@ -189,12 +189,12 @@ export default function SignUp8Screen({ navigation }) {
          <Button
                 onPress={() => handleSuivant()}
                 mode={"contained"}
-                style={styles.badgeButton}
+                style={styles.Button}
               >
-                <Text style={styles.badgeButtonActive}>Suivant</Text>
+                <Text style={styles.Active}>Suivant</Text>
               </Button>
       </View>
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -206,29 +206,74 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  title: {
-    marginTop: 150,
-    fontSize: 35,
+  mainTitle: {
+    fontSize: 30,
     fontWeight: "bold",
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",
+    alignText: "center",
+    marginHorizontal: "auto",
+  },
+  title: {
+    fontSize: 25,
+    fontFamily: "LeagueSpartan-SemiBold",
     letterSpacing: -1,
+    color: "#397a5b",
+    marginBottom: 10,
+  },
+  text: {
+    fontSize: 20,
     marginBottom: 20,
     marginTop: 20,
     textAlign: "center",
   },
-  text: {
-    fontSize: 20,
-    marginBottom: 10,
-    marginTop: 20,
-    textAlign: "center",
-  },
-  badgeButton: {
+ Button: {
     width: 250,
     margin: 30,
   },
-  badgeButtonActive: {
+  Active: {
     color: "white",
     fontSize: 20,
+  },
+  badgeButton: {
+    width: "40%",
+  },
+  badgeButtonActive: {
+    color: "white",
+  },
+  badgeButtonDisable: {
+    color: "black",
+  },
+  typeFoodContainer: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 10,
+    marginTop: 10,
+  },
+  hobbiesContainer: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 10,
+    marginTop: 10,
+  },
+  languageContainer: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 10,
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  inputs_container: {
+    width: "80%",
+    gap: 20,
   },
 });
