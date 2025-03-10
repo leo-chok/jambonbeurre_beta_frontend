@@ -29,6 +29,7 @@ import { BACKEND_ADRESS } from "../../.config";
 import { useDispatch, useSelector } from "react-redux";
 import { addToken } from "../../reducers/user";
 import Schedule from "../../components/Schedule";
+import Gif from "../../components/Gif";
 
 export default function SignUp6Screen({ navigation }) {
   const dispatch = useDispatch();
@@ -84,8 +85,9 @@ export default function SignUp6Screen({ navigation }) {
             </List.Accordion>
           </ScrollView>
         ) : (
-          <ActivityIndicator size={120} animating={true} color={"white"} />
-        )}
+        <View style={{ width: 180, height: 180, marginHorizontal: "auto" }}>
+          <Gif />
+        </View>         )}
          <Button
                 onPress={() => handleSuivant()}
                 mode={"contained"}
@@ -103,18 +105,16 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   title: {
-    marginTop: 150,
+    marginTop: 50,
     fontSize: 35,
     fontWeight: "bold",
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",
     letterSpacing: -1,
-    marginBottom: 20,
-    marginTop: 20,
     textAlign: "center",
   },
   text: {

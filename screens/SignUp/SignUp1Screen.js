@@ -162,13 +162,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   inputField: {
-    marginTop: 0,
     width: 350,
     height: 50,
     borderRadius: 20,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    underline: "none",
     },
   submitContainer: {
     display: "flex",

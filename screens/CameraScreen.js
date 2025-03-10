@@ -17,7 +17,8 @@ import {
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { addPhoto, removePhoto } from "../reducers/user";
 import { BACKEND_ADRESS } from "../.config";
-import { ActivityIndicator, MD2Colors } from "react-native-paper";
+import { ActivityIndicator, MD2Colors, useTheme } from "react-native-paper";
+import Gif from "../components/Gif";
 
 export default function CameraScreen({ navigation }) {
   const token = useSelector((state) => state.user.value.authentification.token);
@@ -29,6 +30,7 @@ export default function CameraScreen({ navigation }) {
   const [flashStatus, setFlashStatus] = useState("off");
   const [isLoading, setIsLoading] = useState(false);
   const { goBack } = navigation;
+  const theme = useTheme();
   console.log(goBack);
   useEffect(() => {
     (async () => {
@@ -88,7 +90,7 @@ export default function CameraScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={styles.settingContainer}>
         <TouchableOpacity
           style={styles.settingButton}
@@ -118,7 +120,9 @@ export default function CameraScreen({ navigation }) {
         </View>
       )}
       {isLoading && (
-        <ActivityIndicator size={120} animating={true} color={"white"} />
+        <View style={{ width: 180, height: 180 }}>
+          <Gif />
+        </View>
       )}
       <View style={styles.snapContainer}>
         <TouchableOpacity style={styles.snapButton} onPress={takePicture}>

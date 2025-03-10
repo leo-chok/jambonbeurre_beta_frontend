@@ -26,6 +26,7 @@ import { BACKEND_ADRESS } from "../.config";
 import { updateProfile } from "../reducers/user";
 import { useDispatch, useSelector } from "react-redux";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Gif from "../components/Gif";
 
 export default function ProfileEditionScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -161,143 +162,155 @@ export default function ProfileEditionScreen({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={[styles.container, {backgroundColor: theme.colors.background}] }>
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-      <Text style={styles.mainTitle}>Modifiez vos informations</Text>
-      {!isLoading && (
-        <ScrollView style={styles.inputs_container}>
-          <Text style={styles.title}>Comment vous appelez vous ?</Text>
-          <TextInput
-            placeholder={username}
-            label={"Pseudo"}
-            value={username}
-            onChangeText={(e) => setUsername(e)}
-            style={styles.inputField}
-          />
-          <TextInput
-            label="Nom"
-            value={firstname}
-            onChangeText={(firstname) => setFirstname(firstname)}
-            style={styles.inputField}
-          />
-          <TextInput
-            label="Prénom"
-            value={lastname}
-            onChangeText={(lastname) => setLastname(lastname)}
-            style={styles.inputField}
-          />
-          <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-          <Text style={styles.title}>Présentez vous ! </Text>
-          <TextInput
-            label="Métier / Etudes"
-            value={work}
-            onChangeText={(work) => setWork(work)}
-            style={styles.inputField}
-          />
-          <TextInput
-            label="Bio / Description"
-            value={bio}
-            onChangeText={(bio) => setBio(bio)}
-            style={styles.inputField}
-          />
-          <Divider style={{ marginTop: 20, marginBottom: 20 }} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <Text style={styles.mainTitle}>Modifie tes informations</Text>
+        {!isLoading && (
+          <ScrollView style={styles.inputs_container}>
+            <Text style={styles.title}>Comment t'appelles-tu ?</Text>
+            <TextInput
+              placeholder={username}
+              label={"Pseudo"}
+              value={username}
+              onChangeText={(e) => setUsername(e)}
+              style={styles.inputField}
+              underlineColor="transparent"
+            />
+            <TextInput
+              label="Nom"
+              value={firstname}
+              onChangeText={(firstname) => setFirstname(firstname)}
+              style={styles.inputField}
+              underlineColor="transparent"
+            />
+            <TextInput
+              label="Prénom"
+              value={lastname}
+              onChangeText={(lastname) => setLastname(lastname)}
+              style={styles.inputField}
+              underlineColor="transparent"
+            />
+            <Divider style={{ marginTop: 20, marginBottom: 20 }} />
+            <Text style={styles.title}>Présente toi ! </Text>
+            <TextInput
+              label="Métier / Etudes"
+              value={work}
+              onChangeText={(work) => setWork(work)}
+              style={styles.inputField}
+              underlineColor="transparent"
+            />
+            <TextInput
+              label="Bio / Description"
+              value={bio}
+              onChangeText={(bio) => setBio(bio)}
+              style={styles.inputField}
+              underlineColor="transparent"
+            />
+            <Divider style={{ marginTop: 20, marginBottom: 20 }} />
 
-          <Text style={styles.title}>Indiquez vos disponibilités.</Text>
-          <View style={styles.vacancesContainer}>
-            <Text>Mode vacances</Text>
-            <Switch value={vacancy} onValueChange={onToggleSwitch} />
-          </View>
-          {!vacancy && (
-            <List.Accordion title="Créneaux Déjeuner" style={styles.inputList}>
-              <Schedule data={userData?.preferences?.lunchtime} />
-            </List.Accordion>
-          )}
-
-          <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-          <Text style={styles.title}>Type de cuisine préférée</Text>
-          <View style={styles.typeFoodContainer}>
-            {foodType.map((type) => (
-              <Button
-                key={type}
-                mode={(favFood.includes(type) && "contained") || "outlined"}
-                onPress={() => addTypeFood(type)}
-                style={styles.badgeButton}
+            <Text style={styles.title}>Indique tes disponibilités</Text>
+            <View style={styles.vacancesContainer}>
+              <Text>Mode vacances</Text>
+              <Switch value={vacancy} onValueChange={onToggleSwitch} />
+            </View>
+            {!vacancy && (
+              <List.Accordion
+                title="Créneaux Déjeuner"
+                style={styles.inputList}
               >
-                <Text
-                  style={[
-                    styles.badgeButtonActive,
-                    favFood.includes(type)
-                      ? styles.badgeButtonActive
-                      : styles.badgeButtonDisable,
-                  ]}
-                >
-                  {type}
-                </Text>
-              </Button>
-            ))}
-          </View>
+                <Schedule data={userData?.preferences?.lunchtime} />
+              </List.Accordion>
+            )}
 
-          <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-          <Text style={styles.title}>Vos centre d'intérêts</Text>
-          <View style={styles.hobbiesContainer}>
-            {hobbiesList.map((type) => (
-              <Button
-                key={type}
-                // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
-                mode={(hobbies.includes(type) && "contained") || "outlined"}
-                onPress={() => addHobbies(type)}
-                style={styles.badgeButton}
-              >
-                <Text
-                  style={[
-                    styles.badgeButtonActive,
-                    hobbies.includes(type)
-                      ? styles.badgeButtonActive
-                      : styles.badgeButtonDisable,
-                  ]}
+            <Divider style={{ marginTop: 20, marginBottom: 20 }} />
+            <Text style={styles.title}>Type de cuisine préféré</Text>
+            <View style={styles.typeFoodContainer}>
+              {foodType.map((type) => (
+                <Button
+                  key={type}
+                  mode={(favFood.includes(type) && "contained") || "outlined"}
+                  onPress={() => addTypeFood(type)}
+                  style={styles.badgeButton}
                 >
-                  {type}
-                </Text>
-              </Button>
-            ))}
-          </View>
+                  <Text
+                    style={[
+                      styles.badgeButtonActive,
+                      favFood.includes(type)
+                        ? styles.badgeButtonActive
+                        : styles.badgeButtonDisable,
+                    ]}
+                  >
+                    {type}
+                  </Text>
+                </Button>
+              ))}
+            </View>
 
-          <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-          <Text style={styles.title}>Do you speak English ?</Text>
-          <View style={styles.hobbiesContainer}>
-            {languagesList.map((type) => (
-              <Button
-                key={type}
-                // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
-                mode={(languages.includes(type) && "contained") || "outlined"}
-                onPress={() => addLanguages(type)}
-                style={styles.badgeButton}
-              >
-                <Text
-                  style={[
-                    styles.badgeButtonActive,
-                    languages.includes(type)
-                      ? styles.badgeButtonActive
-                      : styles.badgeButtonDisable,
-                  ]}
+            <Divider style={{ marginTop: 20, marginBottom: 20 }} />
+            <Text style={styles.title}>Tes centres d'intérêts</Text>
+            <View style={styles.hobbiesContainer}>
+              {hobbiesList.map((type) => (
+                <Button
+                  key={type}
+                  // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
+                  mode={(hobbies.includes(type) && "contained") || "outlined"}
+                  onPress={() => addHobbies(type)}
+                  style={styles.badgeButton}
                 >
-                  {type}
-                </Text>
-              </Button>
-            ))}
-          </View>
-        </ScrollView>
-      )}
-      {isLoading && (
-        <ActivityIndicator size={120} animating={true} color={"white"} />
-      )}
-      <View style={styles.submitContainer}>
-        <Button mode="contained" onPress={() => handleSubmit()}>
-          <Text style={{ color: "white" }}>Modifier</Text>
-        </Button>
-      </View>
-    </KeyboardAvoidingView>
+                  <Text
+                    style={[
+                      styles.badgeButtonActive,
+                      hobbies.includes(type)
+                        ? styles.badgeButtonActive
+                        : styles.badgeButtonDisable,
+                    ]}
+                  >
+                    {type}
+                  </Text>
+                </Button>
+              ))}
+            </View>
+
+            <Divider style={{ marginTop: 20, marginBottom: 20 }} />
+            <Text style={styles.title}>Do you speak English ?</Text>
+            <View style={styles.languageContainer}>
+              {languagesList.map((type) => (
+                <Button
+                  key={type}
+                  // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
+                  mode={(languages.includes(type) && "contained") || "outlined"}
+                  onPress={() => addLanguages(type)}
+                  style={styles.badgeButton}
+                >
+                  <Text
+                    style={[
+                      styles.badgeButtonActive,
+                      languages.includes(type)
+                        ? styles.badgeButtonActive
+                        : styles.badgeButtonDisable,
+                    ]}
+                  >
+                    {type}
+                  </Text>
+                </Button>
+              ))}
+            </View>
+          </ScrollView>
+        )}
+        {isLoading && (
+        <View style={{ width: 180, height: 180, marginHorizontal: "auto" }}>
+          <Gif />
+        </View>        )}
+        <View style={styles.submitContainer}>
+          <Button mode="contained" onPress={() => handleSubmit()}>
+            <Text style={{ color: "white" }}>Modifier</Text>
+          </Button>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -315,7 +328,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     marginBottom: 20,
-    marginTop: 50,
+    marginTop: 20,
     fontWeight: "bold",
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",
@@ -333,6 +346,9 @@ const styles = StyleSheet.create({
   inputField: {
     marginTop: 10,
     width: "100%",
+    borderRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
   },
   vacancesContainer: {
     display: "flex",
@@ -371,16 +387,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 10,
     marginTop: 10,
-    marginBottom: 50,
   },
-  submitContainer: {
+  languageContainer: {
     width: "100%",
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: 20,
-    paddingBottom: 20,
-    boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 10,
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  submitContainer: {
+    // marginTop: 2,
   },
   badgeButton: {
     width: "40%",

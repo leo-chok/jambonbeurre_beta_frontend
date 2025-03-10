@@ -94,7 +94,7 @@ export default function App() {
     "colors": {
       "primary": "rgb(254, 87, 71)",
       "onPrimary": "rgb(255, 255, 255)",
-      "primaryContainer": "rgb(255, 215, 244)",
+      "primaryContainer": "rgb(246, 233, 242)",
       "onPrimaryContainer": "rgb(56, 0, 55)",
       "secondary": "rgb(182, 35, 27)",
       "onSecondary": "rgb(255, 255, 255)",
@@ -108,7 +108,7 @@ export default function App() {
       "onError": "rgb(255, 255, 255)",
       "errorContainer": "rgb(255, 218, 214)",
       "onErrorContainer": "rgb(65, 0, 2)",
-      "background": "#FCF4E9",
+      "background": "#fcf4e9",
       "onBackground": "rgb(31, 26, 29)",
       "surface": "rgb(255, 251, 255)",
       "onSurface": "rgb(31, 26, 29)",
@@ -216,6 +216,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     marginHorizontal: 8,
     zIndex: 1,
+    position: "absolute",
   },
 
   tabBarIcon: {

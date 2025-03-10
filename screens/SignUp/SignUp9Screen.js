@@ -31,6 +31,7 @@ import { addToken } from "../../reducers/user";
 export default function SignUp9Screen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
+  const username = useSelector((state) => state.user.value.infos.username);
   const userReducer = useSelector((state) => state.user.value);
   const theme = useTheme();
 
@@ -48,7 +49,7 @@ export default function SignUp9Screen({ navigation }) {
       <View>
         <Text style={styles.title}>Ton profil est créé 👍</Text>
         <Text style={styles.text}>
-          Super ! 🎉 {"\n"}Tu peux commencer à te connecter {"\n"}avec les
+          Super {username} ! 🎉 {"\n"}Tu peux commencer à te connecter {"\n"}avec les
           utilisateurs qui t'entourent !
         </Text>
                  <Button
