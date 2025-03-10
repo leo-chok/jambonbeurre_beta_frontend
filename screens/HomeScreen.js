@@ -29,7 +29,6 @@ import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
-  console.log(token);
 
   const [currentPosition, setCurrentPosition] = useState({
     latitude: 0,
@@ -38,6 +37,7 @@ export default function HomeScreen({ navigation }) {
   const mapRef = React.useRef(null);
 
   //////////////////////RECUPERER LA LOCALISATION EN TEMPS REEL//////////////////////
+
   useEffect(() => {
     (async () => {
       const result = await Location.requestForegroundPermissionsAsync();
@@ -47,8 +47,12 @@ export default function HomeScreen({ navigation }) {
         Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
           const latitude = location.coords.latitude;
           const longitude = location.coords.longitude;
-          setCurrentPosition({ latitude: latitude, longitude: longitude });
-          dispatch(updatePosition(currentPosition));
+
+          // Mise à jour du state local
+          setCurrentPosition({ latitude, longitude });
+
+          // Dispatch directement les nouvelles coordonnées
+          dispatch(updatePosition([longitude, latitude])); // Redux stocke les coordonnées sous forme de tableau [longitude, latitude]
         });
       }
     })();
@@ -142,6 +146,9 @@ export default function HomeScreen({ navigation }) {
   // Enregistrer les données du restaurant sélectionné dans un setter, qui sera utilisé en props du composants restaurant
   const [dataRestaurant, setDataRestaurant] = useState({});
 
+  //affichage conditionnel
+  // comment vérifgier objet vide
+
   // Fonction pour ouvrir une modale au clic sur un marker de restaurant
   const showRestaurantModal = (name) => {
     fetch(BACKEND_ADRESS + `/restaurants/search/${name}`)
@@ -174,6 +181,7 @@ export default function HomeScreen({ navigation }) {
           address: info.data.address,
           rating: info.data.rating,
           location: info.data.location.coordinates,
+          directionUri: info.data.directionUri,
           website: info?.data?.website,
           openingHours: isOpenNow(openInfos),
         });
@@ -223,6 +231,7 @@ export default function HomeScreen({ navigation }) {
           address: info.data.address,
           rating: info.data.rating,
           location: restaurantLocation,
+          directionUri: info.data.directionUri,
           website: info?.data?.website,
           openingHours: isOpenNow(openInfos),
         });
@@ -350,16 +359,19 @@ export default function HomeScreen({ navigation }) {
             onPress={hideRestaurantModal}
           />
 
-          <Restaurant
-            name={dataRestaurant.name}
-            type={dataRestaurant.type}
-            address={dataRestaurant.address}
-            rating={dataRestaurant.rating}
-            website={dataRestaurant.website}
-            location={dataRestaurant.location}
-            priceLevel={dataRestaurant.priceLevel}
-            isopen={dataRestaurant.openingHours}
-          />
+          {Object.keys(dataRestaurant).length > 0 && (
+            <Restaurant
+              name={dataRestaurant.name}
+              type={dataRestaurant.type}
+              address={dataRestaurant.address}
+              rating={dataRestaurant.rating}
+              website={dataRestaurant.website}
+              location={dataRestaurant.location}
+              directionUri={dataRestaurant.directionUri}
+              priceLevel={dataRestaurant.priceLevel}
+              isopen={dataRestaurant.openingHours}
+            />
+          )}
         </Modal>
       </Portal>
       <MapView
@@ -417,6 +429,7 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
     width: "100%",
+    
   },
   wrapper: {
     position: "absolute",
