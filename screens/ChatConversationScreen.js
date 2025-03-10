@@ -12,39 +12,43 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { BACKEND_ADRESS } from "../.config";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ChatConversationScreen({ route }) {
 
   const [idUser, setIdUser] = useState("");
-  const [mymessage, setMymessage] = useState([]);
-  const [inputnouveauMessage, setnouveauMessage] = useState("");
+  const [discussion, setdiscussion] = useState({});//discussion en cours, initialisé par les params
+  const [inputnouveauMessage, setnouveauMessage] = useState("");// nouveau message saisie au clavier
+  const token = useSelector((state) => state.user.value.authentification.token );
+  
 
   useEffect(() => {
-    console.log("hello chat conversation");
-    setMymessage(route.params);
-    //console.log("mymessage");
-    //console.log(mymessage.messages);
-    //console.log(route.params);
+    console.log("chat conversation");
+    setdiscussion(route.params);
+    console.log("discussion par params");
+    console.log(discussion);
+    console.log(route.params);
 
-    const token = "-iX_Q1hRBYopsMKtf7ZmMOcOgOBOxIow";
+  
     fetch(`${BACKEND_ADRESS}/users/${token}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log("data conversation fetch : ");
         console.log("iduserr  : "+data.userInfos[0]._id);
-        setIdUser(data.userInfos[0]._id);
+        setIdUser(data.userInfos[0]._id);//memorise l'id de l'utilisateur
       }); //then fetch
   }, []);
 
+
+
   function handleSubmit() {
-    const token = "-iX_Q1hRBYopsMKtf7ZmMOcOgOBOxIow";
-    //console.log("nouveau message");
+    console.log("nouveau message");
     fetch(`${BACKEND_ADRESS}/chats/creerUnMessage/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         token: token,
-        idDiscussion: mymessage._id,
+        idDiscussion: discussion._id,
         message: inputnouveauMessage,
       }),
     }) //fetch
@@ -55,13 +59,13 @@ export default function ChatConversationScreen({ route }) {
         fetch(`${BACKEND_ADRESS}/chats/afficheUneDiscussion/`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token: token, idDiscussion: mymessage._id }),
+          body: JSON.stringify({ token: token, idDiscussion: discussion._id }),
         }) //fetch
           .then((response) => response.json())
           .then((data) => {
             //console.log("data conversation fetch : ");
             //console.log(data);
-            setMymessage(data.discussion);
+            setdiscussion(data.discussion);
           }); //fetch
       });
 
@@ -72,6 +76,10 @@ export default function ChatConversationScreen({ route }) {
       if (element.idSender == idUser) return styles.myMessage;
       else return styles.notmyMessage;
     }
+    function FWhosendMessage(element) {
+      if (element.idSender == idUser) return "me";
+      else return element.username;
+    }
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -79,10 +87,11 @@ export default function ChatConversationScreen({ route }) {
     >
       <Text style={styles.title}>Convesation {idUser}</Text>
       <ScrollView style={styles.scrollView}>
-        {mymessage.messages &&
-          mymessage.messages.map((element) => (
+        {discussion.messages &&
+          discussion.messages.map((element) => (
             <View key={element._id} style={FstyleMessage(element)}>
               <Text style={styles.textmessage}>{element.message}</Text>
+              <Text style={styles.textmessage}>{FWhosendMessage(element)}</Text>
             </View>
           ))}
         <TextInput
@@ -114,7 +123,7 @@ const styles = StyleSheet.create({
    
   },
   textmessage: {
-    width: 250,
+    width: 240,
     backgroundColor: "pink",
     borderRadius: 8,
     textAlign: "left",

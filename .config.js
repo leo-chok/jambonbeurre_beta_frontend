@@ -1,1 +1,1 @@
-export const BACKEND_ADRESS = "http://10.251.206.71:3000"
+export const BACKEND_ADRESS = "http://192.168.140.244:3000"
