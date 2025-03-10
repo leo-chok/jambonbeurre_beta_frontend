@@ -112,10 +112,10 @@ export default function SignUp2Screen({ navigation }) {
   return (
     <SafeAreaView
       // style={styles.container}
-      style={{ backgroundColor: theme.colors.background }}
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Text style={styles.title}>Choisissez une photo de profil</Text>
+      <Text style={styles.title}>Choisis ta photo {'\n'}de profil 📸</Text>
       <View style={styles.main}>
         <View style={styles.containerImage}>
           {imageReducer === "" ? (
@@ -176,32 +176,27 @@ export default function SignUp2Screen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "pink",
     flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  main: {
-    width: "100%",
-    height: "50%",
-    flexDirection: "column",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
   },
   title: {
-    fontSize: 20,
+    fontSize: 35,
     fontWeight: "bold",
+    color: "#fe5747",
+    fontFamily: "LeagueSpartan-Bold",
+    letterSpacing: -1,
     marginBottom: 20,
     marginTop: 20,
+    textAlign: "center",
   },
   badgeButton: {
-    width: 200,
+    width: 250,
     margin: 10,
   },
   badgeButtonActive: {
     color: "white",
+    fontSize: 20,
   },
   image: {
     width: 250,
@@ -209,7 +204,8 @@ const styles = StyleSheet.create({
     borderRadius: 175,
   },
   navigationBottom: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

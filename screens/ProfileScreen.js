@@ -20,6 +20,7 @@ import {
   Button,
   Switch,
   Chip,
+  useTheme
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../.config";
@@ -41,6 +42,7 @@ export default function ProfileScreen({ navigation }) {
   const [hobbies, setHobbies] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [vacancy, setVacancy] = useState(false);
+  const theme = useTheme();
 
   // On récupère le lunchtime depuis le reducer car il est modifié dans le composant Schedule
   const lastLunchTime = useSelector(
@@ -104,14 +106,14 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, {backgroundColor: theme.colors.background}]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View>
-        <Text style={styles.title}>Profile</Text>
-        <Text style={styles.textButton} onPress={() => handleEditProfile()}>
-          Modifier
-        </Text>
+      <View style={styles.topContainer}>
+        <Text style={styles.mainTitle}>Mon Profil 🧑‍💻</Text>
+        <Button mode="contained" onPress={() => handleEditProfile()}>
+          <Text style={{ color: "white" }}>Modifier</Text>
+        </Button>
       </View>
       <TouchableOpacity
         onPress={() => handleEditAvatar()}
@@ -189,10 +191,15 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    backgroundColor: "#ffffff",
     justifyContent: "flex-start",
     alignItems: "center",
+  },
+  topContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 50,
+    marginBottom: 20,
   },
   avatarContainer: {
     width: "100%",
@@ -206,10 +213,21 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 100,
   },
-  title: {
-    fontSize: 20,
+  mainTitle: {
+    fontSize: 30,
     fontWeight: "bold",
-    marginBottom: 20,
+    fontWeight: "bold",
+    color: "#fe5747",
+    fontFamily: "LeagueSpartan-Bold",
+    alignText: "center",
+    marginRight: 20,
+  },
+  title: {
+    fontSize: 25,
+    fontFamily: "LeagueSpartan-SemiBold",
+    letterSpacing: -1,
+    color: "#397a5b",
+    marginBottom: 10,
   },
   infos_title: {
     display: "flex",

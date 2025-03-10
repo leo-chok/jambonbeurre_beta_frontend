@@ -25,6 +25,7 @@ import { BACKEND_ADRESS } from "../.config";
 
 import { updateProfile } from "../reducers/user";
 import { useDispatch, useSelector } from "react-redux";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileEditionScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -160,11 +161,10 @@ export default function ProfileEditionScreen({ navigation }) {
   }
 
   return (
-    <KeyboardAvoidingView
-      style={[styles.container, {backgroundColor: theme.colors.background}] }
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    <SafeAreaView style={[styles.container, {backgroundColor: theme.colors.background}] }>
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Text style={styles.title}>Modifiez vos informations</Text>
+      <Text style={styles.mainTitle}>Modifiez vos informations</Text>
       {!isLoading && (
         <ScrollView style={styles.inputs_container}>
           <Text style={styles.title}>Comment vous appelez vous ?</Text>
@@ -294,10 +294,11 @@ export default function ProfileEditionScreen({ navigation }) {
       )}
       <View style={styles.submitContainer}>
         <Button mode="contained" onPress={() => handleSubmit()}>
-          <Text style={{ color: "white" }}>Submit</Text>
+          <Text style={{ color: "white" }}>Modifier</Text>
         </Button>
       </View>
     </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -309,12 +310,21 @@ const styles = StyleSheet.create({
     // backgroundColor: "#ffffff",
     justifyContent: "flex-start",
     alignItems: "center",
-    marginTop: 50,
   },
-  title: {
-    fontSize: 20,
+  mainTitle: {
+    fontSize: 30,
     fontWeight: "bold",
     marginBottom: 20,
+    marginTop: 50,
+    fontWeight: "bold",
+    color: "#fe5747",
+    fontFamily: "LeagueSpartan-Bold",
+  },
+  title: {
+    fontSize: 25,
+    fontFamily: "LeagueSpartan-SemiBold",
+    letterSpacing: -1,
+    color: "#397a5b",
   },
   inputs_container: {
     width: "80%",
