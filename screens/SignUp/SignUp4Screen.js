@@ -21,27 +21,33 @@ import {
   Switch,
   Chip,
   Snackbar,
-  useTheme
+  useTheme,
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../../.config";
 import { useDispatch, useSelector } from "react-redux";
-import { addToken } from "../../reducers/user";
+import { addToken, updateProfile } from "../../reducers/user";
 
 export default function SignUp4Screen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
+  const userReducer = useSelector((state) => state.user.value);
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
   const theme = useTheme();
-
-  const userdata = { token: token, firstname: prenom, lastname: nom };
+  console.log(userReducer);
 
   const handleSuivant = () => {
+    // Enregistrement Reducer
+    const dataReducer = { infos: { firstname: prenom, lastname: nom } };
+    dispatch(updateProfile(dataReducer));
+
+    // Enregistrement BDD
+    const dataBDD = { token: token, firstname: prenom, lastname: nom };
     fetch(BACKEND_ADRESS + "/users/update", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userdata),
+      body: JSON.stringify(dataBDD),
     })
       .then((response) => response.json())
       .then((data) => {

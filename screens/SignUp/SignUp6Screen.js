@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import {
+  ActivityIndicator,
   TextInput,
   List,
   RadioButton,
@@ -27,14 +28,42 @@ import {
 import { BACKEND_ADRESS } from "../../.config";
 import { useDispatch, useSelector } from "react-redux";
 import { addToken } from "../../reducers/user";
+import Schedule from "../../components/Schedule";
 
 export default function SignUp6Screen({ navigation }) {
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.value);
+  const userReducer = useSelector((state) => state.user.value);
   const token = useSelector((state) => state.user.value.authentification.token);
+  const lastLunchTime = useSelector(
+    (state) => state.user.value.preferences.lunchtime
+  );
+  const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
+  console.log(userReducer);
 
   const handleSuivant = () => {
-    navigation.navigate("SignUp7");
+    setIsLoading(true);
+    // On récupère le lunchtime depuis le reducer car il est modifié dans le composant Schedule
+
+ // Enregistrement BDD
+    const dataBDD = {
+      token: token,
+      lunchtime: lastLunchTime,
+    };
+    fetch(BACKEND_ADRESS + "/users/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataBDD),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setIsLoading(false);
+        console.log("User updated in BDD");
+        navigation.navigate("SignUp7");
+      });
   };
 
   return (
@@ -48,6 +77,15 @@ export default function SignUp6Screen({ navigation }) {
           Indique nous tes disponibilités, {"\n"}on te proposera des
           utilisateurs {"\n"}sur les mêmes crénaux !
         </Text>
+        {!isLoading ? (
+          <ScrollView style={styles.inputs_container}>
+            <List.Accordion title="Créneaux Déjeuner" style={styles.inputList}>
+              <Schedule data={userData?.preferences?.lunchtime} />
+            </List.Accordion>
+          </ScrollView>
+        ) : (
+          <ActivityIndicator size={120} animating={true} color={"white"} />
+        )}
         <View>
           <Text style={styles.textButton} onPress={() => handleSuivant()}>
             Suivant

@@ -33,12 +33,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SignUp2Screen({ navigation }) {
   const dispatch = useDispatch();
+  const userReducer = useSelector((state) => state.user.value);
   const token = useSelector((state) => state.user.value.authentification.token);
   const imageReducer = useSelector((state) => state.user.value.infos.avatar);
   const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
 
-  console.log(imageReducer);
+  console.log(userReducer);
 
   // --------------------- FONCTION POUR CHOISIR UNE PHOTO DE SON TELEPHONE ---------------------------------
   const pickImage = async () => {

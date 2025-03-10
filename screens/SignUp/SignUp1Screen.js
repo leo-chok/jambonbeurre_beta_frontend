@@ -32,6 +32,7 @@ import { addToken } from "../../reducers/user";
 export default function SignUp1Screen({ navigation }) {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const userReducer = useSelector((state) => state.user.value);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
