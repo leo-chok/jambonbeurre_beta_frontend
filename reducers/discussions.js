@@ -8,12 +8,12 @@ export const discussionsSlice = createSlice({
     name: "discssions",
     initialState,
     reducers: {
-        chargeDiscussion: (state, action) => {
+        chargeDiscussions: (state, action) => {
         state.value.discussions = action.payload;
       },
     }
 });
 
-export const { chargeDiscussion } =
+export const { chargeDiscussions } =
   discussionsSlice.actions;
 export default discussionsSlice.reducer;

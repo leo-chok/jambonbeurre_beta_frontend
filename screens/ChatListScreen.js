@@ -11,21 +11,25 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { chargeDiscussion } from "../reducers/discussions";
+import { chargeDiscussions } from "../reducers/discussions";
 import { BACKEND_ADRESS } from "../.config";
 
 export default function ChatListScreen({ navigation }) {
   const discussions = useSelector(
     (state) => state.discussions.value.discussions
   );
+  const username = useSelector((state) => state.user.value.infos.username);//marche pas username vide
+  const token = useSelector((state) => state.user.value.authentification.token );
+  //console.log("mytoken");
+  //console.log(token);
   //console.log("useselector discussion :");
   //console.log(discussions);
   const dispatch = useDispatch();
 
-  //const user = { _id: "67c83293d39cf888fb710f8f" };
+ //chargement de toutes les discussions de l'utilisateur à partir de son token
   useEffect(() => {
-    console.log("hello chat");
-    const token = "-iX_Q1hRBYopsMKtf7ZmMOcOgOBOxIow";
+    console.log("chat list screen ");
+console.log("username : "+username);
     fetch(`${BACKEND_ADRESS}/chats/getAllChat/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -33,10 +37,10 @@ export default function ChatListScreen({ navigation }) {
     }) //fetch
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.discussion);
-        console.log("dtata");
+       // console.log(data.discussion);
+       // console.log("data : "+token);
         if (data.discussion) {
-          dispatch(chargeDiscussion(data.discussion));
+          dispatch(chargeDiscussions(data.discussion));
         }
       });
   }, []);
