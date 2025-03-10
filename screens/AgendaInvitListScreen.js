@@ -14,16 +14,18 @@ import {
   deleteReservation,
   displayReservations,
 } from "../reducers/reservations";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { BACKEND_ADRESS } from "../.config";
+
+
 export default function AgendaInvitListScreen({ navigation }) {
   const [users, setUsers] = useState([]);
-  const [avatar, setAvatar] = useState("");
+  const reservationId = route.params?.reservationId; // Récupère l'ID de la réservation
 
   useEffect(() => {
     fetch(BACKEND_ADRESS + "/users/all")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         //Filtrer et trier les utilisateurs en fonction de leurs similitudes
         const filteredUsers = data.listUsers
           .map((user) => {
@@ -47,24 +49,27 @@ export default function AgendaInvitListScreen({ navigation }) {
       );
   }, []);
 
-  //   //------------------ Inviter un utilisateur à une reservation
-  //   const inviteUser = (reservationId, userId) => {
-  //     fetch("http://10.1.0.166:3000/reservations/invite", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ reservationId, userId }),
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         console.log(data);
-  //         if (data.result) {
-  //           console.log("Utilisateur invité", data);
-  //           return "Utilisateur invité";
-  //         } else {
-  //           console.error("Erreur lors de l'invitation:", data.error);
-  //         }
-  //       });
-  //   };
+    //------------------ Inviter un utilisateur à une reservation
+     const handleInviteUser = (userId) => {
+        if (!reservationId) {
+            console.error("Aucune réservation trouvée");
+            return;
+          }
+       fetch(BACKEND_ADRESS + "/reservations/invite", {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ reservationId, userId }),
+       })
+         .then((response) => response.json())
+         .then((data) => {
+           if (data.result) {
+             console.log("Utilisateur ajouté à la réservation");
+             refreshReservations()
+           } else {
+             console.error("Erreur lors de l'invitation:", data.error);
+           }
+         });
+     };
 
   return (
     <KeyboardAvoidingView
@@ -79,24 +84,24 @@ export default function AgendaInvitListScreen({ navigation }) {
         {users.length > 0 ? (
           users.map((user) => (
             <View key={user._id} style={styles.userItem}>
-              {/* Le bouton "Inviter" dans le même conteneur */}
-              <Button
-                style={styles.btnInvite}
-                mode={"contained"}
-                onPress={() => navigation.navigate("HomeScreen")}
-              >
-                <Text style={styles.title}> + Inviter</Text>
-              </Button>
+                <Image source={{ uri: user.infos.avatar }} style={styles.avatar} />
 
-              {/* Le bouton avec le nom d'utilisateur */}
+             
               <Button
                 style={styles.btnUsername}
-                mode="text"  // Change mode to "text" for a link-like style
+                mode="text" 
                 onPress={() =>
                   navigation.navigate("ChatConversationScreen", { userId: user._id })
                 }
               >
                 <Text style={styles.userText}>{user.infos.username}</Text>
+              </Button>
+              <Button
+                style={styles.btnInvite}
+                mode={"contained"}
+                onPress={() => handleInviteUser(user._id)}
+              >
+                <Text style={styles.title}> + Inviter</Text>
               </Button>
             </View>
           ))
@@ -120,7 +125,6 @@ export default function AgendaInvitListScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5DC",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -140,7 +144,7 @@ const styles = StyleSheet.create({
   userList: {
     width: "100%",
     paddingHorizontal: 20,
-    marginTop: 20,
+    marginTop: 30,
     backgroundColor: "#f5f5DC",
   },
   userItem: {
@@ -151,9 +155,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   userText: {
-    marginTop: 15,
+    marginTop: 40,
+    marginLeft: 30,
     color: "black",
-    fontSize: 18,
+    fontSize: 20,
+    fontWeight: "bold",
+    flexWrap: "wrap",
+    maxWidth: 200,
+    textAlign: "center",
   },
   noUsers: {
     textAlign: "center",
@@ -178,12 +187,15 @@ const styles = StyleSheet.create({
 
   },
     btnUsername: {
-        marginTop: -43,
+        marginTop: -195,
+        marginBottom: 50,
     },
   avatar: {
-    marginLeft: 90,
-    width: 50,
-    height: 50,
+    marginLeft: -250,
+    width: 70,
+    height: 70,
     borderRadius: 50,
+    marginTop: -5,
+    marginBottom: 10,
   },
 });
