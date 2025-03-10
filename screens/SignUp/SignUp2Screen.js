@@ -83,7 +83,6 @@ export default function SignUp2Screen({ navigation }) {
             .then((data) => {
               console.log(data);
               setIsLoading(false);
-              navigation.navigate("SignUp3");
             });
         })
         .catch((e) => console.log(e));
@@ -130,7 +129,7 @@ export default function SignUp2Screen({ navigation }) {
         {isLoading && (
           <ActivityIndicator size={120} animating={true} color={"white"} />
         )}
-        {!isLoading && imageReducer === "" && (
+        {!isLoading && (
           <View>
             <Button
               onPress={pickImage}

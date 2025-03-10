@@ -91,7 +91,7 @@ export const userSlice = createSlice({
     },
     
     updatePosition: (state, action) => {
-      state.value.curentPosition = action.payload;
+      state.value.infos.location.coordinates = action.payload;
     },
     addPhoto: (state, action) => {
       state.value.infos.avatar = action.payload;

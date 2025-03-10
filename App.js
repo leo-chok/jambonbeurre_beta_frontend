@@ -37,6 +37,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
 import reservations from "./reducers/reservations";
 import discussions from "./reducers/discussions";
+import OthersProfileScreen from "./screens/OthersProfileScreen";
 
 const store = configureStore({
   reducer: { user, reservations, discussions },
@@ -107,7 +108,7 @@ export default function App() {
       "onError": "rgb(255, 255, 255)",
       "errorContainer": "rgb(255, 218, 214)",
       "onErrorContainer": "rgb(65, 0, 2)",
-      "background": "rgb(255, 229, 246)",
+      "background": "#FCF4E9",
       "onBackground": "rgb(31, 26, 29)",
       "surface": "rgb(255, 251, 255)",
       "onSurface": "rgb(31, 26, 29)",
@@ -162,6 +163,10 @@ export default function App() {
             <Stack.Screen
               name="ProfileEdition"
               component={ProfileEditionScreen}
+            />
+            <Stack.Screen
+              name="OtherProfile"
+              component={OthersProfileScreen}
             />
             <Stack.Screen name="ChatList" component={ChatListScreen} />
             <Stack.Screen 
