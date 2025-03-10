@@ -39,6 +39,7 @@ export default function SignUp2Screen({ navigation }) {
   const theme = useTheme();
 
   console.log(imageReducer);
+
   // --------------------- FONCTION POUR CHOISIR UNE PHOTO DE SON TELEPHONE ---------------------------------
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -50,7 +51,6 @@ export default function SignUp2Screen({ navigation }) {
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
       setIsLoading(true);
       const photoUri = result.assets[0].uri;
 
@@ -68,10 +68,11 @@ export default function SignUp2Screen({ navigation }) {
       })
         .then((response) => response.json())
         .then((data) => {
+          // Enregistrement REDUCER
           dispatch(addPhoto(data.url));
 
           const dataUpdate = { token: token, avatar: data.url };
-
+          // Enregistrement BDD
           fetch(BACKEND_ADRESS + "/users/update", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -96,12 +97,21 @@ export default function SignUp2Screen({ navigation }) {
     navigation.navigate("Camera", { from: "SignUp2" });
   };
 
+
+ // --------------------- FONCTION POUR PRENDRE UNE PHOTO ---------------------------------
+
+
+ const handleSuivant = () => {
+    navigation.navigate("SignUp3");
+  };
+
+
   // --------------------- RENDER ---------------------------------
 
   return (
     <SafeAreaView
       // style={styles.container}
-      style={{ backgroundColor: theme.colors.primary }}
+      style={{ backgroundColor: theme.colors.background }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <Text style={styles.title}>Choisissez une photo de profil</Text>
@@ -119,7 +129,7 @@ export default function SignUp2Screen({ navigation }) {
         {isLoading && (
           <ActivityIndicator size={120} animating={true} color={"white"} />
         )}
-        {!isLoading && (
+        {!isLoading && imageReducer === "" && (
           <View>
             <Button
               onPress={pickImage}
@@ -140,13 +150,23 @@ export default function SignUp2Screen({ navigation }) {
         )}
       </View>
       <View style={styles.navigationBottom}>
-        <Button
-          onPress={() => handleSuivant()}
-          mode={"contained"}
-          style={styles.badgeButton}
-        >
-          <Text style={styles.badgeButtonActive}>Ignorer</Text>
-        </Button>
+        {imageReducer === "" ? (
+          <Button
+            onPress={() => handleSuivant()}
+            mode={"contained"}
+            style={styles.badgeButton}
+          >
+            <Text style={styles.badgeButtonActive}>Ignorer</Text>
+          </Button>
+        ) : (
+          <Button
+            onPress={() => handleSuivant()}
+            mode={"contained"}
+            style={styles.badgeButton}
+          >
+            <Text style={styles.badgeButtonActive}>Suivant</Text>
+          </Button>
+        )}
       </View>
     </SafeAreaView>
   );

@@ -21,6 +21,7 @@ import {
   Switch,
   Chip,
   Snackbar,
+  useTheme,
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../../.config";
@@ -30,12 +31,11 @@ import { addToken } from "../../reducers/user";
 export default function SignUp9Screen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
-console.log(token)
+  const theme = useTheme();
 
-
-const handleDemarrer = () => {
-    navigation.navigate('TabNavigator', { screen: 'Home' });
-}
+  const handleDemarrer = () => {
+    navigation.navigate("TabNavigator", { screen: "Home" });
+  };
 
   return (
     <KeyboardAvoidingView
@@ -43,14 +43,15 @@ const handleDemarrer = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View>
-                <Text style={styles.title}>Ton profil est créé</Text>
+        <Text style={styles.title}>Ton profil est créé</Text>
         <Text style={styles.text}>
-          Super ! 🎉 {'\n'}Tu peux commencer à te connecter {'\n'}avec les utilisateurs qui t'entourent !
-        </Text>        
+          Super ! 🎉 {"\n"}Tu peux commencer à te connecter {"\n"}avec les
+          utilisateurs qui t'entourent !
+        </Text>
         <View>
-            <Text style={styles.textButton} onPress={() => handleDemarrer()}>
-              Démarrer
-            </Text>
+          <Text style={styles.textButton} onPress={() => handleDemarrer()}>
+            Démarrer
+          </Text>
         </View>
       </View>
     </KeyboardAvoidingView>

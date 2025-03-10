@@ -21,6 +21,7 @@ import {
   Switch,
   Chip,
   Snackbar,
+  useTheme,
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../../.config";
@@ -30,8 +31,8 @@ import { addToken } from "../../reducers/user";
 export default function SignUp5Screen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
-console.log(token)
-const [work, setWork] = useState("");
+  const [work, setWork] = useState("");
+  const theme = useTheme();
 
   const userdata = { token: token, work: work };
 
@@ -55,19 +56,17 @@ const [work, setWork] = useState("");
     >
       <View>
         <Text style={styles.title}>Ton profil</Text>
-        <Text style={styles.text}>
-          Tu veux indiquer ce que tu fais ?
-        </Text>   
-                <TextInput
-                  placeholder={"Métiers/ études"}
-                  value={work}
-                  onChangeText={(e) => setWork(e)}
-                  style={styles.inputField}
-                />    
+        <Text style={styles.text}>Tu veux indiquer ce que tu fais ?</Text>
+        <TextInput
+          placeholder={"Métiers/ études"}
+          value={work}
+          onChangeText={(e) => setWork(e)}
+          style={styles.inputField}
+        />
         <View>
-            <Text style={styles.textButton} onPress={() => handleSuivant()}>
-              Suivant
-            </Text>
+          <Text style={styles.textButton} onPress={() => handleSuivant()}>
+            Suivant
+          </Text>
         </View>
       </View>
     </KeyboardAvoidingView>

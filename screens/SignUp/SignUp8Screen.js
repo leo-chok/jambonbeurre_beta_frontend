@@ -21,6 +21,7 @@ import {
   Switch,
   Chip,
   Snackbar,
+  useTheme,
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../../.config";
@@ -30,12 +31,11 @@ import { addToken } from "../../reducers/user";
 export default function SignUp8Screen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
-console.log(token)
+  const theme = useTheme();
 
-
-const handleSuivant = () => {
-  navigation.navigate("SignUp9");
-}
+  const handleSuivant = () => {
+    navigation.navigate("SignUp9");
+  };
 
   return (
     <KeyboardAvoidingView
@@ -45,12 +45,12 @@ const handleSuivant = () => {
       <View>
         <Text style={styles.title}>Ton profil</Text>
         <Text style={styles.text}>
-          Dernière étape ! {'\n'}Aide-nous à te trouver le buddy idéal !
-        </Text>        
+          Dernière étape ! {"\n"}Aide-nous à te trouver le buddy idéal !
+        </Text>
         <View>
-            <Text style={styles.textButton} onPress={() => handleSuivant()}>
-              Suivant
-            </Text>
+          <Text style={styles.textButton} onPress={() => handleSuivant()}>
+            Suivant
+          </Text>
         </View>
       </View>
     </KeyboardAvoidingView>
