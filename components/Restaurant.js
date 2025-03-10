@@ -1,4 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
+import * as React from "react";
+
 import {
   View,
   ScrollView,
@@ -18,67 +20,46 @@ import {
 import { BACKEND_ADRESS } from "../.config";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import { useSelector } from "react-redux";
+import JoinReservation from "../components/JoinReservation";
+import MakeReservation from "../components/MakeReservation";
 
 export default function Restaurant(props) {
   // Image sur la modale
-  let restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
-  if (props.type === "hamburger_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/burger.jpg");
-  } else if (props.type === "bakery") {
-    restaurantImage = require("../assets/restaurants_img/bakery.jpg");
-  } else if (props.type === "sports_activity_location") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
-  } else if (props.type === "coffee_shop") {
-    restaurantImage = require("../assets/restaurants_img/coffee-shop.jpg");
-  } else if (props.type === "video_arcade") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
-  } else if (props.type === "hotel") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
-  } else if (props.type === "bar") {
-    restaurantImage = require("../assets/restaurants_img/bar.jpg");
-  } else if (props.type === "italian_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/italian.jpg");
-  } else if (props.type === "movie_theater") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
-  } else if (props.type === "shopping_mall") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
-  } else if (props.type === "supermarket") {
-    restaurantImage = require("../assets/restaurants_img/supermarket.jpg");
-  } else if (props.type === "store") {
-    restaurantImage = require("../assets/restaurants_img/supermarket.jpg");
-  } else if (props.type === "brunch_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/brunch.jpg");
-  } else if (props.type === "casino") {
-    restaurantImage = require("../assets/restaurants_img/casino.jpg");
-  } else if (props.type === "pizza_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/italian.jpg");
-  } else if (props.type === "restaurant") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
-  } else if (props.type === "thai_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/thai.jpg");
-  } else if (props.type === "food_store") {
-    restaurantImage = require("../assets/restaurants_img/supermarket.jpg");
-  } else if (props.type === "chinese_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/chinese.jpg");
-  } else if (props.type === "french_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/french.jpg");
-  } else if (props.type === "sandwich_shop") {
-    restaurantImage = require("../assets/restaurants_img/bakery.jpg");
-  } else if (props.type === "fast_food_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/fast-food.jpg");
-  } else if (props.type === "tea_house") {
-    restaurantImage = require("../assets/restaurants_img/tea.jpg");
-  } else if (props.type === "meal_takeaway") {
-    restaurantImage = require("../assets/restaurants_img/take-away.jpg");
-  } else if (props.type === "japanese_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/japanese.jpg");
-  } else {
-  }
+  const restaurantImages = {
+    hamburger_restaurant: require("../assets/restaurants_img/burger.jpg"),
+    bakery: require("../assets/restaurants_img/bakery.jpg"),
+    sports_activity_location: require("../assets/restaurants_img/restaurant.jpg"),
+    coffee_shop: require("../assets/restaurants_img/coffee-shop.jpg"),
+    video_arcade: require("../assets/restaurants_img/restaurant.jpg"),
+    hotel: require("../assets/restaurants_img/restaurant.jpg"),
+    bar: require("../assets/restaurants_img/bar.jpg"),
+    italian_restaurant: require("../assets/restaurants_img/italian.jpg"),
+    movie_theater: require("../assets/restaurants_img/restaurant.jpg"),
+    shopping_mall: require("../assets/restaurants_img/restaurant.jpg"),
+    supermarket: require("../assets/restaurants_img/supermarket.jpg"),
+    store: require("../assets/restaurants_img/supermarket.jpg"),
+    brunch_restaurant: require("../assets/restaurants_img/brunch.jpg"),
+    casino: require("../assets/restaurants_img/casino.jpg"),
+    pizza_restaurant: require("../assets/restaurants_img/italian.jpg"),
+    restaurant: require("../assets/restaurants_img/restaurant.jpg"),
+    thai_restaurant: require("../assets/restaurants_img/thai.jpg"),
+    food_store: require("../assets/restaurants_img/supermarket.jpg"),
+    chinese_restaurant: require("../assets/restaurants_img/chinese.jpg"),
+    french_restaurant: require("../assets/restaurants_img/french.jpg"),
+    sandwich_shop: require("../assets/restaurants_img/bakery.jpg"),
+    fast_food_restaurant: require("../assets/restaurants_img/fast-food.jpg"),
+    tea_house: require("../assets/restaurants_img/tea.jpg"),
+    meal_takeaway: require("../assets/restaurants_img/take-away.jpg"),
+    japanese_restaurant: require("../assets/restaurants_img/japanese.jpg"),
+  };
+
+  const restaurantImage =
+    restaurantImages[props.type] ||
+    require("../assets/restaurants_img/restaurant.jpg");
 
   // Modifier le titre du restaurant
-  String.prototype.Capitalize = function () {
-    return this.charAt(0).toUpperCase() + this.slice(1);
-  };
+
+  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
   // Créer la navigation vers le restaurant depuis Google maps
 
@@ -107,19 +88,19 @@ export default function Restaurant(props) {
     );
   };
 
-  // Récupérer les réservation
+  // // Récupérer les réservation
+  let restaurantId = props.id;
+
+  const [eventInfo, setEventInfo] = React.useState(null); // Initialisation de l'état
+
   useEffect(() => {
-    const token = "tZz3VkDLAWtSCoQiQqzxDFya4yRletps";
-    fetch(BACKEND_ADRESS + `/reservation//${token}`)
+    fetch(`${BACKEND_ADRESS}/reservations/restaurant/${restaurantId}`)
       .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        if (data.result) {
-          console.log("reservations are find !!!");
-          dispatch(displayReservations(data.data));
-        }
-      });
-  }, []);
+      .then((data) => setEventInfo(data.result)) // Met à jour eventInfo
+      .catch((error) =>
+        console.error("Erreur lors de la récupération des réservations", error)
+      );
+  }, [restaurantId]);
 
   return (
     <View style={styles.container}>
@@ -130,7 +111,8 @@ export default function Restaurant(props) {
         <View style={styles.header}>
           <View style={styles.left}>
             <View style={styles.basicInfos}>
-              <Text style={styles.semibold}>{props?.type?.Capitalize()}</Text>
+              <Text style={styles.semibold}>{capitalize(props?.type)}</Text>
+
               {props.priceLevel === "PRICE_LEVEL_EXPENSIVE" && (
                 <View style={styles.budget}>
                   <Ionicons name="logo-euro" size={14} color="#026C5D" />
@@ -209,20 +191,8 @@ export default function Restaurant(props) {
             </View>
           </View>
         </View>
-        <View style={[styles.whitecard, styles.reservation]}>
-          <Text style={styles.h2}>Aucune réservation en cours</Text>
-          <View style={styles.gallery}>
-            <View>
-              <TouchableOpacity style={styles.registerbtn}>
-                <View style={styles.strokeborder}>
-                  <Ionicons name="add-outline" size={32} color="#FFF" />
-                </View>
-              </TouchableOpacity>
-              <Text style={styles.bodytext}>Je m'inscris</Text>
-            </View>
-            <TouchableOpacity style={[styles.registerbtn]}></TouchableOpacity>
-          </View>
-        </View>
+        <View></View>
+        {eventInfo === true ? <JoinReservation /> : <MakeReservation />}
       </View>
     </View>
   );
@@ -250,6 +220,8 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 100,
     top: -100,
+    borderColor: "#026C5D",
+    borderWidth: 3,
   },
   h1: {
     fontSize: 26,
