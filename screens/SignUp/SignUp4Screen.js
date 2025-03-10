@@ -52,11 +52,11 @@ export default function SignUp4Screen({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View>
-        <Text style={styles.title}>Ton profil</Text>
+        <Text style={styles.title}>Ton profil 🧑‍💻</Text>
         <Text style={styles.text}>C'est quoi ton petit nom ?</Text>
         <TextInput
           placeholder={"Prénom"}
@@ -70,11 +70,13 @@ export default function SignUp4Screen({ navigation }) {
           onChangeText={(e) => setNom(e)}
           style={styles.inputField}
         />
-        <View>
-          <Text style={styles.textButton} onPress={() => handleSuivant()}>
-            Suivant
-          </Text>
-        </View>
+          <Button
+                onPress={() => handleSuivant()}
+                mode={"contained"}
+                style={styles.badgeButton}
+              >
+                <Text style={styles.badgeButtonActive}>Suivant</Text>
+              </Button>
       </View>
     </KeyboardAvoidingView>
   );
@@ -86,21 +88,33 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     backgroundColor: "#ffffff",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: 50,
   },
   title: {
-    fontSize: 20,
+    marginTop: 150,
+    fontSize: 35,
     fontWeight: "bold",
+    color: "#fe5747",
+    fontFamily: "LeagueSpartan-Bold",
+    letterSpacing: -1,
     marginBottom: 20,
     marginTop: 20,
+    textAlign: "center",
   },
-  textButton: {
-    color: "#ec6e5b",
+  text: {
     fontSize: 20,
-    fontWeight: "bold",
+    marginBottom: 10,
     marginTop: 20,
+    textAlign: "center",
+  },
+  badgeButton: {
+    width: 250,
+    margin: 30,
+  },
+  badgeButtonActive: {
+    color: "white",
+    fontSize: 20,
   },
   inputField: {
     marginTop: 10,
