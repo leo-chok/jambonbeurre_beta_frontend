@@ -22,6 +22,7 @@ import {
   Chip,
   Snackbar,
   HelperText,
+  useTheme,
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../../.config";
@@ -29,6 +30,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToken } from "../../reducers/user";
 
 export default function SignUp1Screen({ navigation }) {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -70,11 +72,11 @@ export default function SignUp1Screen({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View>
-        <Text style={styles.title}>Créé ton compte</Text>
+        <Text style={styles.title}>Créé ton compte 🤗</Text>
         <View>
           <Text style={styles.fieldTitle}>Ton adresse e-mail</Text>
           <TextInput
@@ -136,7 +138,7 @@ export default function SignUp1Screen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffe5f6",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -147,6 +149,7 @@ const styles = StyleSheet.create({
     fontFamily: "LeagueSpartan-Bold",
     letterSpacing: -1,
     marginBottom: 20,
+    textAlign: "center",
   },
   fieldTitle: {
     fontSize: 20,
@@ -155,19 +158,18 @@ const styles = StyleSheet.create({
     color: "#397a5b",
     marginBottom: 10,
     marginTop: 20,
+    textAlign: "center",
   },
   inputField: {
     marginTop: 0,
-    width: 250,
+    width: 350,
     height: 50,
-    backgroundColor: "#fff",
     borderRadius: 20,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     underline: "none",
     },
   submitContainer: {
-    width: "100%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -175,7 +177,6 @@ const styles = StyleSheet.create({
   badgeButton: {
     width: "60%",
     margin: 30,
-    backgroundColor: "#fe5747",
   },
   badgeButtonActive: {
     color: "white",

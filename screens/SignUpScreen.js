@@ -36,9 +36,9 @@ export default function SignUpScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: theme.colors.background}]}>
             <Text style={styles.title}>👋  Bienvenue sur</Text>
-      <Image source={require("../assets/logo/logo.png")} style={styles.logo} />
+      <Image source={require("../assets/logo/logoCouleur.png")} style={styles.logo} />
       <TouchableOpacity style={styles.button} activeOpacity={0.8}>
         <Text style={styles.textButton} onPress={() => handleSubmit()}>
           Menu [DEV]
@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
   badgeButton: {
     width: "60%",
     margin: 10,
-    backgroundColor: "#fe5747",
   },
   badgeButtonActive: {
     color: "white",

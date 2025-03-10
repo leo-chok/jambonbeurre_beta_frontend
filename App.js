@@ -91,7 +91,7 @@ SplashScreen.preventAutoHideAsync();
 export default function App() {
   const theme = {
     "colors": {
-      "primary": "rgb(139, 68, 131)",
+      "primary": "rgb(254, 87, 71)",
       "onPrimary": "rgb(255, 255, 255)",
       "primaryContainer": "rgb(255, 215, 244)",
       "onPrimaryContainer": "rgb(56, 0, 55)",
@@ -107,11 +107,11 @@ export default function App() {
       "onError": "rgb(255, 255, 255)",
       "errorContainer": "rgb(255, 218, 214)",
       "onErrorContainer": "rgb(65, 0, 2)",
-      "background": "rgb(255, 251, 255)",
+      "background": "rgb(255, 229, 246)",
       "onBackground": "rgb(31, 26, 29)",
       "surface": "rgb(255, 251, 255)",
       "onSurface": "rgb(31, 26, 29)",
-      "surfaceVariant": "rgb(238, 222, 231)",
+      "surfaceVariant": "rgb(255, 255, 255)",
       "onSurfaceVariant": "rgb(78, 68, 75)",
       "outline": "rgb(128, 116, 123)",
       "outlineVariant": "rgb(209, 194, 203)",
