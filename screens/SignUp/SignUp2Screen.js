@@ -21,6 +21,7 @@ import {
   Switch,
   Chip,
   Snackbar,
+  useTheme,
 } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 
@@ -32,26 +33,25 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SignUp2Screen({ navigation }) {
   const dispatch = useDispatch();
+  const userReducer = useSelector((state) => state.user.value);
   const token = useSelector((state) => state.user.value.authentification.token);
-  console.log(token);
-  let isValid = false;
-
-  const [image, setImage] = useState("");
+  const imageReducer = useSelector((state) => state.user.value.infos.avatar);
   const [isLoading, setIsLoading] = useState(false);
+  const theme = useTheme();
 
+  console.log(userReducer);
+
+  // --------------------- FONCTION POUR CHOISIR UNE PHOTO DE SON TELEPHONE ---------------------------------
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [1, 1],
-      quality: .3,
+      quality: 0.3,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
       setIsLoading(true);
       const photoUri = result.assets[0].uri;
 
@@ -69,10 +69,11 @@ export default function SignUp2Screen({ navigation }) {
       })
         .then((response) => response.json())
         .then((data) => {
+          // Enregistrement REDUCER
           dispatch(addPhoto(data.url));
 
           const dataUpdate = { token: token, avatar: data.url };
-
+          // Enregistrement BDD
           fetch(BACKEND_ADRESS + "/users/update", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -91,35 +92,45 @@ export default function SignUp2Screen({ navigation }) {
     }
   };
 
-  // Prendre une photo
+  // --------------------- FONCTION POUR PRENDRE UNE PHOTO ---------------------------------
+
   const handleTakePhoto = () => {
-    navigation.navigate("Camera", {from: "SignUp2"});
+    navigation.navigate("Camera", { from: "SignUp2" });
   };
 
-  const handleSuivant = () => {
+
+ // --------------------- FONCTION POUR PRENDRE UNE PHOTO ---------------------------------
+
+
+ const handleSuivant = () => {
     navigation.navigate("SignUp3");
   };
 
+
+  // --------------------- RENDER ---------------------------------
+
   return (
     <SafeAreaView
-      style={styles.container}
+      // style={styles.container}
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Text style={styles.title}>Choisissez une photo de profil</Text>
+      <Text style={styles.title}>Choisis ta photo {'\n'}de profil 📸</Text>
       <View style={styles.main}>
         <View style={styles.containerImage}>
-          {!image && (
+          {imageReducer === "" ? (
             <Image
               source={require("../../assets/logo/avatar_defaut.png")}
               style={styles.image}
             />
+          ) : (
+            <Image source={{ uri: imageReducer }} style={styles.image} />
           )}
-          {image && <Image source={{ uri: image }} style={styles.image} />}
         </View>
         {isLoading && (
           <ActivityIndicator size={120} animating={true} color={"white"} />
         )}
-        {!isLoading && (
+        {!isLoading && imageReducer === "" && (
           <View>
             <Button
               onPress={pickImage}
@@ -140,13 +151,23 @@ export default function SignUp2Screen({ navigation }) {
         )}
       </View>
       <View style={styles.navigationBottom}>
-        <Button
-          onPress={() => handleSuivant()}
-          mode={"contained"}
-          style={styles.badgeButton}
-        >
-          <Text style={styles.badgeButtonActive}>Ignorer</Text>
-        </Button>
+        {imageReducer === "" ? (
+          <Button
+            onPress={() => handleSuivant()}
+            mode={"contained"}
+            style={styles.badgeButton}
+          >
+            <Text style={styles.badgeButtonActive}>Ignorer</Text>
+          </Button>
+        ) : (
+          <Button
+            onPress={() => handleSuivant()}
+            mode={"contained"}
+            style={styles.badgeButton}
+          >
+            <Text style={styles.badgeButtonActive}>Suivant</Text>
+          </Button>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -155,32 +176,27 @@ export default function SignUp2Screen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "pink",
     flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  main: {
-    width: "100%",
-    height: "50%",
-    flexDirection: "column",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
   },
   title: {
-    fontSize: 20,
+    fontSize: 35,
     fontWeight: "bold",
+    color: "#fe5747",
+    fontFamily: "LeagueSpartan-Bold",
+    letterSpacing: -1,
     marginBottom: 20,
     marginTop: 20,
+    textAlign: "center",
   },
   badgeButton: {
-    width: 200,
+    width: 250,
     margin: 10,
   },
   badgeButtonActive: {
     color: "white",
+    fontSize: 20,
   },
   image: {
     width: 250,
@@ -188,7 +204,8 @@ const styles = StyleSheet.create({
     borderRadius: 175,
   },
   navigationBottom: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useSelector } from "react";
 import { View, ScrollView, StyleSheet, Image, Linking } from "react-native";
 import { Checkbox, List, RadioButton, Divider, Text } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
@@ -7,63 +7,73 @@ export default function Restaurant(props) {
   // Image sur la modale
   let restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
   if (props.type === "hamburger_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
+    restaurantImage = require("../assets/restaurants_img/burger.jpg");
   } else if (props.type === "bakery") {
-    restaurantImage = require("../assets/restaurants_img/brunch.png");
+    restaurantImage = require("../assets/restaurants_img/bakery.jpg");
   } else if (props.type === "sports_activity_location") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
+    restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
   } else if (props.type === "coffee_shop") {
-    restaurantImage = require("../assets/restaurants_img/bar.png");
+    restaurantImage = require("../assets/restaurants_img/coffee-shop.jpg");
   } else if (props.type === "video_arcade") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
+    restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
   } else if (props.type === "hotel") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
+    restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
   } else if (props.type === "bar") {
-    restaurantImage = require("../assets/restaurants_img/bar.png");
+    restaurantImage = require("../assets/restaurants_img/bar.jpg");
   } else if (props.type === "italian_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/italian.png");
+    restaurantImage = require("../assets/restaurants_img/italian.jpg");
   } else if (props.type === "movie_theater") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
+    restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
   } else if (props.type === "shopping_mall") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
+    restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
   } else if (props.type === "supermarket") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
+    restaurantImage = require("../assets/restaurants_img/supermarket.jpg");
   } else if (props.type === "store") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
+    restaurantImage = require("../assets/restaurants_img/supermarket.jpg");
   } else if (props.type === "brunch_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/brunch.png");
+    restaurantImage = require("../assets/restaurants_img/brunch.jpg");
   } else if (props.type === "casino") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
+    restaurantImage = require("../assets/restaurants_img/casino.jpg");
   } else if (props.type === "pizza_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/italian.png");
+    restaurantImage = require("../assets/restaurants_img/italian.jpg");
   } else if (props.type === "restaurant") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
+    restaurantImage = require("../assets/restaurants_img/restaurant.jpg");
   } else if (props.type === "thai_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/thai.png");
+    restaurantImage = require("../assets/restaurants_img/thai.jpg");
   } else if (props.type === "food_store") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
+    restaurantImage = require("../assets/restaurants_img/supermarket.jpg");
   } else if (props.type === "chinese_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/japanese.png");
+    restaurantImage = require("../assets/restaurants_img/chinese.jpg");
   } else if (props.type === "french_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/restaurant.png");
+    restaurantImage = require("../assets/restaurants_img/french.jpg");
   } else if (props.type === "sandwich_shop") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
+    restaurantImage = require("../assets/restaurants_img/bakery.jpg");
   } else if (props.type === "fast_food_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/burger.png");
+    restaurantImage = require("../assets/restaurants_img/fast-food.jpg");
   } else if (props.type === "tea_house") {
-    restaurantImage = require("../assets/restaurants_img/brunch.png");
+    restaurantImage = require("../assets/restaurants_img/tea.jpg");
   } else if (props.type === "meal_takeaway") {
-    restaurantImage = require("../assets/restaurants_img/fastfood.png");
+    restaurantImage = require("../assets/restaurants_img/take-away.jpg");
   } else if (props.type === "japanese_restaurant") {
-    restaurantImage = require("../assets/restaurants_img/japanese.png");
+    restaurantImage = require("../assets/restaurants_img/japanese.jpg");
   } else {
   }
-
 
   // Modifier le titre du restaurant
   String.prototype.Capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
   };
+
+  
+  // Créer la navigation vers le restaurant depuis Google maps
+
+    
+  // Calculer la distance entre l'utilisateur et le restaurant affiché dans la modale
+
+  const { calculateDistance } = require("../modules/calculateDistance");
+  const userLocation = useSelector((state) => state.user.value.location);
+  console.log(calculateDistance(props.location, userLocation))
+
 
   return (
     <View style={styles.container}>
@@ -74,20 +84,36 @@ export default function Restaurant(props) {
         <View style={styles.header}>
           <View style={styles.left}>
             <View style={styles.basicInfos}>
-              <Text style={styles.semibold}>{props.type}</Text>
-              <Text style={styles.bodytext}>{props.priceLevel}</Text>
+              <Text style={styles.semibold}>{props?.type?.Capitalize()}</Text>
+              {props.priceLevel === "PRICE_LEVEL_EXPENSIVE" && (
+                <View style={styles.budget}>
+                  <Ionicons name="logo-euro" size={14} color="#026C5D" />
+                  <Ionicons name="logo-euro" size={14} color="#026C5D" />
+                  <Ionicons name="logo-euro" size={14} color="#026C5D" />
+                </View>
+              )}
+              {props.priceLevel === "PRICE_LEVEL_MODERATE" && (
+                <View style={styles.budget}>
+                  <Ionicons name="logo-euro" size={14} color="#026C5D" />
+                  <Ionicons name="logo-euro" size={14} color="#026C5D" />
+                </View>
+              )}
+              {props.priceLevel === "PRICE_LEVEL_INEXPENSIVE" && (
+                <View style={styles.budget}>
+                  <Ionicons name="logo-euro" size={14} color="#026C5D" />
+                </View>
+              )}
             </View>
             <Text style={styles.bodytext}>{props.address}</Text>
           </View>
           <View style={styles.right}>
             <Text style={styles.semibold}>{props.rating}</Text>
-            <Ionicons name="star" size={16} color="#026C5D" />;
+            <Ionicons name="star" size={14} color="#026C5D" />
           </View>
         </View>
         <View style={styles.moreInfos}>
           <View style={styles.nav}>
-            <Ionicons name="navigate-outline" size={40} color="#fff" />;
-            {/* <Text>{props.location}</Text> */}
+            <Ionicons name="navigate-outline" size={40} color="#fff" />
           </View>
           <View style={styles.website}>
             <View style={styles.websitewrapper}>
@@ -105,11 +131,21 @@ export default function Restaurant(props) {
               />
             </View>
             <View style={styles.openNow}>
-              <Ionicons
-                name="checkmark-circle-outline"
-                size={24}
-                color="#026C5D"
-              />
+              <View>
+                {props.isopen ? (
+                  <Ionicons
+                    name="checkmark-circle-outline"
+                    size={24}
+                    color="#026C5D"
+                  />
+                ) : (
+                  <Ionicons
+                    name="close-circle-outline"
+                    size={24}
+                    color="#202020"
+                  />
+                )}
+              </View>
               <Text style={styles.bodytext}>
                 {props.isopen ? <Text>Ouvert</Text> : <Text>Fermé</Text>}
               </Text>
@@ -122,6 +158,7 @@ export default function Restaurant(props) {
 }
 
 const styles = StyleSheet.create({
+
   container: {
     position: "absolute",
     width: "100%",
@@ -158,19 +195,24 @@ const styles = StyleSheet.create({
   main: {
     gap: 16,
     position: "relative",
-    top: -50,
+    top: -70,
     width: "100%",
   },
   header: {
     justifyContent: "space-between",
     alignItems: "top",
     flexDirection: "row",
-    flexWrap: "wrap",
+
     gap: 16,
   },
+  left: {
+    width: "70%",
+  },
   right: {
+    width: "30%",
     flexDirection: "row",
     gap: 8,
+    justifyContent: "flex-end",
     alignItems: "center",
   },
   semibold: {
@@ -180,13 +222,17 @@ const styles = StyleSheet.create({
   basicInfos: {
     flexDirection: "row",
     gap: 16,
+    alignItems: "center",
+  },
+  budget: {
+    flexDirection: "row",
   },
   moreInfos: {
     flexDirection: "row",
     gap: 16,
     width: "100%",
     alignItems: "center",
-    height: 150,
+    height: 110,
   },
   nav: {
     backgroundColor: "#026C5D",
@@ -220,7 +266,6 @@ const styles = StyleSheet.create({
   websitewrapper: {
     flexDirection: "row",
     gap: 16,
-    width: "100%",
   },
   rotate: {
     display: "inline-block",
@@ -233,7 +278,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 100,
     padding: 8,
-    width: "100%",
     gap: 4,
+    width: "85%",
   },
 });

@@ -21,6 +21,7 @@ import {
   Switch,
   Chip,
   Snackbar,
+  useTheme,
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../.config";
@@ -28,69 +29,76 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToken } from "../reducers/user";
 
 export default function SignInScreen({ navigation }) {
-    const dispatch = useDispatch();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+  const theme = useTheme();
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   // Fetch la route SignIn (se connecter)
   const userdata = { email: email, password: password };
 
   const handleSubmit = () => {
     fetch(BACKEND_ADRESS + "/users/signin", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(userdata),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log(data);
-              if (data.result) {
-                dispatch(addToken(data.userToken));
-                navigation.navigate('TabNavigator', { screen: 'Home' });
-              } else {
-                alert("Mauvais identifiants");
-              }
-            })
-            .catch((error) => { console.error("Erreur:", error) })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userdata),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.result) {
+          dispatch(addToken(data.userToken));
+          navigation.navigate("TabNavigator", { screen: "Home" });
+        } else {
+          alert("Mauvais identifiants");
         }
-  
+      })
+      .catch((error) => {
+        console.error("Erreur:", error);
+      });
+  };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <Image source={require("../assets/logo/logoSeul.png")} style={styles.logo} />
+    <KeyboardAvoidingView
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <Image
+        source={require("../assets/logo/logoGifOrange.gif")}
+        style={styles.logo}
+      />
       <Text style={styles.title}>Connecte-toi 👍</Text>
-          <Text style={styles.fieldTitle}>Ton adresse e-mail</Text>
-          <TextInput
-            placeholder={"exemple@exemple.com"}
-            value={email}
-            onChangeText={(e) => setEmail(e)}
-            style={styles.inputField}
-            underlineColor="transparent"
-          />
-          <Text style={styles.fieldTitle}>Ton mot de passe</Text>
-          <TextInput
-            placeholder={"mot de passe"}
-            value={password}
-            secureTextEntry={true}
-            onChangeText={(e) => setPassword(e)}
-            style={styles.inputField}
-            underlineColor="transparent"
-          />
-            <Button
-              onPress={() => handleSubmit()}
-              mode={"contained"}
-              style={styles.badgeButton}
-            >
-              <Text style={styles.badgeButtonActive}>Connexion</Text>
-            </Button>
+      <Text style={styles.fieldTitle}>Ton adresse e-mail</Text>
+      <TextInput
+        placeholder={"exemple@exemple.com"}
+        value={email}
+        onChangeText={(e) => setEmail(e)}
+        style={styles.inputField}
+        underlineColor="transparent"
+      />
+      <Text style={styles.fieldTitle}>Ton mot de passe</Text>
+      <TextInput
+        placeholder={"mot de passe"}
+        value={password}
+        secureTextEntry={true}
+        onChangeText={(e) => setPassword(e)}
+        style={styles.inputField}
+        underlineColor="transparent"
+      />
+      <Button
+        onPress={() => handleSubmit()}
+        mode={"contained"}
+        style={styles.badgeButton}
+      >
+        <Text style={styles.badgeButtonActive}>Connexion</Text>
+      </Button>
     </KeyboardAvoidingView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffe5f6",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -105,15 +113,17 @@ const styles = StyleSheet.create({
     fontSize: 35,
     fontWeight: "bold",
     color: "#fe5747",
-    fontFamily: "league-spartan",
+    fontFamily: "LeagueSpartan-Bold",
+    letterSpacing: -1,
     marginBottom: 20,
     marginTop: 20,
   },
   fieldTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "LeagueSpartan-SemiBold",
+    letterSpacing: -1,
     color: "#397a5b",
-    marginBottom: 20,
+    marginBottom: 10,
     marginTop: 20,
   },
   textButton: {
@@ -124,21 +134,20 @@ const styles = StyleSheet.create({
   },
   inputField: {
     marginTop: 0,
-    width: 250,
+    width: 350,
     height: 50,
     backgroundColor: "#fff",
     borderRadius: 20,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     underline: "none",
-    },
-    badgeButton: {
-      width: "60%",
-      margin: 30,
-      backgroundColor: "#fe5747",
-    },
-    badgeButtonActive: {
-      color: "white",
-      fontSize: 20,
-    },
+  },
+  badgeButton: {
+    width: "60%",
+    margin: 30,
+  },
+  badgeButtonActive: {
+    color: "white",
+    fontSize: 20,
+  },
 });

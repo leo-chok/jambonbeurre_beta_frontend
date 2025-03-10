@@ -22,6 +22,7 @@ import {
   Chip,
   Snackbar,
   HelperText,
+  useTheme,
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../../.config";
@@ -29,7 +30,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToken } from "../../reducers/user";
 
 export default function SignUp1Screen({ navigation }) {
+  const theme = useTheme();
   const dispatch = useDispatch();
+  const userReducer = useSelector((state) => state.user.value);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -70,18 +73,19 @@ export default function SignUp1Screen({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View>
-        <Text style={styles.title}>Création de compte</Text>
+        <Text style={styles.title}>Créé ton compte 🤗</Text>
         <View>
-          <Text style={styles.title}>Ton adresse e-mail</Text>
+          <Text style={styles.fieldTitle}>Ton adresse e-mail</Text>
           <TextInput
             placeholder={"Ton adresse mail"}
             value={email}
             onChangeText={(e) => setEmail(e)}
             style={styles.inputField}
+            underlineColor="transparent"
           />
           {email.length > 3 && 
             <HelperText type="error" visible={hasErrors()}>
@@ -89,26 +93,28 @@ export default function SignUp1Screen({ navigation }) {
             </HelperText>
           }
           
-          <Text style={styles.title}>Ton mot de passe</Text>
+          <Text style={styles.fieldTitle}>Ton mot de passe</Text>
           <TextInput
             placeholder={"Ton mot de passe"}
             value={password}
             secureTextEntry={true}
             onChangeText={(e) => setPassword(e)}
             style={styles.inputField}
+            underlineColor="transparent"
           />
-          <Text style={styles.title}>Confirme ton mot de passe</Text>
+          <Text style={styles.fieldTitle}>Confirme ton mot de passe</Text>
           <TextInput
             placeholder={"Vérifions ton mot de passe"}
             value={password2}
             secureTextEntry={true}
             onChangeText={(e) => setPassword2(e)}
             style={styles.inputField}
+            underlineColor="transparent"
           />
           <View style={styles.submitContainer}>
             <Button
               // Le mode du bouton change si les 3 champs sont remplis
-              mode={(isValid && "contained") || "outlined"}
+              mode={(isValid ? "contained" : "contained-tonal")}
               onPress={() => handleSuivant()}
               style={styles.badgeButton}
             >
@@ -133,41 +139,51 @@ export default function SignUp1Screen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#ffffff",
-    justifyContent: "flex-start",
+    flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: 50,
   },
   title: {
-    fontSize: 20,
+    fontSize: 35,
     fontWeight: "bold",
+    color: "#fe5747",
+    fontFamily: "LeagueSpartan-Bold",
+    letterSpacing: -1,
     marginBottom: 20,
-    marginTop: 20,
+    textAlign: "center",
   },
-  textButton: {
-    color: "#ec6e5b",
+  fieldTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "LeagueSpartan-SemiBold",
+    letterSpacing: -1,
+    color: "#397a5b",
+    marginBottom: 10,
     marginTop: 20,
+    textAlign: "center",
   },
+  inputField: {
+    marginTop: 0,
+    width: 350,
+    height: 50,
+    borderRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    underline: "none",
+    },
   submitContainer: {
-    width: "100%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 20,
-    paddingBottom: 20,
-    boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)",
   },
   badgeButton: {
-    width: "40%",
+    width: "60%",
+    margin: 30,
   },
   badgeButtonActive: {
     color: "white",
+    fontSize: 20,
   },
   badgeButtonDisable: {
-    color: "black",
+    color: "grey",
   },
 });

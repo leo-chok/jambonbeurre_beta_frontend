@@ -5,6 +5,7 @@ import {
   Platform,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from "react-native";
 import {
   TextInput,
@@ -17,9 +18,11 @@ import {
   Switch,
   Chip,
   Snackbar,
+  useTheme
 } from "react-native-paper";
 
 export default function SignUpScreen({ navigation }) {
+  const theme = useTheme();
   const handleSubmit = () => {
     navigation.navigate("TabNavigator", { screen: "Home" });
   };
@@ -33,12 +36,9 @@ export default function SignUpScreen({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-            <Text style={styles.title}>👋 Bienvenue sur</Text>
-      <Image source={require("../assets/logo/logo.png")} style={styles.logo} />
+    <View style={[styles.container, {backgroundColor: theme.colors.background}]}>
+            <Text style={styles.title}>👋  Bienvenue sur</Text>
+      <Image source={require("../assets/logo/logoCouleur.png")} style={styles.logo} />
       <TouchableOpacity style={styles.button} activeOpacity={0.8}>
         <Text style={styles.textButton} onPress={() => handleSubmit()}>
           Menu [DEV]
@@ -59,24 +59,23 @@ export default function SignUpScreen({ navigation }) {
       >
         <Text style={styles.badgeButtonActive}>Connecte-toi</Text>
       </Button>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffe5f6",
     alignItems: "center",
     justifyContent: "center",
   },
   title: {
     fontSize: 35,
-    fontWeight: "bold",
     color: "#fe5747",
-    fontFamily: "league-spartan",
-    marginBottom: 20,
-    marginTop: 20,
+    fontFamily: "LeagueSpartan-Bold",
+    letterSpacing: -1,
+    marginBottom: 10,
+    marginTop: 10,
   },
   text: {
     fontSize: 20,
@@ -93,7 +92,6 @@ const styles = StyleSheet.create({
   badgeButton: {
     width: "60%",
     margin: 10,
-    backgroundColor: "#fe5747",
   },
   badgeButtonActive: {
     color: "white",

@@ -20,6 +20,7 @@ import {
   Button,
   Switch,
   Chip,
+  useTheme
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../.config";
@@ -29,7 +30,7 @@ import { useIsFocused } from "@react-navigation/native";
 export default function ProfileScreen({ navigation }) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const token = "eyqL3bClggeslHRBVHIAAE5wkQoHyvzp";
+  const token = useSelector((state) => state.user.value.authentification.token);
   const [userData, setUserData] = useState({});
   const [username, setUsername] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -41,6 +42,7 @@ export default function ProfileScreen({ navigation }) {
   const [hobbies, setHobbies] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [vacancy, setVacancy] = useState(false);
+  const theme = useTheme();
 
   // On récupère le lunchtime depuis le reducer car il est modifié dans le composant Schedule
   const lastLunchTime = useSelector(
@@ -82,16 +84,36 @@ export default function ProfileScreen({ navigation }) {
     navigation.navigate("Camera");
   };
 
+  const displayCreneaux = lastLunchTime.map((data, i) => {
+    return (
+      <View key={i} style={styles.creneauxContainer}>
+        <View style={styles.creneauxLigne}>
+          <Text>{data.name}</Text>
+          {data.worked ? (
+            <View style={styles.creneauxLigne}>
+              <Text>{data.start} à </Text>
+              <Text>{data.stop}</Text>
+            </View>
+          ) : (
+            <View style={styles.creneauxLigne}>
+              <Text>Indisponible </Text>
+            </View>
+          )}
+        </View>
+      </View>
+    );
+  });
+
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, {backgroundColor: theme.colors.background}]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View>
-        <Text style={styles.title}>Profile</Text>
-        <Text style={styles.textButton} onPress={() => handleEditProfile()}>
-          Modifier
-        </Text>
+      <View style={styles.topContainer}>
+        <Text style={styles.mainTitle}>Mon Profil 🧑‍💻</Text>
+        <Button mode="contained" onPress={() => handleEditProfile()}>
+          <Text style={{ color: "white" }}>Modifier</Text>
+        </Button>
       </View>
       <TouchableOpacity
         onPress={() => handleEditAvatar()}
@@ -101,29 +123,25 @@ export default function ProfileScreen({ navigation }) {
       </TouchableOpacity>
       <ScrollView style={styles.inputs_container}>
         <Text style={styles.title}>Mes informations:</Text>
-        <Text>Pseudo</Text>
-        <Text>{username}</Text>
-        <Text>Nom</Text>
-        <Text>{firstname}</Text>
-        <Text>Prénom</Text>
-        <Text>{lastname}</Text>
+        <Text style={styles.infos_title}>Pseudo</Text>
+        <Text style={styles.infos_data}>{username}</Text>
+        <Text style={styles.infos_title}>Nom</Text>
+        <Text style={styles.infos_data}>{firstname}</Text>
+        <Text style={styles.infos_title}>Prénom</Text>
+        <Text style={styles.infos_data}>{lastname}</Text>
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
         <Text style={styles.title}>Un peu plus sur moi:</Text>
-        <Text>Mon travail / Mes études :</Text>
-        <Text>{work}</Text>
-        <Text>Ma bio :</Text>
-        <Text>{bio}</Text>
+        <Text style={styles.infos_title}>Mon travail / Mes études :</Text>
+        <Text style={styles.infos_data}>{work}</Text>
+        <Text style={styles.infos_title}>Ma bio :</Text>
+        <Text style={styles.infos_data}>{bio}</Text>
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
 
-        <Text style={styles.title}>Indiquez vos disponibilités.</Text>
+        <Text style={styles.title}>Mes créneaux pour déjeuner</Text>
         <View style={styles.vacancesContainer}>
           {vacancy && <Text>En vacances</Text>}
         </View>
-        {!vacancy && (
-          <List.Accordion title="Créneaux Déjeuner" style={styles.inputList}>
-            <Text>Liste des créneaux</Text>
-          </List.Accordion>
-        )}
+        {!vacancy && displayCreneaux}
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
         <Text style={styles.title}>Type de cuisine préférée</Text>
         <View style={styles.typeFoodContainer}>
@@ -173,10 +191,15 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    backgroundColor: "#ffffff",
     justifyContent: "flex-start",
     alignItems: "center",
+  },
+  topContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 50,
+    marginBottom: 20,
   },
   avatarContainer: {
     width: "100%",
@@ -190,10 +213,39 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 100,
   },
-  title: {
-    fontSize: 20,
+  mainTitle: {
+    fontSize: 30,
     fontWeight: "bold",
-    marginBottom: 20,
+    fontWeight: "bold",
+    color: "#fe5747",
+    fontFamily: "LeagueSpartan-Bold",
+    alignText: "center",
+    marginRight: 20,
+  },
+  title: {
+    fontSize: 25,
+    fontFamily: "LeagueSpartan-SemiBold",
+    letterSpacing: -1,
+    color: "#397a5b",
+    marginBottom: 10,
+  },
+  infos_title: {
+    display: "flex",
+    flexDirection: 'row',
+    justifyContent: "flex-start",
+    fontSize: 16,
+    fontWeight: "bold",
+    width: "100%",
+  },
+  infos_data: {
+    display: "flex",
+    flexDirection: 'row',
+    justifyContent: "center",
+    fontSize: 14,
+    fontWeight: 300,
+    width: "100%",
+    textAlign: "right",
+    marginBottom: 10,
   },
   inputs_container: {
     width: "80%",
@@ -208,6 +260,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  creneauxContainer: {
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+  },
+  creneauxLigne: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   inputList: {
     marginTop: 10,

@@ -15,9 +15,6 @@ export default function ChatScreen({ navigation }) {
     navigation.navigate('ChatList');
   };
 
-  const handleConversation = () => {
-    navigation.navigate('ChatConversation');
-  };
 
   return (
     <KeyboardAvoidingView
@@ -26,10 +23,10 @@ export default function ChatScreen({ navigation }) {
     >
       <Text style={styles.title}>Chat</Text>
       <Text style={styles.textButton} onPress={() => handleList()}>
-        List
+        Conversation en cours
       </Text>
-      <Text style={styles.textButton} onPress={() => handleConversation()}>
-        Conversation
+      <Text style={styles.textButton}   onPress={() => navigation.navigate("ChatNewConversation")}>
+        nouvelle conversation
       </Text>
     </KeyboardAvoidingView>
   );
