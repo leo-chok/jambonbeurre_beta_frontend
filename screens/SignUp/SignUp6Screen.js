@@ -21,6 +21,7 @@ import {
   Switch,
   Chip,
   Snackbar,
+  useTheme,
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../../.config";
@@ -30,12 +31,11 @@ import { addToken } from "../../reducers/user";
 export default function SignUp6Screen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
-console.log(token)
+  const theme = useTheme();
 
-
-const handleSuivant = () => {
-  navigation.navigate("SignUp7");
-}
+  const handleSuivant = () => {
+    navigation.navigate("SignUp7");
+  };
 
   return (
     <KeyboardAvoidingView
@@ -45,12 +45,13 @@ const handleSuivant = () => {
       <View>
         <Text style={styles.title}>Ton profil</Text>
         <Text style={styles.text}>
-          Indique nous tes disponibilités, {'\n'}on te proposera des utilisateurs {'\n'}sur les mêmes crénaux !
-        </Text>        
+          Indique nous tes disponibilités, {"\n"}on te proposera des
+          utilisateurs {"\n"}sur les mêmes crénaux !
+        </Text>
         <View>
-            <Text style={styles.textButton} onPress={() => handleSuivant()}>
-              Suivant
-            </Text>
+          <Text style={styles.textButton} onPress={() => handleSuivant()}>
+            Suivant
+          </Text>
         </View>
       </View>
     </KeyboardAvoidingView>

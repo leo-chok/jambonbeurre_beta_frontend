@@ -21,6 +21,7 @@ import {
   Switch,
   Chip,
   Snackbar,
+  useTheme,
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../../.config";
@@ -30,8 +31,8 @@ import { addToken } from "../../reducers/user";
 export default function SignUp7Screen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
-console.log(token)
-const [bio, setBio] = useState("");
+  const theme = useTheme();
+  const [bio, setBio] = useState("");
 
   const userdata = { token: token, bio: bio };
 
@@ -56,19 +57,20 @@ const [bio, setBio] = useState("");
       <View>
         <Text style={styles.title}>Ton profil</Text>
         <Text style={styles.text}>
-          Tu peux en dire un peu plus sur toi, {'\n'}cette présentation sera visible {'\n'}sur ton profil.
-        </Text>     
-                      <TextInput
-                          placeholder={"Bio"}
-                          multiline={true}
-                          value={bio}
-                          onChangeText={(e) => setBio(e)}
-                          style={styles.inputField}
-                        />      
+          Tu peux en dire un peu plus sur toi, {"\n"}cette présentation sera
+          visible {"\n"}sur ton profil.
+        </Text>
+        <TextInput
+          placeholder={"Bio"}
+          multiline={true}
+          value={bio}
+          onChangeText={(e) => setBio(e)}
+          style={styles.inputField}
+        />
         <View>
-            <Text style={styles.textButton} onPress={() => handleSuivant()}>
-              Suivant
-            </Text>
+          <Text style={styles.textButton} onPress={() => handleSuivant()}>
+            Suivant
+          </Text>
         </View>
       </View>
     </KeyboardAvoidingView>

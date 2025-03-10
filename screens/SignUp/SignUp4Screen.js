@@ -21,6 +21,7 @@ import {
   Switch,
   Chip,
   Snackbar,
+  useTheme
 } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../../.config";
@@ -30,9 +31,9 @@ import { addToken } from "../../reducers/user";
 export default function SignUp4Screen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
-  console.log(token);
-const [prenom, setPrenom] = useState("");
-const [nom, setNom] = useState("");
+  const [prenom, setPrenom] = useState("");
+  const [nom, setNom] = useState("");
+  const theme = useTheme();
 
   const userdata = { token: token, firstname: prenom, lastname: nom };
 

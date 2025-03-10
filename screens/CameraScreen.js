@@ -60,12 +60,14 @@ export default function CameraScreen({ navigation }) {
       name: "photo.jpg",
       type: "image/jpeg",
     });
+
     fetch(BACKEND_ADRESS + "/avatar/upload", {
       method: "POST",
       body: formData,
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         dispatch(addPhoto(data.url));
 
         const dataUpdate = { token: token, avatar: data.url };
