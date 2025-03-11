@@ -5,15 +5,30 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
+  
   TouchableOpacity,
   View,
 } from "react-native";
+
+import {
+  TextInput,
+  List,
+  RadioButton,
+  Checkbox,
+  Text,
+  Divider,
+  Button,
+  Switch,
+  Chip,
+  Snackbar,
+  useTheme,
+} from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 
 import { BACKEND_ADRESS } from "../.config";
 export default function ChatNewConversationScreen({ navigation }) {
+  const theme = useTheme();
+
   const [users, setusers] = useState([]);
   const token = useSelector((state) => state.user.value.authentification.token);
   const username = useSelector((state) => state.user.value.infos.username);
@@ -35,7 +50,7 @@ export default function ChatNewConversationScreen({ navigation }) {
   function Fvalide() {
     console.log("fonction valide");
   let title = listeDesSelectioner.map((element) => element.username).join("  -  ");
-  title = title + "  ++  " + username;
+  title = title + "  -  " + username;
     console.log("title : "+title);
     
     fetch(`${BACKEND_ADRESS}/chats/creeUneDiscussion/`, {
@@ -81,7 +96,7 @@ export default function ChatNewConversationScreen({ navigation }) {
   }
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView style={styles.scrollView}>
@@ -98,13 +113,13 @@ export default function ChatNewConversationScreen({ navigation }) {
             </TouchableOpacity>
           ))}
       </ScrollView>
-      <TouchableOpacity
+      <Button
         key="footer"
         style={styles.footer}
+        mode={"contained"}
         onPress={() => Fvalide()}
-      >
-        <Text style={styles.textmessage}>creer le chat</Text>
-      </TouchableOpacity>
+      >creer le chat
+      </Button>
     </KeyboardAvoidingView>
   );
 }
@@ -113,38 +128,47 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#ffffff",
+   
   },
   scrollView: {
-    paddingTop: 10,
-    paddingBottom: 80,
+   
+    marginTop: 50,
+    marginBottom: 70,
   },
   footer: {
     position: "absolute", // Positionne le bouton en bas de l'écran
     bottom: 0, // Fixe le bouton en bas
     left: 0,
     right: 0,
-    padding: 10,
-    backgroundColor: "#00f", // Facultatif : pour bien distinguer le bouton
+    margin: 10,
+    width: "70%",
+    
+   
+    
+   
   },
   view: {
     width: 250,
-    backgroundColor: "pink",
+    backgroundColor: "#397a5b",//vert
     margin: 2,
     padding: 10,
-    borderRadius: 8,
+    borderRadius: 20,
   },
   viewSelected: {
-    width: 250,
-    backgroundColor: "red",
+    width: 260,
+    backgroundColor:  "#397a",//vert
     margin: 20,
     padding: 10,
-    borderRadius: 8,
+    borderRadius: 20,
   },
   textmessage: {
-    width: 240,
-    backgroundColor: "pink",
-    borderRadius: 8,
+    width: 230,
+    backgroundColor:  "#397a5b",//vert
+    color: "white",
+    fontFamily: "LeagueSpartan-Bold",
+    borderRadius: 20,
     textAlign: "left",
+    paddingLeft: 10,
   },
+ 
 });

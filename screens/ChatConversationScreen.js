@@ -5,16 +5,31 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Button,
+ 
   View,
-  Text,
-  TextInput,
+ 
   TouchableOpacity,
 } from "react-native";
+
+import {
+  TextInput,
+  List,
+  RadioButton,
+  Checkbox,
+  Text,
+  Divider,
+  Button,
+  Switch,
+  Chip,
+  Snackbar,
+  useTheme,
+} from "react-native-paper";
+
 import { BACKEND_ADRESS } from "../.config";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function ChatConversationScreen({ route }) {
+  const theme = useTheme();
 
   const [idUser, setIdUser] = useState("");
   const [discussion, setdiscussion] = useState({});//discussion en cours, initialisé par les params
@@ -84,16 +99,17 @@ export default function ChatConversationScreen({ route }) {
     }
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+    style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Text style={styles.title}>Convesation {idUser}</Text>
-      <ScrollView style={styles.scrollView}>
+      <Text style={styles.title}> {discussion.title}</Text>
+      <ScrollView  style={[styles.ScrollView, { backgroundColor: theme.colors.background }]}>
         {discussion.messages &&
           discussion.messages.map((element) => (
             <View key={element._id} style={FstyleMessage(element)}>
-              <Text style={styles.textmessage}>{element.message}</Text>
-              <Text style={styles.textmessage}>{FWhosendMessage(element)}</Text>
+              <Text style={styles.textmessagequi}>{FWhosendMessage(element)}</Text>
+              <Text style={styles.textmessagequoi}>{element.message}</Text>
+              
             </View>
           ))}
         <TextInput
@@ -101,9 +117,9 @@ export default function ChatConversationScreen({ route }) {
           style={styles.nouveauMessage}
           value={inputnouveauMessage}
           onChangeText={setnouveauMessage}
-          placeholder="..."
+          placeholder="nouveau message ..."
         ></TextInput>
-        <Button title="envoyer" onPress={() => handleSubmit()} />
+        <Button  onPress={() => handleSubmit()} mode={"contained"} style={styles.buttonEnvoyer} > envoyer</Button>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -116,39 +132,71 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#ffffff",
+   
     },
-  scrollView:{
+    ScrollView:{
     width: "100%",
     backgroundColor: "#ffffff",
     
    
   },
-  textmessage: {
-    width: 240,
-    backgroundColor: "pink",
-    borderRadius: 8,
+  textmessagequi: {
+    width: 220,
+    //backgroundColor: "#397a5b",//vert
+    color:"#397a5b",//vert
+    fontFamily: "LeagueSpartan-Bold",
+    borderRadius: 20,
+    textAlign: "center",
+
+    
+    
+  },
+  textmessagequoi: {
+    width: 220,
+    backgroundColor: "#397a5b",//vert
+    color: "white",
+    borderRadius: 20,
     textAlign: "left",
-    margin: 2,
+    padding: 10,
     
   },
   myMessage: {
     width: 250,
-    backgroundColor: "pink",
-    borderRadius: 8,
+   // backgroundColor: "#397a5b",//vert
+    borderRadius: 20,
     textAlign: "right",
     alignSelf: "flex-end",
     margin: 2,
   },
   notmyMessage: {
     width: 250,
-    backgroundColor: "pink",
-    borderRadius: 8,
+   // backgroundColor: "#397a5b",//vert
+    borderRadius: 20,
     textAlign: "left", // Align others' messages to the left
     alignSelf: "flex-start",
     margin: 2,
   },
   title:{
 marginTop: 30,
+marginBottom: 20,
+backgroundColor: "#E5410A",
+color: "white",//"#E5410A",//"#397a5b",//vert
+fontSize: 20,
+    fontFamily: "LeagueSpartan-Bold",
+
+  },
+  buttonEnvoyer:{
+    width: 250,
+    margin: 30,
+  },
+  nouveauMessage: {
+    marginTop: 0,
+    width: 350,
+    height: 50,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    underline: "none",
   },
 });

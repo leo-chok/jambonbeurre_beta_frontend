@@ -5,16 +5,31 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
+ 
   TouchableOpacity,
   View,
 } from "react-native";
+
+import {
+  TextInput,
+  List,
+  RadioButton,
+  Checkbox,
+  Text,
+  Divider,
+  Button,
+  Switch,
+  Chip,
+  Snackbar,
+  useTheme,
+} from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { chargeDiscussions } from "../reducers/discussions";
 import { BACKEND_ADRESS } from "../.config";
 
 export default function ChatListScreen({ navigation }) {
+  const theme = useTheme();
+
   const discussions = useSelector(
     (state) => state.discussions.value.discussions
   );
@@ -49,13 +64,13 @@ export default function ChatListScreen({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <Text style={styles.title}>Chat List</Text>
       <ScrollView style={styles.scrollView}>
         {discussions.map((element) => (
-          <TouchableOpacity key={element._id} style={styles.discussionContainer} 
+          <TouchableOpacity key={element._id} style={styles.listeDesDiscussions} 
           onPress={() =>  navigation.navigate('ChatConversation', element)}>
 
             <Text style={styles.textTitle}>{element.title}</Text>
@@ -68,23 +83,25 @@ export default function ChatListScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
   },
-  discussionContainer:{
-    width: 250,
-    backgroundColor: "pink",
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+  listeDesDiscussions:{
+    width: "100%",
+    backgroundColor: "#397a5b",//vert
+    borderRadius: 20,
     alignItems: "center",
-    marginBottom: 15,
+    marginBottom: 50,
  
   },
-  textTitle:{
-    marginBottom: 15,
-    paddingBottom: 20,
-  }
+  title:{
+    marginTop: 30,
+    marginBottom: 20,
+      },
+      textTitle:{
+        color: "white",
+        fontSize: 16,
+      //  fontFamily: "LeagueSpartan-SemiBold",
+        padding: 10,
+      }
 });
