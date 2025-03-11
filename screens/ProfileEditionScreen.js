@@ -42,6 +42,7 @@ export default function ProfileEditionScreen({ navigation }) {
   const [languages, setLanguages] = useState([]);
   const [vacancy, setVacancy] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const theme = useTheme();
 
   // On récupère le lunchtime depuis le reducer car il est modifié dans le composant Schedule
