@@ -449,7 +449,7 @@ export default function HomeScreen({ navigation }) {
       >
         {currentPosition && (
           <Marker coordinate={currentPosition} title="Ma Position">
-            <Image
+            {/* <Image
               style={{
                 width: 50,
                 height: 50,
@@ -458,19 +458,20 @@ export default function HomeScreen({ navigation }) {
                 borderColor: theme.colors.secondary,
               }}
               source={{ uri: userAvatar }}
-            />
+            /> */}
           </Marker>
         )}
         {restaurantsMarkers}
         {nearUsersMarkers}
       </MapView>
       <View style={styles.wrapper}>
-        <Searchbar
+        <Searchbar style={styles.searchbar}
           placeholder="Rechercher un restaurant"
           onChangeText={setSearchQuery}
           onIconPress={handleSearch}
           onSubmitEditing={handleSearch}
           value={searchQuery}
+
         />
         <View style={styles.mapActions}>
           <TouchableOpacity activeOpacity={0.8} onPress={() => handleCenter()}>
@@ -504,6 +505,12 @@ const styles = StyleSheet.create({
     padding: 16,
     flexDirection: "column",
     alignItems: "right",
+  },
+  searchbar: {
+    backgroundColor: "white",
+    shadowOpacity: 0.5,
+    shadowRadius: 6,
+    elevation: 5,
   },
   mapActions: {
     position: "absolute",

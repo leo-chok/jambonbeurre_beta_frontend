@@ -91,18 +91,17 @@ export default function Restaurant(props) {
   // // Récupérer les réservation
   let restaurantId = props.id;
 
-  const [eventInfo, setEventInfo] = React.useState(null); // Initialisation de l'état
+  const [eventInfo, setEventInfo] = React.useState(null);
 
   useEffect(() => {
     fetch(`${BACKEND_ADRESS}/reservations/restaurant/${restaurantId}`)
       .then((response) => response.json())
-      .then((data) => setEventInfo(data.result)) // Met à jour eventInfo
+      .then((data) => setEventInfo(data))
+
       .catch((error) =>
         console.error("Erreur lors de la récupération des réservations", error)
       );
   }, [restaurantId]);
-
-  console.log("voir le type :", props.type)
 
   return (
     <View style={styles.container}>
@@ -194,7 +193,15 @@ export default function Restaurant(props) {
           </View>
         </View>
         <View></View>
-        {eventInfo === true ? <JoinReservation /> : <MakeReservation />}
+        {eventInfo?.result === true ? (
+          <JoinReservation 
+          reservationinfos={eventInfo} />
+        ) : (
+          <MakeReservation
+            restaurantId={restaurantId}
+            restaurantName={props.name}
+          />
+        )}
       </View>
     </View>
   );
