@@ -16,6 +16,7 @@ import { BACKEND_ADRESS } from "../.config";
 export default function ChatNewConversationScreen({ navigation }) {
   const [users, setusers] = useState([]);
   const token = useSelector((state) => state.user.value.authentification.token);
+  const username = useSelector((state) => state.user.value.infos.username);
   const [listeDesSelectioner, setlisteDesSelectioner] = useState([]); //liste des utilisateurs selectionnés pour la conversation
   let title='';
 
@@ -27,13 +28,15 @@ export default function ChatNewConversationScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         setusers(data.listUsers); //memorise la liste de tous les utilisateurs
-        console.log(data);
+       // console.log(data);
       }); //fetch
   }, []);
 
   function Fvalide() {
     console.log("fonction valide");
-  
+  let title = listeDesSelectioner.map((element) => element.username).join("  -  ");
+  title = title + "  ++  " + username;
+    console.log("title : "+title);
     
     fetch(`${BACKEND_ADRESS}/chats/creeUneDiscussion/`, {
       method: "POST",
@@ -41,20 +44,20 @@ export default function ChatNewConversationScreen({ navigation }) {
       body: JSON.stringify({
         token: token,
         userIdInvite: listeDesSelectioner.map((element) => element.id),
-        title: "hello",
+        title: title,
       }),
     }) //fetch
       .then((response) => response.json())
       .then((data) => {
         console.log("data conversation fetch : ");
-        console.log(data);
-        console.log(data.Discussion);
+       // console.log(data);
+        //console.log(data.Discussion);
         navigation.navigate("ChatConversation", data.Discussion);
       }); //then fetch
   } //function
 
   function FselectionneUser(idUser, username) {
-    console.log("hello selectionne user");
+    console.log("selectionne user");
     if (listeDesSelectioner.some((element) => element.id == idUser)) {
       setlisteDesSelectioner((listeDesSelectioner) =>
         listeDesSelectioner.filter((element) => element.id !== idUser)
@@ -65,7 +68,7 @@ export default function ChatNewConversationScreen({ navigation }) {
         { id: idUser, username: username },
       ]);
     }
-    console.log(listeDesSelectioner);
+    //console.log(listeDesSelectioner);
     
   } //function
 

@@ -26,17 +26,19 @@ export default function ChatConversationScreen({ route }) {
     console.log("chat conversation");
     setdiscussion(route.params);
     console.log("discussion par params");
-    console.log(discussion);
-    console.log(route.params);
+    //console.log(discussion);
+    //console.log(route.params);
 
   
     fetch(`${BACKEND_ADRESS}/users/${token}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log("data conversation fetch : ");
-        console.log("iduserr  : "+data.userInfos[0]._id);
+        //console.log("iduserr  : "+data.userInfos[0]._id);
         setIdUser(data.userInfos[0]._id);//memorise l'id de l'utilisateur
       }); //then fetch
+
+   
   }, []);
 
 
@@ -77,8 +79,8 @@ export default function ChatConversationScreen({ route }) {
       else return styles.notmyMessage;
     }
     function FWhosendMessage(element) {
-      if (element.idSender == idUser) return "me";
-      else return element.username;
+      if (element.idSender == idUser) return "";
+      else { return discussion.users.find((elementUser) => elementUser._id == element.idSender).infos.username; }
     }
   return (
     <KeyboardAvoidingView

@@ -29,7 +29,7 @@ export default function ChatListScreen({ navigation }) {
  //chargement de toutes les discussions de l'utilisateur à partir de son token
   useEffect(() => {
     console.log("chat list screen ");
-console.log("username : "+username);
+    //console.log("username : "+username);
     fetch(`${BACKEND_ADRESS}/chats/getAllChat/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
