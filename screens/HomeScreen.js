@@ -20,8 +20,9 @@ import {
   Portal,
   Text,
   Searchbar,
-  useTheme
+  useTheme,
 } from "react-native-paper";
+import FilterRestaurant from "../components/FilterRestaurant";
 import Restaurant from "../components/Restaurant";
 import mapStyle from "../assets/data/mapStyle";
 import { BACKEND_ADRESS } from "../.config";
@@ -33,7 +34,16 @@ export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
   const userAvatar = useSelector((state) => state.user.value.infos.avatar);
-  console.log(token);
+  const filterRestaurant = useSelector((state) => state.restaurantFilter.value);
+
+  const userReducer = useSelector((state) => state.user.value);
+  console.log(userReducer);
+
+  const [restaurantFilter, setRestaurantFilter] = useState([
+    "coffee_shop",
+    "hamburger_restaurant",
+    "restaurant",
+  ]);
 
   const [currentPosition, setCurrentPosition] = useState({
     latitude: 0,
@@ -71,7 +81,7 @@ export default function HomeScreen({ navigation }) {
       // Récupérer les restaurants, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
       fetch(
         BACKEND_ADRESS +
-          "/restaurants/near/500?longitude=" +
+          "/restaurants/near/100000?longitude=" +
           currentPosition.longitude +
           "&latitude=" +
           currentPosition.latitude
@@ -124,8 +134,6 @@ export default function HomeScreen({ navigation }) {
         });
     })();
   }, [currentPosition]);
-
-  console.log(usersMarkers)
 
   // Bouton pour recentrer la map selon la position de l'utilisateur, en temps réel
   const handleCenter = () => {
@@ -264,8 +272,13 @@ export default function HomeScreen({ navigation }) {
       .catch((error) => console.error("Erreur lors de la recherche :", error));
   };
 
+  //////////////////////MODAL DES FILTRES//////////////////////
+  const [filterVisibility, setFilterVisibility] = useState(false);
   // Bouton filtres à faire
-  const handleFilter = () => {};
+  const handleFilter = () => {
+    console.log(filterVisibility);
+    setFilterVisibility(!filterVisibility);
+  };
 
   ////////////////////// CUSTOMISATION DES MARKERS DES UTILISATEURS  //////////////////////
   // Style des markers d'utilisateurs  sur la carte
@@ -278,11 +291,20 @@ export default function HomeScreen({ navigation }) {
           longitude: data.longitude,
         }}
         title={data.username}
-        onPress={() => navigation.navigate("OtherProfile", {userId : data.id})}
+        onPress={() => navigation.navigate("OtherProfile", { userId: data.id })}
+        style={{ display: "flex", resizeMode: "contain" }}
       >
         <Image
-          style={{ width: 50, height: 50, borderRadius:25, borderWidth: 5, borderColor: theme.colors.secondary }}
+          style={{
+            width: 50,
+            height: 50,
+            borderRadius: 25,
+            borderWidth: 5,
+            borderColor: theme.colors.primary,
+            display: "flex",
+          }}
           source={{ uri: data.avatar }}
+          resizeMode="contain"
         />
       </Marker>
     );
@@ -291,72 +313,74 @@ export default function HomeScreen({ navigation }) {
   ////////////////////// CUSTOMISATION DES MARKERS DES RESTAURANTS  //////////////////////
   // Style des markers de restaurants sur la carte
   const restaurantsMarkers = markers.map((data, i) => {
-    let imageMarker = require("../assets/restaurants_icons/restaurant.png");
-    if (data.type === "hamburger_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
-    } else if (data.type === "bakery") {
-      imageMarker = require("../assets/restaurants_icons/brunch.png");
-    } else if (data.type === "sports_activity_location") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
-    } else if (data.type === "coffee_shop") {
-      imageMarker = require("../assets/restaurants_icons/bar.png");
-    } else if (data.type === "video_arcade") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
-    } else if (data.type === "hotel") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
-    } else if (data.type === "bar") {
-      imageMarker = require("../assets/restaurants_icons/bar.png");
-    } else if (data.type === "italian_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/italian.png");
-    } else if (data.type === "movie_theater") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
-    } else if (data.type === "shopping_mall") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
-    } else if (data.type === "supermarket") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
-    } else if (data.type === "store") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
-    } else if (data.type === "brunch_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/brunch.png");
-    } else if (data.type === "casino") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
-    } else if (data.type === "pizza_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/italian.png");
-    } else if (data.type === "restaurant") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
-    } else if (data.type === "thai_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/thai.png");
-    } else if (data.type === "food_store") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
-    } else if (data.type === "chinese_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/japanese.png");
-    } else if (data.type === "french_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/restaurant.png");
-    } else if (data.type === "sandwich_shop") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
-    } else if (data.type === "fast_food_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/burger.png");
-    } else if (data.type === "tea_house") {
-      imageMarker = require("../assets/restaurants_icons/brunch.png");
-    } else if (data.type === "meal_takeaway") {
-      imageMarker = require("../assets/restaurants_icons/fastfood.png");
-    } else if (data.type === "japanese_restaurant") {
-      imageMarker = require("../assets/restaurants_icons/japanese.png");
-    } else {
-    }
+    if (filterRestaurant.includes(data.type)) {
+      let imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      if (data.type === "hamburger_restaurant") {
+        imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      } else if (data.type === "bakery") {
+        imageMarker = require("../assets/restaurants_icons/brunch.png");
+      } else if (data.type === "sports_activity_location") {
+        imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      } else if (data.type === "coffee_shop") {
+        imageMarker = require("../assets/restaurants_icons/bar.png");
+      } else if (data.type === "video_arcade") {
+        imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      } else if (data.type === "hotel") {
+        imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      } else if (data.type === "bar") {
+        imageMarker = require("../assets/restaurants_icons/bar.png");
+      } else if (data.type === "italian_restaurant") {
+        imageMarker = require("../assets/restaurants_icons/italian.png");
+      } else if (data.type === "movie_theater") {
+        imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      } else if (data.type === "shopping_mall") {
+        imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      } else if (data.type === "supermarket") {
+        imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      } else if (data.type === "store") {
+        imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      } else if (data.type === "brunch_restaurant") {
+        imageMarker = require("../assets/restaurants_icons/brunch.png");
+      } else if (data.type === "casino") {
+        imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      } else if (data.type === "pizza_restaurant") {
+        imageMarker = require("../assets/restaurants_icons/italian.png");
+      } else if (data.type === "restaurant") {
+        imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      } else if (data.type === "thai_restaurant") {
+        imageMarker = require("../assets/restaurants_icons/thai.png");
+      } else if (data.type === "food_store") {
+        imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      } else if (data.type === "chinese_restaurant") {
+        imageMarker = require("../assets/restaurants_icons/japanese.png");
+      } else if (data.type === "french_restaurant") {
+        imageMarker = require("../assets/restaurants_icons/restaurant.png");
+      } else if (data.type === "sandwich_shop") {
+        imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      } else if (data.type === "fast_food_restaurant") {
+        imageMarker = require("../assets/restaurants_icons/burger.png");
+      } else if (data.type === "tea_house") {
+        imageMarker = require("../assets/restaurants_icons/brunch.png");
+      } else if (data.type === "meal_takeaway") {
+        imageMarker = require("../assets/restaurants_icons/fastfood.png");
+      } else if (data.type === "japanese_restaurant") {
+        imageMarker = require("../assets/restaurants_icons/japanese.png");
+      } else {
+      }
 
-    return (
-      <Marker
-        key={i}
-        coordinate={{
-          latitude: data.latitude,
-          longitude: data.longitude,
-        }}
-        title={data.name}
-        image={imageMarker}
-        onPress={() => showRestaurantModal(data.name)}
-      ></Marker>
-    );
+      return (
+        <Marker
+          key={i}
+          coordinate={{
+            latitude: data.latitude,
+            longitude: data.longitude,
+          }}
+          title={data.name}
+          image={imageMarker}
+          onPress={() => showRestaurantModal(data.name)}
+        ></Marker>
+      );
+    }
   });
 
   return (
@@ -374,7 +398,6 @@ export default function HomeScreen({ navigation }) {
             color="#20202"
             onPress={hideRestaurantModal}
           />
-
           {Object.keys(dataRestaurant).length > 0 && (
             <Restaurant
               id={dataRestaurant.id}
@@ -389,6 +412,17 @@ export default function HomeScreen({ navigation }) {
               isopen={dataRestaurant.openingHours}
             />
           )}
+        </Modal>
+      </Portal>
+      <Portal>
+        <Modal
+          //Modal pour filtre restaurants
+          visible={filterVisibility}
+          onDismiss={handleFilter}
+          contentContainerStyle={styles.modalStyle}
+        >
+          <Text> FILTRES </Text>
+          <FilterRestaurant />
         </Modal>
       </Portal>
       <MapView
@@ -410,11 +444,17 @@ export default function HomeScreen({ navigation }) {
         customMapStyle={mapStyle}
       >
         {currentPosition && (
-          <Marker coordinate={currentPosition} title="Ma Position" >
-          <Image
-          style={{ width: 50, height: 50, borderRadius:25, borderWidth: 5, borderColor: theme.colors.secondary }}
-          source={{ uri: userAvatar }}
-        />
+          <Marker coordinate={currentPosition} title="Ma Position">
+            <Image
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 25,
+                borderWidth: 5,
+                borderColor: theme.colors.secondary,
+              }}
+              source={{ uri: userAvatar }}
+            />
           </Marker>
         )}
         {restaurantsMarkers}
@@ -422,7 +462,7 @@ export default function HomeScreen({ navigation }) {
       </MapView>
       <View style={styles.wrapper}>
         <Searchbar
-          placeholder="Rechercher un restaurant ou un buddy"
+          placeholder="Rechercher un restaurant"
           onChangeText={setSearchQuery}
           onIconPress={handleSearch}
           onSubmitEditing={handleSearch}
@@ -451,7 +491,6 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
     width: "100%",
-    
   },
   wrapper: {
     position: "absolute",

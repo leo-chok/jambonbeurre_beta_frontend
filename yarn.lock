@@ -1324,6 +1324,13 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@react-native-community/datetimepicker@^8.3.0":
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-8.3.0.tgz#d734a77ae5fdf9585ea2eba0d2b5cf47404c0a09"
+  integrity sha512-K/KgaJbLtjMpx4PaG4efrVIcSe6+DbLufeX1lwPB5YY8i3sq9dOh6WcAcMTLbaRTUpurebQTkl7puHPFm9GalA==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native/assets-registry@0.76.7":
   version "0.76.7"
   resolved "https://registry.yarnpkg.com/@react-native/assets-registry/-/assets-registry-0.76.7.tgz#b9a82d67826edebeb0537393ad984694e8b82395"
@@ -2791,6 +2798,11 @@ expo-image-picker@^16.0.6:
   integrity sha512-HN4xZirFjsFDIsWFb12AZh19fRzuvZjj2ll17cGr19VNRP06S/VPQU3Tdccn5vwUzQhOBlLu704CnNm278boiQ==
   dependencies:
     expo-image-loader "~5.0.0"
+
+expo-image@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/expo-image/-/expo-image-2.0.6.tgz#94a9e01df7306c4e8b5f1e76647f9eea54cfaec1"
+  integrity sha512-NHpIZmGnrPbyDadil6eK+sUgyFMQfapEVb7YaGgxSFWBUQ1rSpjqdIQrCD24IZTO9uSH8V+hMh2ROxrAjAixzQ==
 
 expo-keep-awake@~14.0.3:
   version "14.0.3"
@@ -4759,10 +4771,10 @@ react-native-paper@^5.13.1:
     color "^3.1.2"
     use-latest-callback "^0.1.5"
 
-react-native-safe-area-context@^5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-5.3.0.tgz#272e6786a58aafe3362fde4d3233713b66158179"
-  integrity sha512-glV9bwuozTjf/JDBIBm+ITnukHNaUT3nucgdeADwjtHsfEN3RL5UO6nq99vvdWv5j/O9yCZBvFncM1BBQ+UvpQ==
+react-native-safe-area-context@4.12.0:
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-4.12.0.tgz#17868522a55bbc6757418c94a1b4abdda6b045d9"
+  integrity sha512-ukk5PxcF4p3yu6qMZcmeiZgowhb5AsKRnil54YFUUAXVIS7PJcMHGGC+q44fCiBg44/1AJk5njGMez1m9H0BVQ==
 
 react-native-screens@~4.4.0:
   version "4.4.0"

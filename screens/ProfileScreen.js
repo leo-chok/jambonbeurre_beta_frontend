@@ -4,7 +4,6 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -23,6 +22,10 @@ import {
   Chip,
   useTheme
 } from "react-native-paper";
+
+import {
+  SafeAreaView,
+} from 'react-native-safe-area-context';
 
 import { BACKEND_ADRESS } from "../.config";
 import { TABBAR_SIZE } from "../constants";
@@ -57,7 +60,6 @@ export default function ProfileScreen({ navigation }) {
     fetch(BACKEND_ADRESS + "/users/" + token)
       .then((response) => response.json())
       .then((data) => {
-        console.log("User found");
         setUserData(data.userInfos[0]);
       });
   }, [isFocused]);
@@ -109,7 +111,6 @@ export default function ProfileScreen({ navigation }) {
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.colors.background}]}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
             <View style={styles.mainContainer}>
       <View style={styles.topContainer}>
@@ -146,7 +147,7 @@ export default function ProfileScreen({ navigation }) {
         </View>
         {!vacancy && displayCreneaux}
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-        <Text style={styles.title}>Type de cuisine préféré</Text>
+        <Text style={styles.title}>Types de cuisine préférés</Text>
         <View style={styles.typeFoodContainer}>
           {favFood.map((type) => (
             <Button key={type} mode={"contained"} style={styles.badgeButton}>
@@ -171,7 +172,7 @@ export default function ProfileScreen({ navigation }) {
         </View>
 
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-        <Text style={styles.title}>Mes langues</Text>
+        <Text style={styles.title}>Mes langues parlées</Text>
         <View style={styles.languageContainer}>
           {languages.map((type) => (
             <Button

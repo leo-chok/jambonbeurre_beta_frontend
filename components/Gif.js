@@ -1,4 +1,6 @@
-import { Image, KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+
+import { Image } from "expo-image";
 
 export default function Gif(props) {
   return (
