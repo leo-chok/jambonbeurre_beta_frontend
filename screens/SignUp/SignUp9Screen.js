@@ -47,7 +47,7 @@ export default function SignUp9Screen({ navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View>
-        <Text style={styles.title}>Ton profil est créé 👍</Text>
+        <Text style={styles.title}>Ton profil est créé ✨</Text>
         <Text style={styles.text}>
           Super {username} ! 🎉 {"\n"}Tu peux commencer à te connecter {"\n"}avec les
           utilisateurs qui t'entourent !

@@ -28,6 +28,7 @@ import SignUp6Screen from "./screens/SignUp/SignUp6Screen";
 import SignUp7Screen from "./screens/SignUp/SignUp7Screen";
 import SignUp8Screen from "./screens/SignUp/SignUp8Screen";
 import SignUp9Screen from "./screens/SignUp/SignUp9Screen";
+import UnsubscribeScreen from "./screens/UnsubscribeScreen";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { PaperProvider } from "react-native-paper";
@@ -119,7 +120,7 @@ export default function App() {
       onSurface: "rgb(31, 26, 29)",
       surfaceVariant: "rgb(255, 255, 255)",
       onSurfaceVariant: "rgb(78, 68, 75)",
-      outline: "rgb(128, 116, 123)",
+      outline: "rgb(254, 87, 71)",
       outlineVariant: "rgb(209, 194, 203)",
       shadow: "rgb(0, 0, 0)",
       scrim: "rgb(0, 0, 0)",
@@ -196,6 +197,7 @@ export default function App() {
             <Stack.Screen name="SignUp7" component={SignUp7Screen} />
             <Stack.Screen name="SignUp8" component={SignUp8Screen} />
             <Stack.Screen name="SignUp9" component={SignUp9Screen} />
+            <Stack.Screen name="Unsubscribe" component={UnsubscribeScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

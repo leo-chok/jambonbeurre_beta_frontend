@@ -23,9 +23,6 @@ import {
 
 export default function SignUpScreen({ navigation }) {
   const theme = useTheme();
-  const handleSubmit = () => {
-    navigation.navigate("TabNavigator", { screen: "Home" });
-  };
 
   const handleSignUp = () => {
     navigation.navigate("SignUp1");
@@ -40,9 +37,6 @@ export default function SignUpScreen({ navigation }) {
             <Text style={styles.title}>👋  Bienvenue sur</Text>
       <Image source={require("../assets/logo/logoCouleur.png")} style={styles.logo} />
       <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-        <Text style={styles.textButton} onPress={() => handleSubmit()}>
-          Menu [DEV]
-        </Text>
       </TouchableOpacity>
       <Button
         onPress={() => handleSignUp()}
@@ -83,9 +77,6 @@ const styles = StyleSheet.create({
     height: 180,
     marginBottom: 20,
     marginTop: 20,
-  },
-  textButton: {
-    color: "#fe5747",
   },
   badgeButton: {
     width: "60%",
