@@ -11,16 +11,11 @@ import {
 } from "react-native";
 
 import {
-  TextInput,
-  List,
-  RadioButton,
-  Checkbox,
+  
   Text,
-  Divider,
+
   Button,
-  Switch,
-  Chip,
-  Snackbar,
+  
   useTheme,
 } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
