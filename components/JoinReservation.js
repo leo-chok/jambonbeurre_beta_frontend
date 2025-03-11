@@ -6,33 +6,92 @@ import {
   TouchableOpacity,
   Text,
   Alert,
+  Image,
 } from "react-native";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import { BACKEND_ADRESS } from "../.config";
 
+export default function JoinReservation(reservationinfos) {
+  let reservationData = reservationinfos.reservationinfos.data;
+  let reservationDataId = reservationData[0]._id;
 
-export default function JoinReservation() {
+  const user = useSelector((state) => state.user.value);
+  const userToken = user.authentification.token;
+  const avatar = user.infos.avatar;
+  const username = user.infos.username;
 
+  const [joinReservationConfirmed, setjoinReservationConfirmed] =
+    useState(false);
+
+
+  const handlejoin = async () => {
+    if (!userToken) {
+      Alert.alert("Erreur", "Veuillez vous connecter pour réserver.");
+      return;
+    }
+  
+    const joinReservation = {
+      reservationId: reservationDataId,
+      token: userToken,
+    };
+  
+    try {
+      const response = await fetch(`${BACKEND_ADRESS}/reservations/join`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(joinReservation),
+      });
+  
+      const data = await response.json();
+  
+      if (data.result || data.error === "Utilisateur déjà invité") {
+        setjoinReservationConfirmed(true);
+      } else {
+        Alert.alert("Erreur", data.error || "Impossible de rejoindre la réservation.");
+      }
+    } catch (error) {
+      Alert.alert("Erreur", "Une erreur est survenue.");
+      console.error(error);
+    }
+  };
+  
 
   return (
     <View style={styles.container}>
-      <View style={styles.main}>
-        <View style={[styles.whitecard, styles.reservation]}>
-          <Text style={styles.h2}>Aujourd’hui · 13h00</Text>
-          <View style={styles.gallery}>
-            <View>
-              <TouchableOpacity
-                style={styles.registerbtn}
+      <View>
+        <View style={styles.whitecard}>
+          <View>
+            {joinReservationConfirmed ? (
+              <View>
+                <Image
+                  style={styles.avatar}
+                  source={avatar && { uri: `${avatar}` }}
+                />
+                <Text style={styles.btnlegend}>{username}</Text>
+              </View>
+            ) : (
+              <View style={styles.gallery}>
+                <View>
+                  <Text style={styles.h2}>Un événement a venir !</Text>
 
-              >
-                <View style={styles.strokeborder}>
-                  <Ionicons name="add-outline" size={32} color="#FFF" />
+                  <TouchableOpacity
+                    style={styles.registerbtn}
+                    onPress={() => handlejoin()}
+                  >
+                    <View style={styles.strokeborder}>
+                      <Ionicons name="add-outline" size={32} color="#FFF" />
+                    </View>
+                  </TouchableOpacity>
+
+                  <Text style={styles.btnlegend}>Je m'inscris</Text>
                 </View>
-              </TouchableOpacity>
-              <Text style={styles.bodytext}>Je rejoins les autres !</Text>
-            </View>
-
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -40,34 +99,32 @@ export default function JoinReservation() {
   );
 }
 
-
 const styles = StyleSheet.create({
+  container: {
+    position: "relative",
+    width: "100%",
+    height: "45%",
+    top: -15,
+  },
   whitecard: {
+    gap: 8,
+    width: "100%",
     backgroundColor: "#fff",
     padding: 32,
-    width: "48%",
     borderRadius: 32,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -3 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,
-    gap: 8,
-    height: "100%",
-    justifyContent: "center",
+    height: "auto",
+    alignItems: "center",
   },
 
   h2: {
     fontSize: 16,
     marginBottom: 8,
     fontFamily: "Montserrat-SemiBold",
-  },
-  reservation: {
-    position: "relative",
-    height: "auto%",
-    width: "100%",
-    justifyContent: "top",
-    alignItems: "center",
   },
   registerbtn: {
     backgroundColor: "#FF6C47",
@@ -77,6 +134,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 8,
+    marginHorizontal: "auto",
   },
   strokeborder: {
     backgroundColor: "#transparent",
@@ -93,7 +151,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 16,
   },
-  userphoto : {
-    backgroundColor: "#FF6C47",
+  btnlegend: {
+    marginTop: 5,
+    fontSize: 14,
+    fontFamily: "Montserrat-Medium",
+    marginHorizontal: "auto",
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 50,
+    marginBottom: 4,
   },
 });

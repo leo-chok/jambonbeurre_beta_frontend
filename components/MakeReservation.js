@@ -6,22 +6,32 @@ import {
   Text,
   Alert,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { BACKEND_ADRESS } from "../.config";
+import Invitation from "../components/Invitation";
 
-export default function MakeReservation({ restaurantId }) {
+
+export default function MakeReservation({ restaurantId, restaurantName }) {
   const [loading, setLoading] = useState(false);
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+  const [reservationConfirmed, setReservationConfirmed] = useState(false);
 
   // Récupérer le token de l'utilisateur depuis Redux
-  const userToken = useSelector((state) => state.user.value.authentification.token);
 
+  const user = useSelector((state) => state.user.value);
+  const userToken = user.authentification.token;
+  const username = user.infos.username;
+  const avatar = user.infos.avatar;
+  // const defaultAvatar: require("../assets/restaurants_img/burger.jpg"),
 
-  console.log("user token ",userToken)
+  // if (avatar === "") {
+  //   avatar = <Image source={defaultAvatar} style={styles.image}></Image>;
+  // };
 
   const handleAddReservation = async () => {
     if (!userToken) {
@@ -32,10 +42,10 @@ export default function MakeReservation({ restaurantId }) {
     setLoading(true);
 
     const reservationData = {
-      id: userToken,
-      name: "Réservation", // A remplacer par le nom de restaurant : comment ????
+      name: restaurantName,
+      token: userToken,
       date: date.toISOString(),
-      // restaurants: restaurantId, // A remplacer par l'ID de restaurant : comment ????
+      restaurantId: restaurantId,
     };
 
     try {
@@ -43,15 +53,16 @@ export default function MakeReservation({ restaurantId }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(reservationData),
       });
 
       const data = await response.json();
+      console.log("TESSSSS", data)
 
       if (data.result) {
-        Alert.alert("Succès", "Réservation ajoutée avec succès !");
+        Alert.alert("Tu es bien inscrit !");
+        setReservationConfirmed(true);
       } else {
         Alert.alert(
           "Erreur",
@@ -64,21 +75,34 @@ export default function MakeReservation({ restaurantId }) {
     } finally {
       setLoading(false);
     }
+
   };
+
 
   return (
     <View style={styles.container}>
       <View style={styles.main}>
         <View style={[styles.whitecard, styles.reservation]}>
-          <Text style={styles.h2}>Choisissez une date</Text>
+          <View>
+            {reservationConfirmed ? (
+              <Text style={styles.h2}>Tu es bien inscrit !</Text>
+            ) : (
+              <Text style={styles.h2}>Choisis le créneau de ton choix :</Text>
+            )}
+          </View>
 
-          {/* Date Picker */}
-          <TouchableOpacity
-            onPress={() => setShowPicker(true)}
-            style={styles.dateButton}
-          >
-            <Text style={styles.dateText}>{date.toLocaleString()}</Text>
-          </TouchableOpacity>
+          <View>
+            {reservationConfirmed ? (
+              <View></View>
+            ) : (
+              <TouchableOpacity
+                onPress={() => setShowPicker(true)}
+                style={styles.dateButton}
+              >
+                <Text style={styles.dateText}>{date.toLocaleString()}</Text>
+              </TouchableOpacity>
+            )}
+          </View>
 
           {showPicker && (
             <DateTimePicker
@@ -93,22 +117,39 @@ export default function MakeReservation({ restaurantId }) {
           )}
 
           <View style={styles.gallery}>
-            <View>
-              <TouchableOpacity
-                style={styles.registerbtn}
-                onPress={handleAddReservation}
-                disabled={loading}
-              >
-                <View style={styles.strokeborder}>
-                  {loading ? (
-                    <ActivityIndicator size="small" color="#FFF" />
-                  ) : (
-                    <Ionicons name="add-outline" size={32} color="#FFF" />
-                  )}
+            {reservationConfirmed ? (
+              <View style={styles.row}>
+                <View>
+                  <Image
+                    style={styles.avatar}
+                    source={avatar && { uri: `${avatar}` }}
+                  />
+                  <Text style={styles.btnlegend}>
+                    {reservationConfirmed ? username : "Je réserve"}
+                  </Text>
                 </View>
-              </TouchableOpacity>
-              <Text style={styles.bodytext}>Je réserve</Text>
-            </View>
+                <Invitation></Invitation>
+              </View>
+            ) : (
+              <View>
+                <TouchableOpacity
+                  style={styles.registerbtn}
+                  onPress={handleAddReservation}
+                  disabled={loading}
+                >
+                  <View style={styles.strokeborder}>
+                    {loading ? (
+                      <ActivityIndicator size="small" color="#FFF" />
+                    ) : (
+                      <Ionicons name="add-outline" size={32} color="#FFF" />
+                    )}
+                  </View>
+                </TouchableOpacity>
+                <Text style={styles.btnlegend}>
+                  {reservationConfirmed ? username : "Je réserve"}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -118,14 +159,16 @@ export default function MakeReservation({ restaurantId }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    marginTop: 16,
     position: "relative",
     width: "100%",
-    height: "48%",
+    height: "40%",
     top: -50,
   },
-  main: { alignItems: "center" },
+
   whitecard: {
+    gap: 8,
+    width: "100%",
     backgroundColor: "#fff",
     padding: 32,
     borderRadius: 32,
@@ -134,18 +177,57 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,
-    height: "100%",
+    height: "auto",
   },
-  reservation: { alignItems: "center", marginTop: 20 },
-  h2: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
+  reservation: {
+    alignItems: "center",
+    marginTop: 20,
+  },
+  h2: {
+    fontSize: 16,
+    fontFamily: "Montserrat-SemiBold",
+  },
+
   dateButton: {
     backgroundColor: "#f0f0f0",
     padding: 10,
     borderRadius: 5,
-    marginBottom: 10,
   },
   dateText: { fontSize: 16 },
-  registerbtn: { marginTop: 10 },
-  strokeborder: { padding: 10, backgroundColor: "#026C5D", borderRadius: 50 },
-  bodytext: { marginTop: 5, fontSize: 16 },
+  registerbtn: {
+    backgroundColor: "#FF6C47",
+    width: 80,
+    height: 80,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 50,
+    marginBottom: 4,
+  },
+  strokeborder: {
+    backgroundColor: "#transparent",
+    width: 64,
+    height: 64,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "#FFF",
+    borderWidth: 1.5,
+    borderStyle: "dashed",
+  },
+  btnlegend: {
+    marginTop: 5,
+    fontSize: 14,
+    fontFamily: "Montserrat-Medium",
+    marginHorizontal: "auto",
+  },
+  row: {
+    flexDirection: "row",
+    gap: 24,
+  },
 });

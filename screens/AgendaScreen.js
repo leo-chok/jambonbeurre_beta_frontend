@@ -179,11 +179,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f5f5DC",
+    backgroundColor: "#FCF4E9",
   },
   header: {
     width: "100%",
-    backgroundColor: "#f5f5DC",
+    backgroundColor: "#FCF4E9",
     padding: 30,
     alignItems: "center",
     borderBottomColor: "#ddd",
