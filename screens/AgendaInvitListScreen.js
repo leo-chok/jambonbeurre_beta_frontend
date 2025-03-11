@@ -23,6 +23,7 @@ export default function AgendaInvitListScreen({ route, navigation }) {
   const { reservationId } = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [inviteUser, setInviteUser] = useState();
+
   useEffect(() => {
     fetch(BACKEND_ADRESS + "/users/all")
       .then((response) => response.json())
@@ -31,9 +32,8 @@ export default function AgendaInvitListScreen({ route, navigation }) {
         const filteredUsers = data.listUsers
           .map((user) => {
             let score = 0;
-            //Vérifie les hobbies en communs
             if (
-              user.preferences.hobbies.some((hobby) =>
+              user.preferences.hobbies.some((hobby) => //Vérifie les hobbies en communs
                 user.preferences.hobbies.includes(hobby)
               )
             ) {
@@ -58,7 +58,6 @@ export default function AgendaInvitListScreen({ route, navigation }) {
       console.error("Aucune réservation trouvée");
       return;
     }
-    console.log(reservationId);
     fetch(BACKEND_ADRESS + "/reservations/invite", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -66,7 +65,6 @@ export default function AgendaInvitListScreen({ route, navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.result) {
           console.log("Utilisateur ajouté à la réservation");
           setInviteUser(userId);
@@ -85,7 +83,6 @@ export default function AgendaInvitListScreen({ route, navigation }) {
       <View style={styles.header}>
         <Text style={styles.headerText}>Mes Contacts</Text>
       </View>
-
       <ScrollView style={styles.userList}>
         {users.length > 0 ? (
           users.map((user) => (
@@ -102,7 +99,6 @@ export default function AgendaInvitListScreen({ route, navigation }) {
 <Modal visible={modalVisible} onDismiss={() => setModalVisible(false)} contentContainerStyle={styles.modalStyle}>
   <View style={styles.modalContent}>
     <Text style={styles.modalText}> Utilisateur invité !
-      {/* {inviteUser ? `${inviteUser.infos.username} a été invité !` : "Utilisateur invité !"} */}
     </Text>
     <Button mode="contained" onPress={() => setModalVisible(false)}>
       OK
@@ -146,7 +142,6 @@ export default function AgendaInvitListScreen({ route, navigation }) {
     </KeyboardAvoidingView>
   );
 }
-// }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -165,7 +160,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     fontSize: 24,
     fontWeight: "bold",
-    color: "#FF7F50",
+    color: "rgb(0, 108, 72)",
   },
   userList: {
     width: "100%",
@@ -173,7 +168,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fcf4e9",
   },
   userItem: {
-    paddingTop: 20,
+    height: 80,
     paddingBottom: 20,
     marginVertical: 8,
     backgroundColor: "rgb(255, 218, 213)",
@@ -181,15 +176,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   userText: {
-    marginTop: 45,
-    marginLeft: 30,
-    color: "black",
+    marginTop: 50,
     fontSize: 20,
     fontWeight: "bold",
     flexWrap: "wrap",
     maxWidth: 200,
     textDecorationLine: "underline",
     fontFamily: "LeagueSpartan-SemiBold",
+    color: "rgb(254, 87, 71)",
   },
   noUsers: {
     textAlign: "center",
@@ -198,19 +192,21 @@ const styles = StyleSheet.create({
     color: "#888",
   },
   goBackButton: {
-    marginBottom: 50,
-    padding: 15,
-    backgroundColor: "#f5f5DC",
+    flex: 1,
+    marginTop: 170,
+    padding: 20,
+    backgroundColor: "#fcf4e9",
     borderRadius: 10,
   },
   btnText: {
-    fontSize: 18,
-    color: "#FF7F50",
+    fontSize: 20,
+    marginTop: 29,
+    color: "rgb(254, 87, 71)",
+    fontFamily: "LeagueSpartan-SemiBold",
   },
   btnInvite: {
     flex: 1,
-    marginRight: -220,
-    marginTop: 7,
+    marginLeft: "70%",
     borderRadius: 10,
   },
   btnUsername: {
@@ -218,11 +214,11 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   avatar: {
-    marginLeft: -250,
+    marginRight: 245,
     width: 65,
     height: 65,
     borderRadius: 50,
-    marginTop: -16,
+    marginTop: 8,
     marginBottom: 10,
   },
   modalStyle: {

@@ -8,7 +8,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { TextInput, Modal, Button, Portal, Text, useTheme } from "react-native-paper";
+import {
+  TextInput,
+  Modal,
+  Button,
+  Portal,
+  Text,
+  useTheme,
+} from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewReservation,
@@ -16,29 +23,32 @@ import {
   displayReservations,
 } from "../reducers/reservations";
 import { BACKEND_ADRESS } from "../.config";
-import AntDesign from '@expo/vector-icons/AntDesign';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import AntDesign from "@expo/vector-icons/AntDesign";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Scroll } from "lucide-react";
 
 export default function AgendaScreen({ navigation }) {
   const reservations = useSelector(
     (state) => state.reservations.value.reservations
   );
-  const token = useSelector((state) => state.user.value.authentification.token );
+  const token = useSelector((state) => state.user.value.authentification.token);
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
   const theme = useTheme();
+  const [upcomingReservations, setUpcomingReservations] = useState([]);
+  const [pastReservations, setPastReservations] = useState([]);
 
-  //------------------- Permet de refresh les reservations après une action ------------------------
-  const refreshReservations = () => {
-    fetch(BACKEND_ADRESS + `/reservations/${token}`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        if (data.result) {
-          dispatch(displayReservations(data.data));
-        }
-      });
-  };
+  // //------------------- Permet de refresh les reservations après une action ------------------------
+  // const refreshReservations = () => {
+  //   fetch(BACKEND_ADRESS + `/reservations/${token}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //       if (data.result) {
+  //         dispatch(displayReservations(data.data));
+  //       }
+  //     });
+  // };
 
   //------------------- Permet de récupérer les reservations ------------------------
   useEffect(() => {
@@ -48,11 +58,20 @@ export default function AgendaScreen({ navigation }) {
         console.log(data);
         if (data.result) {
           dispatch(displayReservations(data.data));
-          refreshReservations()
+          // refreshReservations();
+          // Sépare les réservations en passées et futures
+          const now = new Date();
+          const future = data.data.filter(
+            (reservation) => new Date(reservation.date) >= now
+          );
+          const past = data.data.filter(
+            (reservation) => new Date(reservation.date) < now
+          );
+          setUpcomingReservations(future);
+          setPastReservations(past);
         }
       });
   }, []);
-
   //------------------- Ajouter une reservation ------------------------
   const handleAddReservation = () => {
     fetch(BACKEND_ADRESS + "/reservations/add", {
@@ -77,16 +96,26 @@ export default function AgendaScreen({ navigation }) {
   };
 
   //------------------- Quitter une reservation ------------------------
-  const leaveReservation = (reservationId, userId) => {
+  const leaveReservation = (reservationId, token) => {
+    console.log("token:", token);
+    if (!reservationId || !token) {
+      console.error("Reservation ID or token is missing", {
+        reservationId,
+        token,
+      });
+      return;
+    }
+
+    console.log("Sending request with:", { reservationId, token });
     fetch(BACKEND_ADRESS + "/reservations/leaveReservation", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ reservationId, userId }),
+      body: JSON.stringify({ reservationId, token }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(deleteReservation(reservationId, userId));
+          // dispatch(deleteReservation(reservationId, token));
           refreshReservations();
           console.log("Reservation quittée");
           return "Reservation quittée";
@@ -95,84 +124,77 @@ export default function AgendaScreen({ navigation }) {
         }
       });
   };
-  //------------------- Supprimer une reservation ------------------------
-  // const handleDeleteReservation = (reservationId) => {
-  //   fetch(BACKEND_ADRESS + "/reservations/deleteUser", {
-  //     method: "DELETE",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ reservationId }),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log(data);
-  //       if (data.result) {
-  //         dispatch(deleteReservation(reservationId));
-  //         return "Reservation supprimée";
-  //       } else {
-  //         console.error(data.error);
-  //       }
-  //     });
-  // };
 
- 
-  // //------------------- Formatage de la date
-  // const formatDate = (date) => {
-  //   return new Date(date).toLocaleDateString("fr-FR"); // Formate en jj/mm/aaaa
-  // };
+  //------------------- Formatage de la date ------------------------
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("fr-FR"); // Formate en jj/mm/aaaa
+  };
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.header}>
-        <Text style={styles.headerText}>Mon Agenda</Text>
+        <Text style={styles.headerText}>Mon Agenda 🗓️ </Text>
       </View>
-      <Text style={styles.section}> Réservation prévues : {reservations.length} </Text>
+      <Text style={styles.section}>
+        {" "}
+        Réservation prévues : {upcomingReservations.length}{" "}
+      </Text>
       <ScrollView style={styles.scrollView}>
-        {reservations.map((reservation) => (
+        {upcomingReservations.map((reservation) => (
           <View key={reservation._id} style={styles.reservationContainer}>
             <Text style={styles.textName}>{reservation.name}</Text>
-            <Text style={styles.textDate}>{reservation.date}</Text>
+            <Text style={styles.textDate}>{formatDate(reservation.date)}</Text>
             <Text style={styles.textConversation}>
               {reservation.conversation}
-            </Text> 
-            {/* <Button
-              style={styles.btnDelete}
+            </Text>
+            <Button
+              style={styles.btnInvite}
               mode={"contained"}
-              onPress={() => handleDeleteReservation(reservation._id)}
-              >
-              <Text style={styles.btnText}>Delete</Text>
-              </Button> */}
-              <Button
-                style={styles.btnInvite}
-                mode={"contained"}
-                onPress={() => navigation.navigate("AgendaInvitList", { reservationId: reservation._id })}
-              >
-                <AntDesign name="adduser" size={21} color="black" />
-                <Text style={styles.title} > Inviter</Text>
-              </Button>
-              <Button
-                style={styles.btnLeaveReservation}
-                mode={"contained"}
-                onPress={() => leaveReservation(reservation._id, user._id)}
-              >
-                <FontAwesome name="remove" size={20} color="black" />
-                <Text style={styles.title}  > Quitter</Text>
-              </Button>
-            : (
-                      <Text style={styles.noReserv}>Aucune réservation trouvée</Text>
-                    )
+              onPress={() =>
+                navigation.navigate("AgendaInvitListScreen", {
+                  reservationId: reservation._id,
+                })
+              }
+            >
+              <AntDesign name="adduser" size={21} color="black" />
+              <Text style={styles.title}> Inviter</Text>
+            </Button>
+            <Button
+              style={styles.btnLeaveReservation}
+              mode={"contained"}
+              onPress={() => leaveReservation(reservation._id, token)}
+            >
+              <FontAwesome name="remove" size={20} color="black" />
+              <Text style={styles.title}> Quitter</Text>
+            </Button>
+            {reservations.length === 0 && (
+              <Text style={styles.noReserv}>Aucune réservation trouvée</Text>
+            )}
           </View>
         ))}
       </ScrollView>
-      <Text style={styles.section2}> Réservation passées : </Text>
+      <Text style={styles.section2}>
+        Réservation passées : {pastReservations.length}
+      </Text>
+      <ScrollView>
+        {pastReservations.map((reservation) => (
+          <View
+            key={reservation._id}
+            style={[styles.reservationContainerPast, { opacity: 0.7 }]}
+          >
+            <Text style={styles.textName}>{reservation.name}</Text>
+            <Text style={styles.textDate}>{formatDate(reservation.date)}</Text>
+          </View>
+        ))}
+      </ScrollView>
       <Button
         style={styles.btnAddReservation}
         mode={"contained"}
-        onPress={() => navigation.navigate("Home")} 
-      > 
-      
+        onPress={() => navigation.navigate("Home")}
+      >
         <Text style={styles.title}>Nouvelle Reservation ?</Text>
       </Button>
     </KeyboardAvoidingView>
@@ -184,7 +206,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fcf4e9",
   },
   header: {
     width: "100%",
@@ -197,7 +218,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     fontSize: 24,
     fontWeight: "bold",
-    color: "rgb(254, 87, 71)",
+    color: "rgb(0, 108, 72)",
     fontFamily: "LeagueSpartan-SemiBold",
   },
   reservationContainer: {
@@ -213,6 +234,18 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingTop: 10,
   },
+  reservationContainerPast: {
+    width: 330,
+    height: 110,
+    backgroundColor: "rgb(255, 218, 213)",
+    borderRadius: 30,
+    shadowColor: "#000",
+    shadowRadius: 4,
+    alignItems: "center",
+    marginBottom: 35,
+    paddingBottom: 10,
+    paddingTop: 30,
+  },
   btnAddReservation: {
     marginBottom: 120,
   },
@@ -222,8 +255,6 @@ const styles = StyleSheet.create({
   },
   btnInvite: {
     marginLeft: -100,
-    
-
   },
   textName: {
     fontSize: 20,
@@ -233,14 +264,15 @@ const styles = StyleSheet.create({
   section: {
     fontSize: 24,
     fontWeight: "bold",
-    marginTop: 18,
+    marginTop: 8,
     color: "rgb(0, 108, 72)",
     fontFamily: "LeagueSpartan-SemiBold",
   },
   section2: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 170,
+    marginBottom: 40,
+    paddingTop: 10,
     color: "rgb(0, 108, 72)",
     fontFamily: "LeagueSpartan-SemiBold",
   },
@@ -249,5 +281,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 70,
     color: "#888",
-  }
+  },
 });
