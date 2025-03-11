@@ -57,7 +57,6 @@ export default function ProfileScreen({ navigation }) {
     fetch(BACKEND_ADRESS + "/users/" + token)
       .then((response) => response.json())
       .then((data) => {
-        console.log("User found");
         setUserData(data.userInfos[0]);
       });
   }, [isFocused]);

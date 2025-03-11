@@ -37,10 +37,12 @@ import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
 import reservations from "./reducers/reservations";
 import discussions from "./reducers/discussions";
+import restaurantFilter from "./reducers/restaurantFilter";
+
 import OthersProfileScreen from "./screens/OthersProfileScreen";
 
 const store = configureStore({
-  reducer: { user, reservations, discussions },
+  reducer: { user, reservations, discussions, restaurantFilter },
 });
 
 const Stack = createNativeStackNavigator();

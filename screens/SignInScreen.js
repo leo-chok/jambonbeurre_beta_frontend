@@ -26,7 +26,7 @@ import {
 
 import { BACKEND_ADRESS } from "../.config";
 import { useDispatch, useSelector } from "react-redux";
-import { addToken } from "../reducers/user";
+import { addToken, updateProfile } from "../reducers/user";
 import Gif from "../components/Gif";
 
 export default function SignInScreen({ navigation }) {
@@ -46,9 +46,20 @@ export default function SignInScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        
         if (data.result) {
-          dispatch(addToken(data.userToken));
+          const userInfos = data.userInfos;
+
+          // Enregistrement du token dans reducer
+          dispatch(addToken(userInfos.authentification.token));
+
+          // Enregistrement des autres infos dans reducer
+          const dataReducer = {
+            infos: userInfos.infos,
+            description: userInfos.description,
+            preferences: userInfos.preferences,
+          };
+          dispatch(updateProfile(dataReducer));
           navigation.navigate("TabNavigator", { screen: "Home" });
         } else {
           alert("Mauvais identifiants");
@@ -65,7 +76,7 @@ export default function SignInScreen({ navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={{ width: 180, height: 180 }}>
-      <Gif/>
+        <Gif />
       </View>
       <Text style={styles.title}>Connecte-toi 👍</Text>
       <Text style={styles.fieldTitle}>Ton adresse e-mail</Text>
