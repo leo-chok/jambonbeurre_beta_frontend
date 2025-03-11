@@ -22,6 +22,7 @@ export default function AgendaInvitListScreen({ route, navigation }) {
   const [users, setUsers] = useState([]);
   const { reservationId } = route.params;
   const [modalVisible, setModalVisible] = useState(false);
+  const [inviteUser, setInviteUser] = useState();
   useEffect(() => {
     fetch(BACKEND_ADRESS + "/users/all")
       .then((response) => response.json())
@@ -68,6 +69,8 @@ export default function AgendaInvitListScreen({ route, navigation }) {
         console.log(data);
         if (data.result) {
           console.log("Utilisateur ajouté à la réservation");
+          setInviteUser(userId);
+          setModalVisible(true);
         } else {
           console.error("Erreur lors de l'invitation:", data.error);
         }
@@ -88,15 +91,30 @@ export default function AgendaInvitListScreen({ route, navigation }) {
           users.map((user) => (
             <View key={user._id} style={styles.userItem}>
               <Image
-                source={{ uri: user.infos.avatar }}
+                source={
+                  user.infos.avatar
+                    ? { uri: user.infos.avatar }
+                    : require("../assets/logo/logoSeul.png")
+                }
                 style={styles.avatar}
               />
-
+              <Portal>
+<Modal visible={modalVisible} onDismiss={() => setModalVisible(false)} contentContainerStyle={styles.modalStyle}>
+  <View style={styles.modalContent}>
+    <Text style={styles.modalText}> Utilisateur invité !
+      {/* {inviteUser ? `${inviteUser.infos.username} a été invité !` : "Utilisateur invité !"} */}
+    </Text>
+    <Button mode="contained" onPress={() => setModalVisible(false)}>
+      OK
+    </Button>
+  </View>
+</Modal>
+</Portal>
               <Button
                 style={styles.btnUsername}
                 mode="text"
                 onPress={() =>
-                  navigation.navigate("ChatConversationScreen", {
+                  navigation.navigate("ChatConversation", {
                     userId: user._id,
                   })
                 }
@@ -107,10 +125,9 @@ export default function AgendaInvitListScreen({ route, navigation }) {
                 style={styles.btnInvite}
                 mode={"contained"}
                 onPress={() => handleInviteUser(reservationId, user._id)}
-              >
+                >
                 <AntDesign name="adduser" size={21} color="black" />
                 <Text style={styles.title}></Text>
-
               </Button>
             </View>
           ))
@@ -119,10 +136,10 @@ export default function AgendaInvitListScreen({ route, navigation }) {
         )}
       </ScrollView>
       <Button
-        style={styles.goBackButton}
-        mode={"contained"}
-        title="Go Back"
-        onPress={() => navigation.navigate("AgendaScreen")}
+      style={styles.goBackButton}
+      mode={"contained"}
+      title="Go Back"
+      onPress={() => navigation.navigate("AgendaScreen")}
       >
         <Text style={styles.btnText}>Retour à l'agenda</Text>
       </Button>
@@ -135,11 +152,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f5f5DC",
+    backgroundColor: "#fcf4e9",
   },
   header: {
     width: "100%",
-    backgroundColor: "#f5f5DC",
+    backgroundColor: "#fcf4e9",
     padding: 30,
     alignItems: "center",
     borderBottomColor: "#ddd",
@@ -153,13 +170,13 @@ const styles = StyleSheet.create({
   userList: {
     width: "100%",
     paddingHorizontal: 20,
-    marginTop: 30,
-    backgroundColor: "#f5f5DC",
+    backgroundColor: "#fcf4e9",
   },
   userItem: {
-    padding: 15,
-    marginVertical: 5,
-    backgroundColor: "#FCD2DE",
+    paddingTop: 20,
+    paddingBottom: 20,
+    marginVertical: 8,
+    backgroundColor: "rgb(255, 218, 213)",
     borderRadius: 10,
     alignItems: "center",
   },
@@ -171,8 +188,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     flexWrap: "wrap",
     maxWidth: 200,
-    textAlign: "center",
     textDecorationLine: "underline",
+    fontFamily: "LeagueSpartan-SemiBold",
   },
   noUsers: {
     textAlign: "center",
@@ -191,6 +208,7 @@ const styles = StyleSheet.create({
     color: "#FF7F50",
   },
   btnInvite: {
+    flex: 1,
     marginRight: -220,
     marginTop: 7,
     borderRadius: 10,
@@ -201,16 +219,35 @@ const styles = StyleSheet.create({
   },
   avatar: {
     marginLeft: -250,
-    width: 70,
-    height: 70,
+    width: 65,
+    height: 65,
     borderRadius: 50,
-    marginTop: -5,
+    marginTop: -16,
     marginBottom: 10,
   },
   modalStyle: {
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    width: "80%",
     backgroundColor: "white",
     padding: 20,
-    height: "50%",
-    marginTop: "87%",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    
+  },
+  modalContent: {
+    alignItems: "center",
+    
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 15,
+    color: "rgb(0, 108, 72)"
   },
 });
