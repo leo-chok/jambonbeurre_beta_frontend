@@ -35,9 +35,7 @@ export default function HomeScreen({ navigation }) {
   const token = useSelector((state) => state.user.value.authentification.token);
   const userAvatar = useSelector((state) => state.user.value.infos.avatar);
   const filterRestaurant = useSelector((state) => state.restaurantFilter.value);
-
   const userReducer = useSelector((state) => state.user.value);
-  console.log(userReducer);
 
   const [restaurantFilter, setRestaurantFilter] = useState([
     "coffee_shop",
@@ -276,7 +274,6 @@ export default function HomeScreen({ navigation }) {
   const [filterVisibility, setFilterVisibility] = useState(false);
   // Bouton filtres à faire
   const handleFilter = () => {
-    console.log(filterVisibility);
     setFilterVisibility(!filterVisibility);
   };
 
@@ -420,9 +417,16 @@ export default function HomeScreen({ navigation }) {
           //Modal pour filtre restaurants
           visible={filterVisibility}
           onDismiss={handleFilter}
-          contentContainerStyle={styles.modalStyle}
+          contentContainerStyle={styles.filterModalStyle}
         >
-          <Text> FILTRES </Text>
+        
+          <Ionicons
+            style={styles.closemodale}
+            name="close-outline"
+            size={40}
+            color="#20202"
+            onPress={handleFilter}
+          />
           <FilterRestaurant />
         </Modal>
       </Portal>
@@ -514,6 +518,13 @@ const styles = StyleSheet.create({
     bottom: -35,
     width: "100%",
     height: "83%",
+  },
+
+  filterModalStyle: {
+    position: "absolute",
+    alignSelf: "center",
+    width: "70%",
+    height: "80%",
   },
   closemodale: {
     position: "absolute",
