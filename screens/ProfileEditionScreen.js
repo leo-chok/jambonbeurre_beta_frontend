@@ -42,19 +42,20 @@ export default function ProfileEditionScreen({ navigation }) {
   const [languages, setLanguages] = useState([]);
   const [vacancy, setVacancy] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [expanded, setExpanded] = useState(true);
   const theme = useTheme();
 
+  console.log("userdata", userData)
   // On récupère le lunchtime depuis le reducer car il est modifié dans le composant Schedule
   const lastLunchTime = useSelector(
     (state) => state.user.value.preferences.lunchtime
   );
-
+  
   const onToggleSwitch = () => setVacancy(!vacancy);
   console.log(vacancy);
-
+  
   // On vient récupérer les informations de l'utilisateur pour les afficher dans les champs
   useEffect(() => {
+    console.log("token", token)
     // fetch user data
     fetch(BACKEND_ADRESS + "/users/" + token)
       .then((response) => response.json())
@@ -222,7 +223,6 @@ export default function ProfileEditionScreen({ navigation }) {
               {!vacancy && (
                 <List.Accordion
                   title="Créneaux Déjeuner"
-                  expanded={expanded}
                   style={styles.inputList}
                 >
                   <Schedule data={userData?.preferences?.lunchtime} />
