@@ -62,7 +62,6 @@ const TabNavigator = () => {
           let iconSize = 26; // Taille par défaut pour toutes les icônes
           let iconStyle = {}; // Style par défaut vide
 
-
           if (route.name === "Profile") {
             iconName = focused ? "person" : "person-outline";
           } else if (route.name === "Chat") {
@@ -70,14 +69,27 @@ const TabNavigator = () => {
           } else if (route.name === "Home") {
             iconName = focused ? "location" : "location-outline";
             iconSize = 30; // Augmenter la taille de l'icône pour la homepage
-            iconStyle = {marginTop: 10, right: 2, top: -5, width: 30, height: 30 }; // Appliquer une marge spécifique
+            iconStyle = {
+              marginTop: 10,
+              right: 2,
+              top: -5,
+              width: 30,
+              height: 30,
+            }; // Appliquer une marge spécifique
           } else if (route.name === "Agenda") {
             iconName = focused ? "calendar" : "calendar-outline";
           } else if (route.name === "Settings") {
             iconName = focused ? "settings" : "settings-outline";
           }
 
-          return <Ionicons name={iconName} size={iconSize} color={color} style={iconStyle}/>;
+          return (
+            <Ionicons
+              name={iconName}
+              size={iconSize}
+              color={color}
+              style={iconStyle}
+            />
+          );
         },
         tabBarActiveTintColor: "#FF6C47",
         tabBarInactiveTintColor: "#202020",
@@ -160,46 +172,49 @@ export default function App() {
   }
   return (
     <SafeAreaProvider>
-    <Provider store={store}>
-      <PaperProvider theme={theme}>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="SignUp" component={SignUpScreen} />
-            <Stack.Screen name="TabNavigator" component={TabNavigator} />
-            <Stack.Screen
-              name="ProfileEdition"
-              component={ProfileEditionScreen}
-            />
-            <Stack.Screen name="OtherProfile" component={OthersProfileScreen} />
-            <Stack.Screen name="ChatList" component={ChatListScreen} />
-            <Stack.Screen
-              name="ChatConversation"
-              component={ChatConversationScreen}
-            />
-            <Stack.Screen
-              name="ChatNewConversation"
-              component={ChatNewConversationScreen}
-            />
+      <Provider store={store}>
+        <PaperProvider theme={theme}>
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="SignUp" component={SignUpScreen} />
+              <Stack.Screen name="TabNavigator" component={TabNavigator} />
+              <Stack.Screen
+                name="ProfileEdition"
+                component={ProfileEditionScreen}
+              />
+              <Stack.Screen
+                name="OtherProfile"
+                component={OthersProfileScreen}
+              />
+              <Stack.Screen name="ChatList" component={ChatListScreen} />
+              <Stack.Screen
+                name="ChatConversation"
+                component={ChatConversationScreen}
+              />
+              <Stack.Screen
+                name="ChatNewConversation"
+                component={ChatNewConversationScreen}
+              />
 
-            <Stack.Screen
-              name="AgendaInvitListScreen"
-              component={AgendaInvitListScreen}
-            />
-            <Stack.Screen name="SignIn" component={SignInScreen} />
-            <Stack.Screen name="Camera" component={CameraScreen} />
-            <Stack.Screen name="SignUp1" component={SignUp1Screen} />
-            <Stack.Screen name="SignUp2" component={SignUp2Screen} />
-            <Stack.Screen name="SignUp3" component={SignUp3Screen} />
-            <Stack.Screen name="SignUp4" component={SignUp4Screen} />
-            <Stack.Screen name="SignUp5" component={SignUp5Screen} />
-            <Stack.Screen name="SignUp6" component={SignUp6Screen} />
-            <Stack.Screen name="SignUp7" component={SignUp7Screen} />
-            <Stack.Screen name="SignUp8" component={SignUp8Screen} />
-            <Stack.Screen name="SignUp9" component={SignUp9Screen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </Provider>
+              <Stack.Screen
+                name="AgendaInvitListScreen"
+                component={AgendaInvitListScreen}
+              />
+              <Stack.Screen name="SignIn" component={SignInScreen} />
+              <Stack.Screen name="Camera" component={CameraScreen} />
+              <Stack.Screen name="SignUp1" component={SignUp1Screen} />
+              <Stack.Screen name="SignUp2" component={SignUp2Screen} />
+              <Stack.Screen name="SignUp3" component={SignUp3Screen} />
+              <Stack.Screen name="SignUp4" component={SignUp4Screen} />
+              <Stack.Screen name="SignUp5" component={SignUp5Screen} />
+              <Stack.Screen name="SignUp6" component={SignUp6Screen} />
+              <Stack.Screen name="SignUp7" component={SignUp7Screen} />
+              <Stack.Screen name="SignUp8" component={SignUp8Screen} />
+              <Stack.Screen name="SignUp9" component={SignUp9Screen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </PaperProvider>
+      </Provider>
     </SafeAreaProvider>
   );
 }
