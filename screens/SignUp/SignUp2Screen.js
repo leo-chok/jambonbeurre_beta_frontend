@@ -112,7 +112,6 @@ export default function SignUp2Screen({ navigation }) {
     <SafeAreaView
       // style={styles.container}
       style={[styles.container, { backgroundColor: theme.colors.background }]}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <Text style={styles.title}>Choisis ta photo {'\n'}de profil 📸</Text>
       <View style={styles.main}>
