@@ -1,16 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
-  Image,
   Linking,
   TouchableOpacity,
   Text,
+  Alert,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
+import { BACKEND_ADRESS } from "../.config";
+
 
 export default function JoinReservation() {
+
+
   return (
     <View style={styles.container}>
       <View style={styles.main}>
@@ -18,23 +22,24 @@ export default function JoinReservation() {
           <Text style={styles.h2}>Aujourd’hui · 13h00</Text>
           <View style={styles.gallery}>
             <View>
-              <TouchableOpacity style={styles.registerbtn}>
+              <TouchableOpacity
+                style={styles.registerbtn}
+
+              >
                 <View style={styles.strokeborder}>
                   <Ionicons name="add-outline" size={32} color="#FFF" />
                 </View>
               </TouchableOpacity>
-              <Text style={styles.bodytext}>Je m'inscris</Text>
+              <Text style={styles.bodytext}>Je rejoins les autres !</Text>
             </View>
-            <TouchableOpacity style={[styles.registerbtn, styles.userphoto]}>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.registerbtn, styles.userphoto]}>
-            </TouchableOpacity>
+
           </View>
         </View>
       </View>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   whitecard: {
@@ -89,6 +94,6 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   userphoto : {
-    backgroundColor: "#026C5D",
+    backgroundColor: "#FF6C47",
   },
 });
