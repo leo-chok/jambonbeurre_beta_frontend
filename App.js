@@ -178,7 +178,7 @@ export default function App() {
               component={ChatNewConversationScreen}
             />
             
-            <Stack.Screen name="AgendaInvitListScreen" component={AgendaInvitListScreen} />
+            <Stack.Screen name="AgendaInvitList" component={AgendaInvitListScreen} />
             <Stack.Screen name="SignIn" component={SignInScreen} />
             <Stack.Screen name="Camera" component={CameraScreen} />
             <Stack.Screen name="SignUp1" component={SignUp1Screen} />

@@ -125,7 +125,6 @@ export default function HomeScreen({ navigation }) {
     })();
   }, [currentPosition]);
 
-  console.log(usersMarkers)
 
   // Bouton pour recentrer la map selon la position de l'utilisateur, en temps réel
   const handleCenter = () => {
@@ -281,7 +280,7 @@ export default function HomeScreen({ navigation }) {
         onPress={() => navigation.navigate("OtherProfile", {userId : data.id})}
       >
         <Image
-          style={{ width: 50, height: 50, borderRadius:25, borderWidth: 5, borderColor: theme.colors.secondary }}
+          style={{ width: 50, height: 50, borderRadius:25, borderWidth: 5, borderColor: theme.colors.primary }}
           source={{ uri: data.avatar }}
         />
       </Marker>
