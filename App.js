@@ -29,7 +29,7 @@ import SignUp7Screen from "./screens/SignUp/SignUp7Screen";
 import SignUp8Screen from "./screens/SignUp/SignUp8Screen";
 import SignUp9Screen from "./screens/SignUp/SignUp9Screen";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
-
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { PaperProvider } from "react-native-paper";
 
 import { Provider } from "react-redux";
@@ -154,6 +154,7 @@ export default function App() {
     return null;
   }
   return (
+    <SafeAreaProvider>
     <Provider store={store}>
       <PaperProvider theme={theme}>
         <NavigationContainer>
@@ -194,6 +195,7 @@ export default function App() {
         </NavigationContainer>
       </PaperProvider>
     </Provider>
+    </SafeAreaProvider>
   );
 }
 

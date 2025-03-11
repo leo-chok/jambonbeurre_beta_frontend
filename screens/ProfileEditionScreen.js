@@ -212,22 +212,24 @@ export default function ProfileEditionScreen({ navigation }) {
             />
             <Divider style={{ marginTop: 20, marginBottom: 20 }} />
 
-            <Text style={styles.title}>Indique tes disponibilités</Text>
+            <Text style={styles.title}>Mes disponibilités</Text>
             <View style={styles.vacancesContainer}>
               <Text>Mode vacances</Text>
               <Switch value={vacancy} onValueChange={onToggleSwitch} />
             </View>
-            {!vacancy && (
-              <List.Accordion
-                title="Créneaux Déjeuner"
-                style={styles.inputList}
-              >
-                <Schedule data={userData?.preferences?.lunchtime} />
-              </List.Accordion>
-            )}
-
+            <View style={styles.list}>
+              {!vacancy && (
+                <List.Accordion
+                  title="Créneaux Déjeuner"
+                  expanded={expanded}
+                  style={styles.inputList}
+                >
+                  <Schedule data={userData?.preferences?.lunchtime} />
+                </List.Accordion>
+              )}
+            </View>
             <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-            <Text style={styles.title}>Type de cuisine préféré</Text>
+            <Text style={styles.title}>Types de cuisine préférés</Text>
             <View style={styles.typeFoodContainer}>
               {foodType.map((type) => (
                 <Button
@@ -251,7 +253,7 @@ export default function ProfileEditionScreen({ navigation }) {
             </View>
 
             <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-            <Text style={styles.title}>Tes centres d'intérêts</Text>
+            <Text style={styles.title}>Mes centres d'intérêts</Text>
             <View style={styles.hobbiesContainer}>
               {hobbiesList.map((type) => (
                 <Button
@@ -276,7 +278,7 @@ export default function ProfileEditionScreen({ navigation }) {
             </View>
 
             <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-            <Text style={styles.title}>Do you speak English ?</Text>
+            <Text style={styles.title}>Mes langues parlées</Text>
             <View style={styles.languageContainer}>
               {languagesList.map((type) => (
                 <Button
@@ -302,9 +304,10 @@ export default function ProfileEditionScreen({ navigation }) {
           </ScrollView>
         )}
         {isLoading && (
-        <View style={{ width: 180, height: 180, marginHorizontal: "auto" }}>
-          <Gif />
-        </View>        )}
+          <View style={{ width: 180, height: 180, marginHorizontal: "auto" }}>
+            <Gif />
+          </View>
+        )}
         <View style={styles.submitContainer}>
           <Button mode="contained" onPress={() => handleSubmit()}>
             <Text style={{ color: "white" }}>Modifier</Text>
@@ -342,6 +345,7 @@ const styles = StyleSheet.create({
   inputs_container: {
     width: "80%",
     gap: 20,
+    flex: 1,
   },
   inputField: {
     marginTop: 10,
@@ -357,9 +361,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inputList: {
-    marginTop: 10,
+    // marginTop: 10,
     width: "100%",
   },
+//   list: {
+// flex: 1,
+//   },
   checkBox: {
     width: 30,
     height: 30,

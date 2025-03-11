@@ -162,7 +162,7 @@ export default function SignUp8Screen({ navigation }) {
           </View>
 
           <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-          <Text style={styles.title}>Do you speak English ?</Text>
+          <Text style={styles.title}>Quelles langues parles-tu ?</Text>
           <View style={styles.languageContainer}>
             {languagesList.map((type) => (
               <Button
