@@ -127,20 +127,29 @@ export default function ProfileScreen({ navigation }) {
       </TouchableOpacity>
       <ScrollView style={styles.inputs_container}>
         <Text style={styles.title}>Mes informations</Text>
+        <View style={styles.infos_container}>
         <Text style={styles.infos_title}>Pseudo</Text>
         <Text style={styles.infos_data}>{username}</Text>
+        </View>
+        <View style={styles.infos_container}>
         <Text style={styles.infos_title}>Nom</Text>
         <Text style={styles.infos_data}>{firstname}</Text>
+        </View>
+        <View style={styles.infos_container}>
         <Text style={styles.infos_title}>Prénom</Text>
         <Text style={styles.infos_data}>{lastname}</Text>
+        </View>
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
         <Text style={styles.title}>Un peu plus sur moi</Text>
-        <Text style={styles.infos_title}>Mon travail / Mes études :</Text>
+        <View style={styles.infos_container}>
+        <Text style={styles.infos_title}>Mon travail / Mes études</Text>
         <Text style={styles.infos_data}>{work}</Text>
-        <Text style={styles.infos_title}>Ma bio :</Text>
+        </View>
+        <View style={styles.infos_container}>
+        <Text style={styles.infos_title}>Ma bio</Text>
         <Text style={styles.infos_data}>{bio}</Text>
+        </View>
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-
         <Text style={styles.title}>Mes créneaux pour déjeuner</Text>
         <View style={styles.vacancesContainer}>
           {vacancy && <Text>En vacances</Text>}
@@ -149,17 +158,21 @@ export default function ProfileScreen({ navigation }) {
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
         <Text style={styles.title}>Types de cuisine préférés</Text>
         <View style={styles.typeFoodContainer}>
-          {favFood.map((type) => (
+          {favFood.length === 0 ? (
+    <Text style={styles.noInfos}>Aucun type de cuisine préféré</Text>
+  ) : (favFood.map((type) => (
             <Button key={type} mode={"contained"} style={styles.badgeButton}>
               <Text style={styles.badgeButtonActive}>{type}</Text>
             </Button>
-          ))}
+          ))
+        )}
         </View>
-
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
         <Text style={styles.title}>Mes centres d'intérêts</Text>
         <View style={styles.hobbiesContainer}>
-          {hobbies.map((type) => (
+          {hobbies.length === 0 ? (
+    <Text style={styles.noInfos}>Aucun centre d'intérêt</Text>
+          ) : (hobbies.map((type) => (
             <Button
               key={type}
               // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
@@ -168,13 +181,16 @@ export default function ProfileScreen({ navigation }) {
             >
               <Text style={styles.badgeButtonActive}>{type}</Text>
             </Button>
-          ))}
+          ))
+        )}
         </View>
 
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
         <Text style={styles.title}>Mes langues parlées</Text>
         <View style={styles.languageContainer}>
-          {languages.map((type) => (
+          {languages.length === 0 ? (
+    <Text style={styles.noInfos}>Aucune langue parlée</Text>
+          ) : (languages.map((type) => (
             <Button
               key={type}
               // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
@@ -183,7 +199,8 @@ export default function ProfileScreen({ navigation }) {
             >
               <Text style={styles.badgeButtonActive}>{type}</Text>
             </Button>
-          ))}
+          ))
+        )}
         </View>
       </ScrollView>
       </View>
@@ -239,22 +256,38 @@ const styles = StyleSheet.create({
     color: "#397a5b",
     marginBottom: 10,
   },
+  infos_container: {
+    flexDirection: "row",
+   justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 10,
+  },
   infos_title: {
     display: "flex",
     flexDirection: 'row',
     justifyContent: "flex-start",
     fontSize: 16,
     fontWeight: "bold",
-    width: "100%",
+    width: "40%",
   },
   infos_data: {
+    fontSize: 15,
+    fontWeight: 300,
+    display: "flex",
+    flexDirection: 'row',
+    flexWrap: "wrap",
+    textAlign: "right",
+    width: "60%",
+  },
+  noInfos: {
     display: "flex",
     flexDirection: 'row',
     justifyContent: "center",
     fontSize: 15,
     fontWeight: 300,
     width: "100%",
-    textAlign: "right",
+    textAlign: "left",
     marginBottom: 10,
   },
   inputs_container: {

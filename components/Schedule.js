@@ -6,10 +6,12 @@ import { updateLunchTime } from "../reducers/user";
 
 export default function Schedule(props) {
   const dispatch = useDispatch();
-  const userSchedule = props.data;
+  const scheduleFromReducer = useSelector(
+    (state) => state.user.value.preferences.lunchtime
+  );
 
   const [schedule, setSchedule] = useState(
-    userSchedule.map((e) => ({
+    scheduleFromReducer.map((e) => ({
       name: e.name,
       start: e.start,
       stop: e.stop,
@@ -25,7 +27,7 @@ export default function Schedule(props) {
       stop: day.stop,
       worked: day.worked,
     }));
-    
+
     dispatch(updateLunchTime(deepCopySchedule));
   }, [schedule]);
 
@@ -94,7 +96,7 @@ export default function Schedule(props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: 400,
     padding: 20,
   },
   dayContainer: {
