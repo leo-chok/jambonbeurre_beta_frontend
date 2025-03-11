@@ -81,7 +81,7 @@ export default function HomeScreen({ navigation }) {
       // Récupérer les restaurants, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
       fetch(
         BACKEND_ADRESS +
-          "/restaurants/near/500?longitude=" +
+          "/restaurants/near/100000?longitude=" +
           currentPosition.longitude +
           "&latitude=" +
           currentPosition.latitude
@@ -398,7 +398,6 @@ export default function HomeScreen({ navigation }) {
             color="#20202"
             onPress={hideRestaurantModal}
           />
-
           {Object.keys(dataRestaurant).length > 0 && (
             <Restaurant
               id={dataRestaurant.id}
@@ -463,7 +462,7 @@ export default function HomeScreen({ navigation }) {
       </MapView>
       <View style={styles.wrapper}>
         <Searchbar
-          placeholder="Rechercher un restaurant ou un buddy"
+          placeholder="Rechercher un restaurant"
           onChangeText={setSearchQuery}
           onIconPress={handleSearch}
           onSubmitEditing={handleSearch}

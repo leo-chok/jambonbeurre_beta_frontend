@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -49,7 +49,6 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -60,6 +59,9 @@ const TabNavigator = () => {
 
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
+          let iconSize = 26; // Taille par défaut pour toutes les icônes
+          let iconStyle = {}; // Style par défaut vide
+
 
           if (route.name === "Profile") {
             iconName = focused ? "person" : "person-outline";
@@ -67,13 +69,15 @@ const TabNavigator = () => {
             iconName = focused ? "chatbubbles" : "chatbubbles-outline";
           } else if (route.name === "Home") {
             iconName = focused ? "location" : "location-outline";
+            iconSize = 30; // Augmenter la taille de l'icône pour la homepage
+            iconStyle = {marginTop: 10, right: 2, top: -5, width: 30, height: 30 }; // Appliquer une marge spécifique
           } else if (route.name === "Agenda") {
             iconName = focused ? "calendar" : "calendar-outline";
           } else if (route.name === "Settings") {
             iconName = focused ? "settings" : "settings-outline";
           }
 
-          return <Ionicons name={iconName} size={20} color={color} />;
+          return <Ionicons name={iconName} size={iconSize} color={color} style={iconStyle}/>;
         },
         tabBarActiveTintColor: "#FF6C47",
         tabBarInactiveTintColor: "#202020",
@@ -90,60 +94,59 @@ const TabNavigator = () => {
 
 SplashScreen.preventAutoHideAsync();
 
-
 export default function App() {
   const theme = {
-    "colors": {
-      "primary": "rgb(254, 87, 71)",
-      "onPrimary": "rgb(255, 255, 255)",
-      "primaryContainer": "rgb(246, 233, 242)",
-      "onPrimaryContainer": "rgb(56, 0, 55)",
-      "secondary": "rgb(182, 35, 27)",
-      "onSecondary": "rgb(255, 255, 255)",
-      "secondaryContainer": "rgb(255, 218, 213)",
-      "onSecondaryContainer": "rgb(65, 0, 1)",
-      "tertiary": "rgb(0, 108, 72)",
-      "onTertiary": "rgb(255, 255, 255)",
-      "tertiaryContainer": "rgb(141, 247, 194)",
-      "onTertiaryContainer": "rgb(0, 33, 19)",
-      "error": "rgb(186, 26, 26)",
-      "onError": "rgb(255, 255, 255)",
-      "errorContainer": "rgb(255, 218, 214)",
-      "onErrorContainer": "rgb(65, 0, 2)",
-      "background": "#fcf4e9",
-      "onBackground": "rgb(31, 26, 29)",
-      "surface": "rgb(255, 251, 255)",
-      "onSurface": "rgb(31, 26, 29)",
-      "surfaceVariant": "rgb(255, 255, 255)",
-      "onSurfaceVariant": "rgb(78, 68, 75)",
-      "outline": "rgb(128, 116, 123)",
-      "outlineVariant": "rgb(209, 194, 203)",
-      "shadow": "rgb(0, 0, 0)",
-      "scrim": "rgb(0, 0, 0)",
-      "inverseSurface": "rgb(52, 47, 50)",
-      "inverseOnSurface": "rgb(248, 238, 242)",
-      "inversePrimary": "rgb(255, 171, 241)",
-      "elevation": {
-        "level0": "transparent",
-        "level1": "rgb(249, 242, 249)",
-        "level2": "rgb(246, 236, 245)",
-        "level3": "rgb(242, 231, 241)",
-        "level4": "rgb(241, 229, 240)",
-        "level5": "rgb(239, 225, 238)"
+    colors: {
+      primary: "rgb(254, 87, 71)",
+      onPrimary: "rgb(255, 255, 255)",
+      primaryContainer: "rgb(246, 233, 242)",
+      onPrimaryContainer: "rgb(56, 0, 55)",
+      secondary: "rgb(182, 35, 27)",
+      onSecondary: "rgb(255, 255, 255)",
+      secondaryContainer: "rgb(255, 218, 213)",
+      onSecondaryContainer: "rgb(65, 0, 1)",
+      tertiary: "rgb(0, 108, 72)",
+      onTertiary: "rgb(255, 255, 255)",
+      tertiaryContainer: "rgb(141, 247, 194)",
+      onTertiaryContainer: "rgb(0, 33, 19)",
+      error: "rgb(186, 26, 26)",
+      onError: "rgb(255, 255, 255)",
+      errorContainer: "rgb(255, 218, 214)",
+      onErrorContainer: "rgb(65, 0, 2)",
+      background: "#fcf4e9",
+      onBackground: "rgb(31, 26, 29)",
+      surface: "rgb(255, 251, 255)",
+      onSurface: "rgb(31, 26, 29)",
+      surfaceVariant: "rgb(255, 255, 255)",
+      onSurfaceVariant: "rgb(78, 68, 75)",
+      outline: "rgb(128, 116, 123)",
+      outlineVariant: "rgb(209, 194, 203)",
+      shadow: "rgb(0, 0, 0)",
+      scrim: "rgb(0, 0, 0)",
+      inverseSurface: "rgb(52, 47, 50)",
+      inverseOnSurface: "rgb(248, 238, 242)",
+      inversePrimary: "rgb(255, 171, 241)",
+      elevation: {
+        level0: "transparent",
+        level1: "rgb(249, 242, 249)",
+        level2: "rgb(246, 236, 245)",
+        level3: "rgb(242, 231, 241)",
+        level4: "rgb(241, 229, 240)",
+        level5: "rgb(239, 225, 238)",
       },
-      "surfaceDisabled": "rgba(31, 26, 29, 0.12)",
-      "onSurfaceDisabled": "rgba(31, 26, 29, 0.38)",
-      "backdrop": "rgba(55, 46, 52, 0.4)"
-    }
-  }
+      surfaceDisabled: "rgba(31, 26, 29, 0.12)",
+      onSurfaceDisabled: "rgba(31, 26, 29, 0.38)",
+      backdrop: "rgba(55, 46, 52, 0.4)",
+    },
+  };
   const [loaded, error] = useFonts({
-    'OldStandard-Bold': require('./assets/fonts/OldStandardTT-Bold.ttf'),
-    'Montserrat-Medium': require('./assets/fonts/Montserrat-Medium.ttf'),
-    'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
-    'Montserrat-Bold': require('./assets/fonts/Montserrat-Bold.ttf'),
-    'LeagueSpartan-Bold': require('./assets/fonts/LeagueSpartan-Bold.ttf'),
-    'LeagueSpartan-Regular': require('./assets/fonts/LeagueSpartan-Regular.ttf'),
-    'LeagueSpartan-SemiBold': require('./assets/fonts/LeagueSpartan-SemiBold.ttf'),
+    "OldStandard-Bold": require("./assets/fonts/OldStandardTT-Bold.ttf"),
+    "Montserrat-Medium": require("./assets/fonts/Montserrat-Medium.ttf"),
+    "Montserrat-SemiBold": require("./assets/fonts/Montserrat-SemiBold.ttf"),
+    "Montserrat-Bold": require("./assets/fonts/Montserrat-Bold.ttf"),
+    "LeagueSpartan-Bold": require("./assets/fonts/LeagueSpartan-Bold.ttf"),
+    "LeagueSpartan-Regular": require("./assets/fonts/LeagueSpartan-Regular.ttf"),
+    "LeagueSpartan-SemiBold": require("./assets/fonts/LeagueSpartan-SemiBold.ttf"),
   });
 
   useEffect(() => {
@@ -167,21 +170,21 @@ export default function App() {
               name="ProfileEdition"
               component={ProfileEditionScreen}
             />
-            <Stack.Screen
-              name="OtherProfile"
-              component={OthersProfileScreen}
-            />
+            <Stack.Screen name="OtherProfile" component={OthersProfileScreen} />
             <Stack.Screen name="ChatList" component={ChatListScreen} />
-            <Stack.Screen 
+            <Stack.Screen
               name="ChatConversation"
               component={ChatConversationScreen}
             />
-            <Stack.Screen 
+            <Stack.Screen
               name="ChatNewConversation"
               component={ChatNewConversationScreen}
             />
-            
-            <Stack.Screen name="AgendaInvitListScreen" component={AgendaInvitListScreen} />
+
+            <Stack.Screen
+              name="AgendaInvitListScreen"
+              component={AgendaInvitListScreen}
+            />
             <Stack.Screen name="SignIn" component={SignInScreen} />
             <Stack.Screen name="Camera" component={CameraScreen} />
             <Stack.Screen name="SignUp1" component={SignUp1Screen} />
@@ -207,7 +210,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    height: 80,
+    height: 72,
     backgroundColor: "#fff",
     borderRadius: 50,
     shadowColor: "#red",
@@ -225,6 +228,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: 20,
     height: 20,
-    marginBottom: -20,
+    marginBottom: -25,
   },
 });

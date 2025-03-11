@@ -102,6 +102,8 @@ export default function Restaurant(props) {
       );
   }, [restaurantId]);
 
+  console.log("voir le type :", props.type)
+
   return (
     <View style={styles.container}>
       <Image source={restaurantImage} style={styles.image}></Image>
@@ -111,7 +113,7 @@ export default function Restaurant(props) {
         <View style={styles.header}>
           <View style={styles.left}>
             <View style={styles.basicInfos}>
-              <Text style={styles.semibold}>{capitalize(props?.type)}</Text>
+              <Text style={styles.semibold}>{capitalize(props.type)}</Text>
 
               {props.priceLevel === "PRICE_LEVEL_EXPENSIVE" && (
                 <View style={styles.budget}>
