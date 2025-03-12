@@ -243,7 +243,6 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 30,
     fontWeight: "bold",
-    fontWeight: "bold",
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",
     alignText: "center",
