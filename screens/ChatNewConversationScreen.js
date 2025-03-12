@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addDiscussionToStore } from "../reducers/discussions";
 
 import { BACKEND_ADRESS } from "../.config";
+import { ScreenStackHeaderSearchBarView } from "react-native-screens";
 export default function ChatNewConversationScreen({ navigation }) {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ export default function ChatNewConversationScreen({ navigation }) {
   const [users, setusers] = useState([]);
   const token = useSelector((state) => state.user.value.authentification.token);
   const username = useSelector((state) => state.user.value.infos.username);
+  const [search, setSearch] = useState("");
  console.log("username : " + username);
   
   const [listeDesSelectioner, setlisteDesSelectioner] = useState([]); //liste des utilisateurs selectionnés pour la conversation
@@ -98,23 +100,27 @@ export default function ChatNewConversationScreen({ navigation }) {
       return styles.viewSelected;
     else return styles.view;
   }
+
+  // Fonction Searchbar: rechercher un utilisateur
+
+
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Searchbar
+      <TextInput
         style={styles.searchbar}
         placeholder="Rechercher un buddy"
-        // onChangeText={setSearchQuery}
-        // onIconPress={handleSearch}
-        // onSubmitEditing={handleSearch}
-        // value={searchQuery}
+        onChangeText={(value) => setSearch(value)}
+        value={search}
+        underlineColor="transparent"
       />
       <ScrollView style={styles.scrollView}>
         {users &&
           users
             .filter((element) => element.infos.username !== username)
+            .filter((element) => element.infos.username.includes(search))
             .map((element) => (
               <TouchableOpacity
                 key={element._id}
@@ -192,5 +198,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 6,
     elevation: 5,
-  },
+    borderRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,  },
 });
