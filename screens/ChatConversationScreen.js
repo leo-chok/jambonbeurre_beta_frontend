@@ -73,6 +73,7 @@ export default function ChatConversationScreen({ route }) {
   }, []);
 
   function handleSubmit() {
+    if(inputnouveauMessage=="") return;
     console.log("nouveau message");
     fetch(`${BACKEND_ADRESS}/chats/creerUnMessage/`, {
       method: "POST",
