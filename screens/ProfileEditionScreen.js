@@ -311,7 +311,7 @@ export default function ProfileEditionScreen({ navigation }) {
         )}
         <View style={styles.submitContainer}>
           <Button mode="contained" onPress={() => handleSubmit()}>
-            <Text style={{ color: "white" }}>Modifier</Text>
+            <Text style={{ color: "white", fontSize: 20 }}>Modifier</Text>
           </Button>
         </View>
       </KeyboardAvoidingView>

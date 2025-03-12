@@ -103,9 +103,78 @@ export const userSlice = createSlice({
       state.value.authentification.token = action.payload;
     },
     logout: (state) => {
-      state.value.infos = null;
-      state.value.description = null;
-      state.value.preferences = null;
+      state.value = {
+        infos: {
+          username: "",
+          firstname: "",
+          lastname: "",
+          avatar: "",
+          online: true,
+          location: {
+            type: "Point",
+            coordinates: [3.0644092, 50.6490435],
+          },
+        },
+        authentification: {
+          token: "",
+        },
+        description: {
+          work: "",
+          bio: "",
+        },
+        preferences: {
+          favBuddies: [],
+          favRestaurant: [],
+          favFood: [],
+          hobbies: [],
+          languages: [],
+          holidays: false,
+          lunchtime: [
+            {
+              name: "Lundi",
+              start: "12:00",
+              stop: "13:00",
+              worked: true,
+            },
+            {
+              name: "Mardi",
+              start: "12:00",
+              stop: "13:00",
+              worked: true,
+            },
+            {
+              name: "Mercredi",
+              start: "12:00",
+              stop: "13:00",
+              worked: true,
+            },
+            {
+              name: "Jeudi",
+              start: "12:00",
+              stop: "13:00",
+              worked: true,
+            },
+            {
+              name: "Vendredi",
+              start: "12:00",
+              stop: "13:00",
+              worked: true,
+            },
+            {
+              name: "Samedi",
+              start: null,
+              stop: null,
+              worked: false,
+            },
+            {
+              name: "Dimanche",
+              start: null,
+              stop: null,
+              worked: false,
+            },
+          ],
+        },
+      }
     },
   },
 });

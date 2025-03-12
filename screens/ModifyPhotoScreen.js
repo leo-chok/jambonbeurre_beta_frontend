@@ -20,13 +20,13 @@ import {
 } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 
-import { BACKEND_ADRESS } from "../../.config";
+import { BACKEND_ADRESS } from "./../.config";
 import { useDispatch, useSelector } from "react-redux";
-import { addToken, addPhoto } from "../../reducers/user";
+import { addToken, addPhoto } from "./../reducers/user";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function SignUp2Screen({ navigation }) {
+export default function ModifyPhotoScreen({ navigation }) {
   const dispatch = useDispatch();
   const userReducer = useSelector((state) => state.user.value);
   const token = useSelector((state) => state.user.value.authentification.token);
@@ -90,7 +90,7 @@ export default function SignUp2Screen({ navigation }) {
   // --------------------- FONCTION POUR PRENDRE UNE PHOTO ---------------------------------
 
   const handleTakePhoto = () => {
-    navigation.navigate("Camera", { from: "SignUp2" });
+    navigation.navigate("Camera", { from: "ProfileScreen" });
   };
 
 
@@ -98,7 +98,7 @@ export default function SignUp2Screen({ navigation }) {
 
 
  const handleSuivant = () => {
-    navigation.navigate("SignUp3");
+    navigation.navigate("TabNavigator", { screen: "ProfileScreen" });
   };
 
 
@@ -114,7 +114,7 @@ export default function SignUp2Screen({ navigation }) {
         <View style={styles.containerImage}>
           {imageReducer === "" ? (
             <Image
-              source={require("../../assets/logo/avatar_defaut.png")}
+              source={require("./../assets/logo/avatar_defaut.png")}
               style={styles.image}
             />
           ) : (
