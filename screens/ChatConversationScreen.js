@@ -30,13 +30,15 @@ export default function ChatConversationScreen({ route }) {
   const theme = useTheme();
 
   const [idUser, setIdUser] = useState("");
-  const [discussion, setdiscussion] = useState({}); //discussion en cours, initialisé par les params
+  const [discussion, setdiscussion] = useState(route.params); //discussion en cours, initialisé par les params
+
   const [inputnouveauMessage, setnouveauMessage] = useState(""); // nouveau message saisie au clavier
   const token = useSelector((state) => state.user.value.authentification.token);
 
   useEffect(() => {
     console.log("chat conversation");
     setdiscussion(route.params);
+
     console.log("discussion par params");
     //console.log(discussion);
     //console.log(route.params);
@@ -48,6 +50,26 @@ export default function ChatConversationScreen({ route }) {
         //console.log("iduserr  : "+data.userInfos[0]._id);
         setIdUser(data.userInfos[0]._id); //memorise l'id de l'utilisateur
       }); //then fetch
+
+    // Créer un timer pour actualiser toutes les 5 secondes
+    const interval = setInterval(() => {
+      console.log("actualisation de la conversation");
+      if (discussion._id == undefined) return;
+
+      console.log("id discussion : " + discussion._id);
+      fetch(`${BACKEND_ADRESS}/chats/afficheUneDiscussion/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: token, idDiscussion: discussion._id }),
+      }) //fetch
+        .then((response) => response.json())
+        .then((data) => {
+          //console.log("data conversation fetch : ");
+          console.log(data.discussion);
+          setdiscussion(data.discussion);
+        }); //fetch
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   function handleSubmit() {
@@ -97,7 +119,7 @@ export default function ChatConversationScreen({ route }) {
       style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Text style={styles.title}>✉️  {discussion.title}</Text>
+      <Text style={styles.title}>✉️ {discussion.title}</Text>
       <ScrollView
         style={[
           styles.ScrollView,
@@ -143,7 +165,6 @@ const styles = StyleSheet.create({
   },
   ScrollView: {
     width: "100%",
- 
   },
   textmessagequi: {
     width: 220,
@@ -192,7 +213,6 @@ const styles = StyleSheet.create({
     color: "#fe5747",
     fontFamily: "LeagueSpartan-SemiBold",
     letterSpacing: -1,
-
   },
   buttonEnvoyer: {
     width: 250,

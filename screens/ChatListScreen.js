@@ -33,7 +33,7 @@ export default function ChatListScreen({ navigation }) {
   const discussions = useSelector(
     (state) => state.discussions.value.discussions
   );
-  const username = useSelector((state) => state.user.value.infos.username); //marche pas username vide
+
   const token = useSelector((state) => state.user.value.authentification.token);
   //console.log("mytoken");
   //console.log(token);
@@ -41,24 +41,28 @@ export default function ChatListScreen({ navigation }) {
   //console.log(discussions);
   const dispatch = useDispatch();
 
-
   //chargement de toutes les discussions de l'utilisateur à partir de son token
   useEffect(() => {
     console.log("chat list screen ");
-    //console.log("username : "+username);
-    fetch(`${BACKEND_ADRESS}/chats/getAllChat/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: token }),
-    }) //fetch
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log(data.discussion);
-        // console.log("data : "+token);
-        if (data.discussion) {
-          dispatch(chargeDiscussions(data.discussion));
-        }
-      });
+    // Créer un timer pour actualiser toutes les 5 secondes
+    const interval = setInterval(() => {
+      console.log("actualisation de la liste des conversations");
+      //console.log("username : "+username);
+      fetch(`${BACKEND_ADRESS}/chats/getAllChat/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: token }),
+      }) //fetch
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log(data.discussion);
+          // console.log("data : "+token);
+          if (data.discussion) {
+            dispatch(chargeDiscussions(data.discussion));
+          }
+        });
+    }, 5000); //timer
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -76,19 +80,22 @@ export default function ChatListScreen({ navigation }) {
         <Text style={styles.textNewMessage}> Nouveau message </Text>
       </Button>
       <ScrollView style={styles.scrollView}>
-        {discussions.slice().reverse().map((element) => (
-          <TouchableOpacity
-            key={element._id}
-            style={styles.ConversationContainer}
-            onPress={() => navigation.navigate("ChatConversation", element)}
-          >
-            <Image
-              source={{ uri: element.users[0].infos.avatar }}
-              style={styles.avatar}
-            />
-            <Text style={styles.titleConversation}>{element.title}</Text>
-          </TouchableOpacity>
-        ))}
+        {discussions
+          .slice()
+          .reverse()
+          .map((element) => (
+            <TouchableOpacity
+              key={element._id}
+              style={styles.ConversationContainer}
+              onPress={() => navigation.navigate("ChatConversation", element)}
+            >
+              <Image
+                source={{ uri: element.users[0].infos.avatar }}
+                style={styles.avatar}
+              />
+              <Text style={styles.titleConversation}>{element.title}</Text>
+            </TouchableOpacity>
+          ))}
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -135,7 +142,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "rgb(254, 87, 71)",
   },
-  textNewMessage : {
+  textNewMessage: {
     fontSize: 20,
     fontFamily: "LeagueSpartan-SemiBold",
     color: "white",

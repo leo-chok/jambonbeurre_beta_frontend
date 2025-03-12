@@ -118,17 +118,17 @@ export default function FilterRestaurant(props) {
       <View style={styles.selects}>
         <Button
           onPress={() => fillList()}
-          mode={"contained"}
+          mode={"outlined"}
           style={styles.badgeButton}
         >
-          <Text style={styles.badgeButtonActive}>Tout sélectionner</Text>
+          <Text style={styles.buttonActive}>Tout sélectionner</Text>
         </Button>
         <Button
           onPress={() => emptyList()}
-          mode={"contained"}
+          mode={"outlined"}
           style={styles.badgeButton}
         >
-          <Text style={styles.badgeButtonActive}>Tout déselectionner</Text>
+          <Text style={styles.buttonActive}>Tout déselectionner</Text>
         </Button>
       </View>
       <Divider style={{ marginTop: 5, marginBottom: 5 }} />
@@ -187,6 +187,9 @@ const styles = StyleSheet.create({
   },
   badgeButtonActive: {
     color: "white",
+  },
+  buttonActive: {
+    color: "#fe5747",
   },
   badgeButtonDisable: {
     color: "black",
