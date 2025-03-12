@@ -15,53 +15,52 @@ import { BACKEND_ADRESS } from "../.config";
 import MakeReservation from "../components/MakeReservation";
 
 export default function JoinReservation(props) {
-
   let restaurantId = props.restaurantId;
   let restaurantName = props.restaurantName;
 
-  restaurantName
   const user = useSelector((state) => state.user.value);
   const [reservationData, setReservationData] = React.useState(null);
 
+  const [isReserved, setIsReserved] = useState(false);
+
   // Récupérer les réservations
   useEffect(() => {
+    getRestaurantReservation();
+  }, [restaurantId]);
+
+  //fonction fecth res
+
+  const getRestaurantReservation = () => {
     fetch(`${BACKEND_ADRESS}/reservations/restaurant/${restaurantId}`)
       .then((response) => response.json())
-      .then((data) => setReservationData(data))
+      .then((data) => {
+        setReservationData(data);
 
+        if (data?.data?.[0]?.users) {
+          setIsReserved(true);
+        }
+      })
       .catch((error) =>
         console.error("Erreur lors de la récupération des réservations", error)
       );
-  }, [restaurantId]);
+  };
 
-  // Quitter si pas de réservation existante
+  // Vérifier que reservationData est bien chargé avant d'accéder aux valeurs
   if (!reservationData) {
-    return;
+    return null;
   }
 
-  // let reservationDataName = reservationData[0]?.name;
-
-  console.log("START JSON HERE :", JSON.stringify(reservationData, null, 2))
-
-
-
-  // Si réservation existante, récupérer les infos des utilisateurs inscrits au déjeuner du restaurant sélectionné
-  let registeredUsers = reservationData.data?.[0].users.map(
-    (user) => user.infos.username
-  );
-  let registeredAvatar = reservationData.data?.[0].users.map(
-    (user) => user.infos.avatar
-  );
-  const username = user.infos.username;
-  const joinReservationConfirmed = registeredUsers?.includes(username);
-
-  let reservationDataId = reservationData[0]?._id;
-
-  // Infos de l'utilisateur connecté (token, name et photo de profil)
+  // Infos des utilisateurs inscrits
+  const registeredUsers =
+    reservationData.data?.[0]?.users?.map((user) => user.infos.username) || [];
+  const registeredAvatar =
+    reservationData.data?.[0]?.users?.map((user) => user.infos.avatar) || [];
+  const reservationDataId = reservationData.data?.[0]?._id;
   const userToken = user.authentification.token;
 
-  // Vérifier si une réservation existante est créée
-  const isReserved = registeredUsers?.length != 0;
+  const joinReservationConfirmed = registeredUsers?.includes(
+    user.infos.username
+  );
 
   // Fonction pour rejoindre une réservation
   const handlejoin = async () => {
@@ -86,8 +85,8 @@ export default function JoinReservation(props) {
 
       const data = await response.json();
 
-      if (data.result || data.error === "Utilisateur déjà invité") {
-        setjoinReservationConfirmed(true);
+      if (data?.result || data?.error === "Utilisateur déjà invité") {
+        getRestaurantReservation();
       } else {
         Alert.alert(
           "Erreur",
@@ -100,36 +99,67 @@ export default function JoinReservation(props) {
     }
   };
 
+  // Fonction pour formater la date de la réservation au format souhaité
+  let reservationDate = reservationData.data?.[0].date;
+  const formatDate = (dateString) => {
+    const jours = [
+      "Dimanche",
+      "Lundi",
+      "Mardi",
+      "Mercredi",
+      "Jeudi",
+      "Vendredi",
+      "Samedi",
+    ];
+    const mois = [
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre",
+    ];
+
+    const date = new Date(dateString);
+
+    const jourSemaine = jours[date.getUTCDay()];
+    const jour = date.getUTCDate();
+    const moisNom = mois[date.getUTCMonth()];
+    const heures = date.getUTCHours().toString().padStart(2, "0");
+    const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+
+    return `${jourSemaine} ${jour} ${moisNom} - ${heures}h${minutes}`;
+  };
+
   return (
     <View style={styles.container}>
       {reservationData.result ? (
         <View>
           <View style={styles.whitecard}>
-            {joinReservationConfirmed ? (
-              <Text style={styles.h2}>Tu es bien inscrit !</Text>
-            ) : (
-              <Text style={styles.h2}>Inscrit-toi !</Text>
-            )}
+            <Text style={styles.h2}>{formatDate(reservationDate)}</Text>
             <View style={styles.gallery}>
               {!joinReservationConfirmed && (
-                <View style={styles.gallery}>
-                  <View>
-                    <TouchableOpacity
-                      style={styles.registerbtn}
-                      onPress={() => handlejoin()}
-                    >
-                      <View style={styles.strokeborder}>
-                        <Ionicons name="add-outline" size={32} color="#FFF" />
-                      </View>
-                    </TouchableOpacity>
-
-                    <Text style={styles.btnlegend}>Je m'inscris</Text>
-                  </View>
+                <View>
+                  <TouchableOpacity
+                    style={styles.registerbtn}
+                    onPress={handlejoin}
+                  >
+                    <View style={styles.strokeborder}>
+                      <Ionicons name="add-outline" size={32} color="#FFF" />
+                    </View>
+                  </TouchableOpacity>
+                  <Text style={styles.btnlegend}>Je m'inscrit</Text>
                 </View>
               )}
               {isReserved && (
                 <View style={styles.registeredusers}>
-                  {registeredUsers?.map((user, index) => (
+                  {registeredUsers.map((user, index) => (
                     <View key={index}>
                       <Image
                         style={styles.avatar}
@@ -144,7 +174,10 @@ export default function JoinReservation(props) {
           </View>
         </View>
       ) : (
-        <MakeReservation restaurantId={restaurantId} restaurantName={restaurantName}></MakeReservation>
+        <MakeReservation
+          restaurantId={restaurantId}
+          restaurantName={restaurantName}
+        />
       )}
     </View>
   );

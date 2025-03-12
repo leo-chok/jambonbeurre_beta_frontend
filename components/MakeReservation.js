@@ -12,10 +12,10 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { BACKEND_ADRESS } from "../.config";
+
 import Invitation from "../components/Invitation";
 
 export default function MakeReservation(props) {
-
   let restaurantId = props.restaurantId;
   let restaurantName = props.restaurantName;
 
@@ -30,8 +30,6 @@ export default function MakeReservation(props) {
   const username = user.infos.username;
   const avatar = user.infos.avatar;
 
-  console.log(userToken);
-
   const handleAddReservation = async () => {
     if (!userToken) {
       Alert.alert("Erreur", "Veuillez vous connecter pour réserver.");
@@ -41,7 +39,7 @@ export default function MakeReservation(props) {
     setLoading(true);
 
     const reservationData = {
-      name: restaurantName, 
+      name: restaurantName,
       token: userToken,
       date: date.toISOString(),
       restaurantId: restaurantId,
@@ -57,9 +55,9 @@ export default function MakeReservation(props) {
       });
 
       const data = await response.json();
+      console.log(reservationData);
 
       if (data.result) {
-        Alert.alert("Tu es bien inscrit !");
         setReservationConfirmed(true);
       } else {
         Alert.alert(
@@ -74,7 +72,44 @@ export default function MakeReservation(props) {
       setLoading(false);
     }
   };
+  // // Fonction pour formater la date de la réservation au format souhaité
 
+  // let reservationDate = reservationData.data?.[0].date;
+  // const formatDate = (dateString) => {
+  //   const jours = [
+  //     "Dimanche",
+  //     "Lundi",
+  //     "Mardi",
+  //     "Mercredi",
+  //     "Jeudi",
+  //     "Vendredi",
+  //     "Samedi",
+  //   ];
+  //   const mois = [
+  //     "Janvier",
+  //     "Février",
+  //     "Mars",
+  //     "Avril",
+  //     "Mai",
+  //     "Juin",
+  //     "Juillet",
+  //     "Août",
+  //     "Septembre",
+  //     "Octobre",
+  //     "Novembre",
+  //     "Décembre",
+  //   ];
+
+  //   const date = new Date(dateString);
+
+  //   const jourSemaine = jours[date.getUTCDay()];
+  //   const jour = date.getUTCDate();
+  //   const moisNom = mois[date.getUTCMonth()];
+  //   const heures = date.getUTCHours().toString().padStart(2, "0");
+  //   const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+
+  //   return `${jourSemaine} ${jour} ${moisNom} - ${heures}h${minutes}`;
+  // };
   return (
     <View style={styles.container}>
       <View style={styles.main}>
@@ -89,7 +124,9 @@ export default function MakeReservation(props) {
 
           <View>
             {reservationConfirmed ? (
-              <View></View>
+              <View>
+                {/* <Text style={styles.h2}>{formatDate(reservationDate)}</Text> */}
+              </View>
             ) : (
               <TouchableOpacity
                 onPress={() => setShowPicker(true)}
@@ -124,7 +161,7 @@ export default function MakeReservation(props) {
                     {reservationConfirmed ? username : "Je réserve"}
                   </Text>
                 </View>
-                {/* <Invitation></Invitation> */}
+                {/* <Invitation restaurantId={restaurantId}></Invitation> */}
               </View>
             ) : (
               <View>

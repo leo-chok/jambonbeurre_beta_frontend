@@ -12,21 +12,28 @@ import { useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { BACKEND_ADRESS } from "../.config";
 
-export default function Invitation({ navigation }) {
+// import { NavigationContainer } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+
+export default function Invitation({ reservationId }) {
+  const navigation = useNavigation();
+
   return (
     <View>
-      <View>
-        <TouchableOpacity
-          style={styles.registerbtn}
-          onPress={() => navigation.navigate("Chat")}
-        >
-          <View style={styles.strokeborder}>
-            <Ionicons name="person-add-outline" size={32} color="#FFF" />
-          </View>
-        </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.registerbtn}
+        onPress={() =>
+          navigation.navigate("AgendaInvitListScreen", {
+            reservationId: reservation._id,
+          })
+        }
+      >
+        <View style={styles.strokeborder}>
+          <Ionicons name="person-add-outline" size={32} color="#FFF" />
+        </View>
+      </TouchableOpacity>
 
-        <Text style={styles.btnlegend}>Inviter</Text>
-      </View>
+      <Text style={styles.btnlegend}>Inviter</Text>
     </View>
   );
 }
