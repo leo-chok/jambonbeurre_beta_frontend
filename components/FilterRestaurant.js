@@ -31,12 +31,89 @@ export default function FilterRestaurant(props) {
     dispatch(fillFilter());
   }
 
+  const buttons = restaurantsTypes.map((type) => {
+    let textButton = "Restaurant";
+
+    if (type === "hamburger_restaurant") {
+      textButton = "Hamburger";
+    } else if (type === "bakery") {
+      textButton = "Boulangerie";
+    } else if (type === "sports_activity_location") {
+      textButton = "Lieu de sport";
+    } else if (type === "coffee_shop") {
+      textButton = "Café";
+    } else if (type === "video_arcade") {
+      textButton = "Salle d'arcade";
+    } else if (type === "hotel") {
+      textButton = "Hotel";
+    } else if (type === "bar") {
+      textButton = "Bar";
+    } else if (type === "italian_restaurant") {
+      textButton = "Italien";
+    } else if (type === "movie_theater") {
+      textButton = "Cinéma";
+    } else if (type === "shopping_mall") {
+      textButton = "Centre Commercial";
+    } else if (type === "supermarket") {
+      textButton = "Supermarché";
+    } else if (type === "store") {
+      textButton = "Boutique";
+    } else if (type === "brunch_restaurant") {
+      textButton = "Restaurant Brunch";
+    } else if (type === "casino") {
+      textButton = "Casino";
+    } else if (type === "pizza_restaurant") {
+      textButton = "Pizza";
+    } else if (type === "restaurant") {
+      textButton = "Restaurant";
+    } else if (type === "thai_restaurant") {
+      textButton = "Thailandais";
+    } else if (type === "food_store") {
+      textButton = "Magasin";
+    } else if (type === "chinese_restaurant") {
+      textButton = "Chinois";
+    } else if (type === "french_restaurant") {
+      textButton = "Grastronomie Française";
+    } else if (type === "sandwich_shop") {
+      textButton = "Sandwicherie";
+    } else if (type === "fast_food_restaurant") {
+      textButton = "Fast Food";
+    } else if (type === "tea_house") {
+      textButton = "Salon de Thé";
+    } else if (type === "meal_takeaway") {
+      textButton = "A emporter";
+    } else if (type === "japanese_restaurant") {
+      textButton = "Japonais";
+    } else {
+    }
+
+    return (
+      <Button
+        key={type}
+        mode={(filterRestaurant.includes(type) && "contained") || "outlined"}
+        onPress={() => updateList(type)}
+        style={styles.badgeButton}
+      >
+        <Text
+          style={[
+            styles.badgeButtonActive,
+            filterRestaurant.includes(type)
+              ? styles.badgeButtonActive
+              : styles.badgeButtonDisable,
+          ]}
+        >
+          {textButton}
+        </Text>
+      </Button>
+    );
+  });
+
   return (
     <View
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
       <Text style={[styles.title, { color: theme.colors.tertiary }]}>
-        Filtrer vos restaurants
+        Filtre tes restaurants
       </Text>
       <View style={styles.selects}>
         <Button
@@ -56,29 +133,7 @@ export default function FilterRestaurant(props) {
       </View>
       <Divider style={{ marginTop: 5, marginBottom: 5 }} />
       <ScrollView>
-        <View style={styles.buttonsContainer}>
-          {restaurantsTypes.map((type) => (
-            <Button
-              key={type}
-              mode={
-                (filterRestaurant.includes(type) && "contained") || "outlined"
-              }
-              onPress={() => updateList(type)}
-              style={styles.badgeButton}
-            >
-              <Text
-                style={[
-                  styles.badgeButtonActive,
-                  filterRestaurant.includes(type)
-                    ? styles.badgeButtonActive
-                    : styles.badgeButtonDisable,
-                ]}
-              >
-                {type}
-              </Text>
-            </Button>
-          ))}
-        </View>
+        <View style={styles.buttonsContainer}>{buttons}</View>
       </ScrollView>
     </View>
   );
