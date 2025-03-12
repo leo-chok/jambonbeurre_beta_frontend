@@ -14,24 +14,23 @@ import { Ionicons } from "@expo/vector-icons";
 import { BACKEND_ADRESS } from "../.config";
 import Invitation from "../components/Invitation";
 
+export default function MakeReservation(props) {
 
-export default function MakeReservation({ restaurantId, restaurantName }) {
+  let restaurantId = props.restaurantId;
+  let restaurantName = props.restaurantName;
+
   const [loading, setLoading] = useState(false);
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [reservationConfirmed, setReservationConfirmed] = useState(false);
 
   // Récupérer le token de l'utilisateur depuis Redux
-
   const user = useSelector((state) => state.user.value);
   const userToken = user.authentification.token;
   const username = user.infos.username;
   const avatar = user.infos.avatar;
-  // const defaultAvatar: require("../assets/restaurants_img/burger.jpg"),
 
-  // if (avatar === "") {
-  //   avatar = <Image source={defaultAvatar} style={styles.image}></Image>;
-  // };
+  console.log(userToken);
 
   const handleAddReservation = async () => {
     if (!userToken) {
@@ -42,7 +41,7 @@ export default function MakeReservation({ restaurantId, restaurantName }) {
     setLoading(true);
 
     const reservationData = {
-      name: restaurantName,
+      name: restaurantName, 
       token: userToken,
       date: date.toISOString(),
       restaurantId: restaurantId,
@@ -58,7 +57,6 @@ export default function MakeReservation({ restaurantId, restaurantName }) {
       });
 
       const data = await response.json();
-      console.log("TESSSSS", data)
 
       if (data.result) {
         Alert.alert("Tu es bien inscrit !");
@@ -75,9 +73,7 @@ export default function MakeReservation({ restaurantId, restaurantName }) {
     } finally {
       setLoading(false);
     }
-
   };
-
 
   return (
     <View style={styles.container}>
@@ -128,7 +124,7 @@ export default function MakeReservation({ restaurantId, restaurantName }) {
                     {reservationConfirmed ? username : "Je réserve"}
                   </Text>
                 </View>
-                <Invitation></Invitation>
+                {/* <Invitation></Invitation> */}
               </View>
             ) : (
               <View>
@@ -162,8 +158,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     position: "relative",
     width: "100%",
-    height: "40%",
-    top: -50,
+    top: -32,
   },
 
   whitecard: {

@@ -168,7 +168,6 @@ export default function HomeScreen({ navigation }) {
     fetch(BACKEND_ADRESS + `/restaurants/search/${name}`)
       .then((response) => response.json())
       .then((info) => {
-        //console.log(JSON.stringify(info, null, 2)); // Sera utile pour les réservations
         let openInfos = info.data.openingHours;
         const isOpenNow = (openInfos) => {
           const now = new Date();
@@ -523,7 +522,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: -35,
     width: "100%",
-    height: "83%",
+    height: "85%",
   },
 
   filterModalStyle: {
