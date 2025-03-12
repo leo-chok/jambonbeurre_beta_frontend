@@ -50,9 +50,10 @@ export default function UnsubscribeScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-    >
+    <KeyboardAvoidingView
+       style={[styles.container, { backgroundColor: theme.colors.background }]}
+       behavior={Platform.OS === "ios" ? "padding" : "height"}
+     >
       <View style={styles.topContainer}>
         <Text style={styles.mainTitle}>
           Nous sommes tristes de te voir partir 😢
@@ -85,7 +86,7 @@ export default function UnsubscribeScreen({ navigation }) {
       >
         <Text style={styles.deleteButtonActive}>Supprimer mon compte</Text>
       </Button>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
