@@ -47,7 +47,7 @@ export default function SignUp6Screen({ navigation }) {
     setIsLoading(true);
     // On récupère le lunchtime depuis le reducer car il est modifié dans le composant Schedule
 
- // Enregistrement BDD
+    // Enregistrement BDD
     const dataBDD = {
       token: token,
       lunchtime: lastLunchTime,
@@ -67,6 +67,10 @@ export default function SignUp6Screen({ navigation }) {
       });
   };
 
+  const handleIgnore = () => {
+    navigation.navigate("SignUp7");
+  };
+  
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
@@ -85,16 +89,24 @@ export default function SignUp6Screen({ navigation }) {
             </List.Accordion>
           </ScrollView>
         ) : (
-        <View style={{ width: 180, height: 180, marginHorizontal: "auto" }}>
-          <Gif />
-        </View>         )}
-         <Button
-                onPress={() => handleSuivant()}
-                mode={"contained"}
-                style={styles.badgeButton}
-              >
-                <Text style={styles.badgeButtonActive}>Suivant</Text>
-              </Button>
+          <View style={{ width: 180, height: 180, marginHorizontal: "auto" }}>
+            <Gif />
+          </View>
+        )}
+        <Button
+          onPress={() => handleSuivant()}
+          mode={"contained"}
+          style={styles.badgeButton}
+        >
+          <Text style={styles.badgeButtonActive}>Suivant</Text>
+        </Button>
+        <Button
+          onPress={() => handleIgnore()}
+          mode={"outlined"}
+          style={styles.badgeButton}
+        >
+          <Text style={styles.ignoreButtonActive}>Ignorer</Text>
+        </Button>
       </View>
     </KeyboardAvoidingView>
   );
@@ -125,10 +137,14 @@ const styles = StyleSheet.create({
   },
   badgeButton: {
     width: 250,
-    margin: 30,
+    marginBottom: 20,
   },
   badgeButtonActive: {
     color: "white",
+    fontSize: 20,
+  },
+  ignoreButtonActive: {
+    color: "#fe5747",
     fontSize: 20,
   },
 });

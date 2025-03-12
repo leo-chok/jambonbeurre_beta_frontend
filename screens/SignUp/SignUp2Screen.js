@@ -127,18 +127,18 @@ export default function SignUp2Screen({ navigation }) {
           <View>
             <Button
               onPress={pickImage}
-              mode={"contained"}
-              style={styles.badgeButton}
+              mode={"outlined"}
+              style={styles.photoButton}
             >
-              <Text style={styles.badgeButtonActive}>Depuis son téléphone</Text>
+              <Text style={styles.photoButtonActive}>Depuis son téléphone</Text>
             </Button>
 
             <Button
               onPress={() => handleTakePhoto()}
-              mode={"contained"}
-              style={styles.badgeButton}
+              mode={"outlined"}
+              style={styles.photoButton}
             >
-              <Text style={styles.badgeButtonActive}>Prendre une photo</Text>
+              <Text style={styles.photoButtonActive}>Prendre une photo</Text>
             </Button>
           </View>
         )}
@@ -187,14 +187,26 @@ const styles = StyleSheet.create({
     width: 250,
     margin: 10,
   },
+  photoButton: {
+    width: 250,
+    margin: 10,
+  },
   badgeButtonActive: {
     color: "white",
+    fontSize: 20,
+  },
+  photoButtonActive: {
+    color: "#fe5747",
     fontSize: 20,
   },
   image: {
     width: 250,
     height: 250,
     borderRadius: 175,
+  },
+  containerImage: {
+    marginBottom: 15,
+    marginHorizontal: "auto",
   },
   navigationBottom: {
     flexDirection: "column",

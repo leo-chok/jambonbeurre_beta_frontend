@@ -60,6 +60,10 @@ export default function SignUp7Screen({ navigation }) {
       });
   };
 
+  const handleIgnore = () => {
+    navigation.navigate("SignUp8");
+  };
+
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
@@ -79,13 +83,20 @@ export default function SignUp7Screen({ navigation }) {
           style={styles.inputField}
           underlineColor="transparent"
         />
-         <Button
-                onPress={() => handleSuivant()}
-                mode={"contained"}
-                style={styles.badgeButton}
-              >
-                <Text style={styles.badgeButtonActive}>Suivant</Text>
-              </Button>
+        <Button
+          onPress={() => handleSuivant()}
+          mode={"contained"}
+          style={styles.badgeButton}
+        >
+          <Text style={styles.badgeButtonActive}>Suivant</Text>
+        </Button>
+        <Button
+          onPress={() => handleIgnore()}
+          mode={"outlined"}
+          style={styles.badgeButton}
+        >
+          <Text style={styles.ignoreButtonActive}>Ignorer</Text>
+        </Button>
       </View>
     </KeyboardAvoidingView>
   );
@@ -115,10 +126,15 @@ const styles = StyleSheet.create({
   },
   badgeButton: {
     width: 250,
-    margin: 30,
+    marginTop: 20,
+    marginHorizontal: "auto",
   },
   badgeButtonActive: {
     color: "white",
+    fontSize: 20,
+  },
+  ignoreButtonActive: {
+    color: "#fe5747",
     fontSize: 20,
   },
   inputField: {
