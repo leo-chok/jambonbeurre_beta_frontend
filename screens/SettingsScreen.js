@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   deleteButtonActive: {
-    color: "red",
+    color: "#fe5747",
     fontSize: 20,
   },
 });

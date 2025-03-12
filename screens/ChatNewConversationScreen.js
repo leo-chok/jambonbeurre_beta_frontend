@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
+    height: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -198,7 +199,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 6,
     elevation: 5,
-    borderRadius: 20,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,  },
+    borderRadius: 30,
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,  
+  },
 });
