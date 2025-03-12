@@ -25,10 +25,12 @@ import {
   useTheme,
 } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
+import { addDiscussionToStore } from "../reducers/discussions";
 
 import { BACKEND_ADRESS } from "../.config";
 export default function ChatNewConversationScreen({ navigation }) {
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   const [users, setusers] = useState([]);
   const token = useSelector((state) => state.user.value.authentification.token);
@@ -65,9 +67,11 @@ export default function ChatNewConversationScreen({ navigation }) {
     }) //fetch
       .then((response) => response.json())
       .then((data) => {
-        console.log("data conversation fetch : ");
+        console.log("conversation creer : ");
        // console.log(data);
-        //console.log(data.Discussion);
+        console.log(data.Discussion);
+       // dispatch(addDiscussionToStore(data.Discussion));
+        //console.log("dispatch");
         navigation.navigate("ChatConversation", data.Discussion);
       }); //then fetch
   } //function

@@ -76,7 +76,7 @@ export default function ChatListScreen({ navigation }) {
         <Text style={styles.textNewMessage}> Nouveau message </Text>
       </Button>
       <ScrollView style={styles.scrollView}>
-        {discussions.map((element) => (
+        {discussions.slice().reverse().map((element) => (
           <TouchableOpacity
             key={element._id}
             style={styles.ConversationContainer}
@@ -100,22 +100,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   ConversationContainer: {
-    height: "22%",
+    height: 120,
     width: 350,
     backgroundColor: "rgb(0, 108, 72)",
     borderRadius: 20,
-    marginBottom: 40,
+    marginBottom: 20,
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
   },
   scrollView: {
-    marginTop: 50,
+    marginTop: 30,
+    marginBottom: 90,
   },
   header: {
     width: "100%",
     padding: 34,
-    paddingTop: 80,
+    paddingTop: 40,
     textAlign: "center",
     borderBottomColor: "rgb(0, 108, 72)",
     color: "rgb(0, 108, 72)",
