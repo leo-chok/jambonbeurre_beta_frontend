@@ -135,7 +135,7 @@ export default function AgendaInvitListScreen({ route, navigation }) {
       style={styles.goBackButton}
       mode={"contained"}
       title="Go Back"
-      onPress={() => navigation.navigate("AgendaScreen")}
+      onPress={() => navigation.navigate("Agenda")}
       >
         <Text style={styles.btnText}>Retour à l'agenda</Text>
       </Button>

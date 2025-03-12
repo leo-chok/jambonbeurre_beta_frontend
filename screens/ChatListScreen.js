@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   ConversationContainer: {
-    height: "22%",
+    height: 120,
     width: 350,
     backgroundColor: "rgb(0, 108, 72)",
     borderRadius: 20,
