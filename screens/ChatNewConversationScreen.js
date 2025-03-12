@@ -5,7 +5,6 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  
   TouchableOpacity,
   View,
 } from "react-native";
@@ -35,9 +34,10 @@ export default function ChatNewConversationScreen({ navigation }) {
   const [users, setusers] = useState([]);
   const token = useSelector((state) => state.user.value.authentification.token);
   const username = useSelector((state) => state.user.value.infos.username);
+ console.log("username : " + username);
+  
   const [listeDesSelectioner, setlisteDesSelectioner] = useState([]); //liste des utilisateurs selectionnés pour la conversation
-  let title='';
-
+  let title = "";
 
   useEffect(() => {
     console.log("new conversation");
@@ -46,16 +46,18 @@ export default function ChatNewConversationScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         setusers(data.listUsers); //memorise la liste de tous les utilisateurs
-       // console.log(data);
+        // console.log(data);
       }); //fetch
   }, []);
 
   function Fvalide() {
     console.log("fonction valide");
-  let title = listeDesSelectioner.map((element) => element.username).join("  -  ");
-  title = title + "  -  " + username;
-    console.log("title : "+title);
-    
+    let title = listeDesSelectioner
+      .map((element) => element.username)
+      .join("  -  ");
+    title = title + "  -  " + username;
+    console.log("title : " + title);
+
     fetch(`${BACKEND_ADRESS}/chats/creeUneDiscussion/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -68,9 +70,9 @@ export default function ChatNewConversationScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         console.log("conversation creer : ");
-       // console.log(data);
+        // console.log(data);
         console.log(data.Discussion);
-       // dispatch(addDiscussionToStore(data.Discussion));
+        // dispatch(addDiscussionToStore(data.Discussion));
         //console.log("dispatch");
         navigation.navigate("ChatConversation", data.Discussion);
       }); //then fetch
@@ -89,11 +91,8 @@ export default function ChatNewConversationScreen({ navigation }) {
       ]);
     }
     //console.log(listeDesSelectioner);
-    
   } //function
 
-
-  
   function FstyleSelectionner(idUser) {
     if (listeDesSelectioner.some((element) => element.id == idUser))
       return styles.viewSelected;
@@ -104,33 +103,37 @@ export default function ChatNewConversationScreen({ navigation }) {
       style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-              <Searchbar style={styles.searchbar}
-          placeholder="Rechercher un buddy"
-          // onChangeText={setSearchQuery}
-          // onIconPress={handleSearch}
-          // onSubmitEditing={handleSearch}
-          // value={searchQuery}
-        />
+      <Searchbar
+        style={styles.searchbar}
+        placeholder="Rechercher un buddy"
+        // onChangeText={setSearchQuery}
+        // onIconPress={handleSearch}
+        // onSubmitEditing={handleSearch}
+        // value={searchQuery}
+      />
       <ScrollView style={styles.scrollView}>
         {users &&
-          users.map((element) => (
-            <TouchableOpacity
-              key={element._id}
-              style={FstyleSelectionner(element._id)}
-              onPress={() =>
-                FselectionneUser(element._id, element.infos.username)
-              }
-            >
-              <Text style={styles.textmessage}>{element.infos.username}</Text>
-            </TouchableOpacity>
-          ))}
+          users
+            .filter((element) => element.infos.username !== username)
+            .map((element) => (
+              <TouchableOpacity
+                key={element._id}
+                style={FstyleSelectionner(element._id)}
+                onPress={() =>
+                  FselectionneUser(element._id, element.infos.username)
+                }
+              >
+                <Text style={styles.textmessage}>{element.infos.username}</Text>
+              </TouchableOpacity>
+            ))}
       </ScrollView>
       <Button
         key="footer"
         style={styles.footer}
         mode={"contained"}
         onPress={() => Fvalide()}
-      ><Text style={styles.textButton}>Écrire</Text>
+      >
+        <Text style={styles.textButton}>Écrire</Text>
       </Button>
     </KeyboardAvoidingView>
   );
@@ -140,8 +143,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-   justifyContent: "center",
-   alignItems: "center",
+    justifyContent: "center",
+    alignItems: "center",
   },
   scrollView: {
     marginTop: 10,
@@ -156,14 +159,14 @@ const styles = StyleSheet.create({
   },
   view: {
     width: 250,
-    backgroundColor: "rgb(255, 218, 213)",//vert
+    backgroundColor: "rgb(255, 218, 213)", //vert
     margin: 2,
     padding: 10,
     borderRadius: 20,
   },
   viewSelected: {
     width: 250,
-    backgroundColor: "pink",//vert
+    backgroundColor: "pink", //vert
     margin: 20,
     padding: 10,
     borderRadius: 20,
@@ -171,14 +174,14 @@ const styles = StyleSheet.create({
   textmessage: {
     width: 230,
     fontSize: 20,
-    backgroundColor:  "rgb(255, 218, 213)",//vert
+    backgroundColor: "rgb(255, 218, 213)", //vert
     color: "darkGrey",
     fontFamily: "LeagueSpartan-SemiBold",
     borderRadius: 20,
     textAlign: "center",
     paddingLeft: 10,
   },
-  textButton : {
+  textButton: {
     color: "white",
     fontSize: 20,
   },
@@ -190,5 +193,4 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 5,
   },
- 
 });
