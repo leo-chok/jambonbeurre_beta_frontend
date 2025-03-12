@@ -33,8 +33,10 @@ export default function AgendaInvitListScreen({ route, navigation }) {
           .map((user) => {
             let score = 0;
             if (
-              user.preferences.hobbies.some((hobby) => //Vérifie les hobbies en communs
-                user.preferences.hobbies.includes(hobby)
+              user.preferences.hobbies.some(
+                (
+                  hobby //Vérifie les hobbies en communs
+                ) => user.preferences.hobbies.includes(hobby)
               )
             ) {
               score += 1;
@@ -51,7 +53,6 @@ export default function AgendaInvitListScreen({ route, navigation }) {
         }
       });
   }, []);
-
   //------------------ Inviter un utilisateur à une reservation ------------------------
   const handleInviteUser = (reservationId, userId) => {
     if (!reservationId) {
@@ -81,7 +82,7 @@ export default function AgendaInvitListScreen({ route, navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.header}>
-        <Text style={styles.headerText}>Mes Contacts</Text>
+        <Text style={styles.headerText}>Mes Contacts 👥</Text>
       </View>
       <ScrollView style={styles.userList}>
         {users.length > 0 ? (
@@ -96,16 +97,22 @@ export default function AgendaInvitListScreen({ route, navigation }) {
                 style={styles.avatar}
               />
               <Portal>
-<Modal visible={modalVisible} onDismiss={() => setModalVisible(false)} contentContainerStyle={styles.modalStyle}>
-  <View style={styles.modalContent}>
-    <Text style={styles.modalText}> Utilisateur invité !
-    </Text>
-    <Button mode="contained" onPress={() => setModalVisible(false)}>
-      OK
-    </Button>
-  </View>
-</Modal>
-</Portal>
+                <Modal
+                  visible={modalVisible}
+                  onDismiss={() => setModalVisible(false)}
+                  contentContainerStyle={styles.modalStyle}
+                >
+                  <View style={styles.modalContent}>
+                    <Text style={styles.modalText}> Utilisateur invité !</Text>
+                    <Button
+                      mode="contained"
+                      onPress={() => setModalVisible(false)}
+                    >
+                      OK
+                    </Button>
+                  </View>
+                </Modal>
+              </Portal>
               <Button
                 style={styles.btnUsername}
                 mode="text"
@@ -121,7 +128,7 @@ export default function AgendaInvitListScreen({ route, navigation }) {
                 style={styles.btnInvite}
                 mode={"contained"}
                 onPress={() => handleInviteUser(reservationId, user._id)}
-                >
+              >
                 <AntDesign name="adduser" size={21} color="black" />
                 <Text style={styles.title}></Text>
               </Button>
@@ -132,10 +139,10 @@ export default function AgendaInvitListScreen({ route, navigation }) {
         )}
       </ScrollView>
       <Button
-      style={styles.goBackButton}
-      mode={"contained"}
-      title="Go Back"
-      onPress={() => navigation.navigate("Agenda")}
+        style={styles.goBackButton}
+        mode={"contained"}
+        title="Go Back"
+        onPress={() => navigation.navigate("Agenda")}
       >
         <Text style={styles.btnText}>Retour à l'agenda</Text>
       </Button>
@@ -158,9 +165,10 @@ const styles = StyleSheet.create({
   },
   headerText: {
     marginTop: 50,
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
-    color: "rgb(0, 108, 72)",
+    color: "rgb(254, 87, 71)",
+    fontFamily: "LeagueSpartan-SemiBold",
   },
   userList: {
     width: "100%",
@@ -234,16 +242,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    
   },
   modalContent: {
     alignItems: "center",
-    
   },
   modalText: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 15,
-    color: "rgb(0, 108, 72)"
+    color: "rgb(0, 108, 72)",
+  },
+  searchbar: {
+    height: 50,
+    width: 340,
   },
 });
