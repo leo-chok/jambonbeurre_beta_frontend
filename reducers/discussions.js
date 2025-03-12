@@ -11,9 +11,12 @@ export const discussionsSlice = createSlice({
         chargeDiscussions: (state, action) => {
         state.value.discussions = action.payload;
       },
+      addDiscussionToStore: (state, action) => {
+        state.value.discussions.push(action.payload);
     }
+}
 });
 
-export const { chargeDiscussions } =
+export const { chargeDiscussions , addDiscussionToStore } =
   discussionsSlice.actions;
 export default discussionsSlice.reducer;

@@ -11,7 +11,6 @@ import AgendaInvitListScreen from "./screens/AgendaInvitListScreen";
 import ChatConversationScreen from "./screens/ChatConversationScreen";
 import ChatNewConversationScreen from "./screens/ChatNewConversationScreen";
 import ChatListScreen from "./screens/ChatListScreen";
-import ChatScreen from "./screens/ChatScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ProfileEditionScreen from "./screens/ProfileEditionScreen";
 import ProfileScreen from "./screens/ProfileScreen";
