@@ -21,9 +21,10 @@ import { BACKEND_ADRESS } from "../.config";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import { useSelector } from "react-redux";
 import JoinReservation from "../components/JoinReservation";
-import MakeReservation from "../components/MakeReservation";
 
 export default function Restaurant(props) {
+    let restaurantId = props.id;
+    let restaurantName = props.name;
   // Image sur la modale
   const restaurantImages = {
     hamburger_restaurant: require("../assets/restaurants_img/burger.jpg"),
@@ -88,20 +89,7 @@ export default function Restaurant(props) {
     );
   };
 
-  // // Récupérer les réservation
-  let restaurantId = props.id;
 
-  const [eventInfo, setEventInfo] = React.useState(null);
-
-  useEffect(() => {
-    fetch(`${BACKEND_ADRESS}/reservations/restaurant/${restaurantId}`)
-      .then((response) => response.json())
-      .then((data) => setEventInfo(data))
-
-      .catch((error) =>
-        console.error("Erreur lors de la récupération des réservations", error)
-      );
-  }, [restaurantId]);
 
   return (
     <View style={styles.container}>
@@ -193,15 +181,8 @@ export default function Restaurant(props) {
           </View>
         </View>
         <View></View>
-        {eventInfo?.result === true ? (
-          <JoinReservation 
-          reservationinfos={eventInfo} />
-        ) : (
-          <MakeReservation
-            restaurantId={restaurantId}
-            restaurantName={props.name}
-          />
-        )}
+
+        <JoinReservation restaurantId={restaurantId} restaurantName={restaurantName}/>
       </View>
     </View>
   );
