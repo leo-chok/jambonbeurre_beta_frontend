@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Searchbar } from "react-native-paper";
 
 import {
   TextInput,
@@ -24,10 +25,12 @@ import {
   useTheme,
 } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
+import { addDiscussionToStore } from "../reducers/discussions";
 
 import { BACKEND_ADRESS } from "../.config";
 export default function ChatNewConversationScreen({ navigation }) {
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   const [users, setusers] = useState([]);
   const token = useSelector((state) => state.user.value.authentification.token);
@@ -64,9 +67,11 @@ export default function ChatNewConversationScreen({ navigation }) {
     }) //fetch
       .then((response) => response.json())
       .then((data) => {
-        console.log("data conversation fetch : ");
+        console.log("conversation creer : ");
        // console.log(data);
-        //console.log(data.Discussion);
+        console.log(data.Discussion);
+       // dispatch(addDiscussionToStore(data.Discussion));
+        //console.log("dispatch");
         navigation.navigate("ChatConversation", data.Discussion);
       }); //then fetch
   } //function
@@ -99,6 +104,13 @@ export default function ChatNewConversationScreen({ navigation }) {
       style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+              <Searchbar style={styles.searchbar}
+          placeholder="Rechercher un buddy"
+          // onChangeText={setSearchQuery}
+          // onIconPress={handleSearch}
+          // onSubmitEditing={handleSearch}
+          // value={searchQuery}
+        />
       <ScrollView style={styles.scrollView}>
         {users &&
           users.map((element) => (
@@ -118,7 +130,7 @@ export default function ChatNewConversationScreen({ navigation }) {
         style={styles.footer}
         mode={"contained"}
         onPress={() => Fvalide()}
-      >creer le chat
+      ><Text style={styles.textButton}>Écrire</Text>
       </Button>
     </KeyboardAvoidingView>
   );
@@ -128,47 +140,55 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-   
+   justifyContent: "center",
+   alignItems: "center",
   },
   scrollView: {
-   
-    marginTop: 50,
+    marginTop: 10,
     marginBottom: 70,
   },
   footer: {
     position: "absolute", // Positionne le bouton en bas de l'écran
     bottom: 0, // Fixe le bouton en bas
-    left: 0,
-    right: 0,
-    margin: 10,
     width: "70%",
-    
-   
-    
-   
+    marginHorizontal: "auto",
+    marginBottom: 20,
   },
   view: {
     width: 250,
-    backgroundColor: "#397a5b",//vert
+    backgroundColor: "rgb(255, 218, 213)",//vert
     margin: 2,
     padding: 10,
     borderRadius: 20,
   },
   viewSelected: {
-    width: 260,
-    backgroundColor:  "#397a",//vert
+    width: 250,
+    backgroundColor: "pink",//vert
     margin: 20,
     padding: 10,
     borderRadius: 20,
   },
   textmessage: {
     width: 230,
-    backgroundColor:  "#397a5b",//vert
-    color: "white",
-    fontFamily: "LeagueSpartan-Bold",
+    fontSize: 20,
+    backgroundColor:  "rgb(255, 218, 213)",//vert
+    color: "darkGrey",
+    fontFamily: "LeagueSpartan-SemiBold",
     borderRadius: 20,
-    textAlign: "left",
+    textAlign: "center",
     paddingLeft: 10,
+  },
+  textButton : {
+    color: "white",
+    fontSize: 20,
+  },
+  searchbar: {
+    marginTop: 50,
+    width: "80%",
+    backgroundColor: "white",
+    shadowOpacity: 0.5,
+    shadowRadius: 6,
+    elevation: 5,
   },
  
 });

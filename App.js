@@ -11,7 +11,6 @@ import AgendaInvitListScreen from "./screens/AgendaInvitListScreen";
 import ChatConversationScreen from "./screens/ChatConversationScreen";
 import ChatNewConversationScreen from "./screens/ChatNewConversationScreen";
 import ChatListScreen from "./screens/ChatListScreen";
-import ChatScreen from "./screens/ChatScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ProfileEditionScreen from "./screens/ProfileEditionScreen";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -97,7 +96,7 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Profile" component={ProfileScreen} />
-      <Tab.Screen name="Chat" component={ChatScreen} />
+      <Tab.Screen name="Chat" component={ChatListScreen} />
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Agenda" component={AgendaScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />

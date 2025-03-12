@@ -38,18 +38,17 @@ export default function AgendaScreen({ navigation }) {
   const [upcomingReservations, setUpcomingReservations] = useState([]);
   const [pastReservations, setPastReservations] = useState([]);
 
-  // //------------------- Permet de refresh les reservations après une action ------------------------
-  // const refreshReservations = () => {
-  //   fetch(BACKEND_ADRESS + `/reservations/${token}`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log(data);
-  //       if (data.result) {
-  //         dispatch(displayReservations(data.data));
-  //       }
-  //     });
-  // };
-
+  //------------------- Permet de refresh les reservations après une action ------------------------
+  const refreshReservations = () => {
+    fetch(BACKEND_ADRESS + `/reservations/${token}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.result) {
+          dispatch(displayReservations(data.data));
+        }
+      });
+  };
   //------------------- Permet de récupérer les reservations ------------------------
   useEffect(() => {
     fetch(BACKEND_ADRESS + `/reservations/${token}`)
@@ -57,8 +56,10 @@ export default function AgendaScreen({ navigation }) {
       .then((data) => {
         console.log(data);
         if (data.result) {
-          dispatch(displayReservations(data.data));
-          // refreshReservations();
+          // Vérifie si les nouvelles données sont différentes des anciennes
+          if (JSON.stringify(reservations) !== JSON.stringify(data.data)) {
+            dispatch(displayReservations(data.data));
+          }
           // Sépare les réservations en passées et futures
           const now = new Date();
           const future = data.data.filter(
@@ -71,7 +72,7 @@ export default function AgendaScreen({ navigation }) {
           setPastReservations(past);
         }
       });
-  }, []);
+  }, [reservations]);
   //------------------- Ajouter une reservation ------------------------
   const handleAddReservation = () => {
     fetch(BACKEND_ADRESS + "/reservations/add", {
@@ -94,7 +95,6 @@ export default function AgendaScreen({ navigation }) {
         }
       });
   };
-
   //------------------- Quitter une reservation ------------------------
   const leaveReservation = (reservationId, token) => {
     console.log("token:", token);
@@ -105,7 +105,6 @@ export default function AgendaScreen({ navigation }) {
       });
       return;
     }
-
     console.log("Sending request with:", { reservationId, token });
     fetch(BACKEND_ADRESS + "/reservations/leaveReservation", {
       method: "DELETE",
@@ -115,7 +114,7 @@ export default function AgendaScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          // dispatch(deleteReservation(reservationId, token));
+          dispatch(deleteReservation(reservationId, token));
           refreshReservations();
           console.log("Reservation quittée");
           return "Reservation quittée";
@@ -124,10 +123,16 @@ export default function AgendaScreen({ navigation }) {
         }
       });
   };
-
   //------------------- Formatage de la date ------------------------
   const formatDate = (date) => {
-    return new Date(date).toLocaleDateString("fr-FR"); // Formate en jj/mm/aaaa
+    return (
+      new Date(date).toLocaleDateString("fr-FR") +
+      " - " +
+      new Date(date).toLocaleTimeString("fr-FR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    ); // Formate en jj/mm/aaaa
   };
 
   return (
@@ -138,64 +143,72 @@ export default function AgendaScreen({ navigation }) {
       <View style={styles.header}>
         <Text style={styles.headerText}>Mon Agenda 🗓️ </Text>
       </View>
-      <Text style={styles.section}>
-        {" "}
-        Réservation prévues : {upcomingReservations.length}{" "}
-      </Text>
-      <ScrollView style={styles.scrollView}>
-        {upcomingReservations.map((reservation) => (
-          <View key={reservation._id} style={styles.reservationContainer}>
-            <Text style={styles.textName}>{reservation.name}</Text>
-            <Text style={styles.textDate}>{formatDate(reservation.date)}</Text>
-            <Text style={styles.textConversation}>
-              {reservation.conversation}
-            </Text>
-            <Button
-              style={styles.btnInvite}
-              mode={"contained"}
-              onPress={() =>
-                navigation.navigate("AgendaInvitListScreen", {
-                  reservationId: reservation._id,
-                })
-              }
+      <View style={{ flex: 1.2, width: "100%" }}>
+        <Text style={styles.section}>
+          {" "}
+          Réservation prévues : {upcomingReservations.length}{" "}
+        </Text>
+        <ScrollView style={styles.scrollView}>
+          {upcomingReservations.map((reservation) => (
+            <View key={reservation._id} style={styles.reservationContainer}>
+              <Text style={styles.textName}>{reservation.name}</Text>
+              <Text style={styles.textDate}>
+                {formatDate(reservation.date)}
+              </Text>
+              <Text style={styles.textConversation}>
+                {reservation.conversation}
+              </Text>
+              <Button
+                style={styles.btnInvite}
+                mode={"contained"}
+                onPress={() =>
+                  navigation.navigate("AgendaInvitListScreen", {
+                    reservationId: reservation._id,
+                  })
+                }
+              >
+                <AntDesign name="adduser" size={21} color="black" />
+                <Text style={styles.title}> Inviter</Text>
+              </Button>
+              <Button
+                style={styles.btnLeaveReservation}
+                mode={"contained"}
+                onPress={() => leaveReservation(reservation._id, token)}
+              >
+                <FontAwesome name="remove" size={20} color="black" />
+                <Text style={styles.title}> Quitter</Text>
+              </Button>
+              {reservations.length === 0 && (
+                <Text style={styles.noReserv}>Aucune réservation trouvée</Text>
+              )}
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+      <View style={{ flex: 0.9, width: "100%" }}>
+        <Text style={styles.section2}>
+          Réservation passées : {pastReservations.length}
+        </Text>
+        <ScrollView style={styles.scrollView}>
+          {pastReservations.map((reservation) => (
+            <View
+              key={reservation._id}
+              style={[styles.reservationContainerPast, { opacity: 0.7 }]}
             >
-              <AntDesign name="adduser" size={21} color="black" />
-              <Text style={styles.title}> Inviter</Text>
-            </Button>
-            <Button
-              style={styles.btnLeaveReservation}
-              mode={"contained"}
-              onPress={() => leaveReservation(reservation._id, token)}
-            >
-              <FontAwesome name="remove" size={20} color="black" />
-              <Text style={styles.title}> Quitter</Text>
-            </Button>
-            {reservations.length === 0 && (
-              <Text style={styles.noReserv}>Aucune réservation trouvée</Text>
-            )}
-          </View>
-        ))}
-      </ScrollView>
-      <Text style={styles.section2}>
-        Réservation passées : {pastReservations.length}
-      </Text>
-      <ScrollView>
-        {pastReservations.map((reservation) => (
-          <View
-            key={reservation._id}
-            style={[styles.reservationContainerPast, { opacity: 0.7 }]}
-          >
-            <Text style={styles.textName}>{reservation.name}</Text>
-            <Text style={styles.textDate}>{formatDate(reservation.date)}</Text>
-          </View>
-        ))}
-      </ScrollView>
+              <Text style={styles.textName}>{reservation.name}</Text>
+              <Text style={styles.textDate}>
+                {formatDate(reservation.date)}
+              </Text>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
       <Button
         style={styles.btnAddReservation}
         mode={"contained"}
         onPress={() => navigation.navigate("Home")}
       >
-        <Text style={styles.title}>Nouvelle Reservation ?</Text>
+        <Text style={styles.newReservation}>Nouvelle Reservation ?</Text>
       </Button>
     </KeyboardAvoidingView>
   );
@@ -265,10 +278,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginTop: 8,
+    textAlign: "center",
     color: "rgb(0, 108, 72)",
     fontFamily: "LeagueSpartan-SemiBold",
   },
   section2: {
+    textAlign: "center",
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 40,
@@ -281,5 +296,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 70,
     color: "#888",
+  },
+  newReservation: {
+    color: "white",
+    fontFamily: "LeagueSpartan-SemiBold",
+    fontSize: 16,
+  },
+  scrollView: {
+    flex: 1,
+    width: "100%",
+    paddingHorizontal: 20,
   },
 });

@@ -106,7 +106,7 @@ export default function OthersProfileScreen({ navigation, route }) {
         <Image style={styles.avatar} source={avatar && { uri: `${avatar}` }} />
       </TouchableOpacity>
       <ScrollView style={styles.inputs_container}>
-        <Text style={styles.title}>Mes informations:</Text>
+        <Text style={styles.title}>Mes informations</Text>
      <View style={styles.infos_container}>
             <Text style={styles.infos_title}>Pseudo</Text>
             <Text style={styles.infos_data}>{username}</Text>
@@ -137,7 +137,7 @@ export default function OthersProfileScreen({ navigation, route }) {
         </View>
         {!vacancy && displayCreneaux}
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-        <Text style={styles.title}>Type de cuisine préférée</Text>
+        <Text style={styles.title}>Types de cuisine préférés</Text>
         <View style={styles.typeFoodContainer}>
           {favFood.length === 0 ? (
               <Text style={styles.noInfos}>Aucun type de cuisine préféré</Text>
@@ -150,7 +150,7 @@ export default function OthersProfileScreen({ navigation, route }) {
         </View>
 
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-        <Text style={styles.title}>Vos centre d'intérêts</Text>
+        <Text style={styles.title}>Mes centres d'intérêts</Text>
         <View style={styles.hobbiesContainer}>
           {hobbies.length === 0 ? (
               <Text style={styles.noInfos}>Aucun centre d'intérêt</Text>

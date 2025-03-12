@@ -12,51 +12,14 @@ import { useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { BACKEND_ADRESS } from "../.config";
 
-export default function Invitation() {
-  const user = useSelector((state) => state.user.value);
-  const userToken = user.authentification.token;
-  const handleInvitation = async () => {
-
-    console.log("vous avez invité john doe")
-    const invitationData = {
-      reservationId: restaurantName,
-      userId: userToken,
-    };
-
-    console.log("user token :", userId)
-
-    try {
-      const response = await fetch(
-        `${BACKEND_ADRESS}/reservations/invitation`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(invitationData),
-        }
-      );
-
-      const data = await response.json();
-
-      if (data.result) {
-        Alert.alert("Invitation envoyée!");
-      } else {
-        Alert.alert(
-          "Erreur",
-          data.error || "Impossible d'envoyer une invitation"
-        );
-      }
-    } catch (error) {
-      Alert.alert("Erreur", "Une erreur est survenue.");
-      console.error(error);
-    }
-  };
-
+export default function Invitation({ navigation }) {
   return (
     <View>
       <View>
-        <TouchableOpacity style={styles.registerbtn} onPress={handleInvitation}>
+        <TouchableOpacity
+          style={styles.registerbtn}
+          onPress={() => navigation.navigate("Chat")}
+        >
           <View style={styles.strokeborder}>
             <Ionicons name="person-add-outline" size={32} color="#FFF" />
           </View>

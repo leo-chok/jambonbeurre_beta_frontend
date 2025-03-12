@@ -22,9 +22,11 @@ import {
 } from "react-native-paper";
 import { TABBAR_SIZE } from "../constants";
 import Gif from "../components/Gif";
-import { useSelector } from "react-redux";
+import { logout } from '../reducers/user';
+import { useSelector, useDispatch } from "react-redux";
 
 export default function SettingsScreen({ navigation }) {
+  const dispatch = useDispatch();
   const theme = useTheme();
 
   // Modifier son profil : renvoie sur la page de modification du profil
@@ -32,8 +34,9 @@ export default function SettingsScreen({ navigation }) {
     navigation.navigate("ProfileEdition");
   };
 
-  // Se déconnecter : renvoie sur la page de connexion
+  // Se déconnecter : infos du user à null dans le reducer + renvoie sur la page d'acceuil
   const handleSignOut = () => {
+    dispatch(logout());
     navigation.navigate("SignUp");
   };
 

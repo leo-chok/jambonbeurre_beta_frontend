@@ -101,9 +101,14 @@ export const userSlice = createSlice({
     },
     addToken: (state, action) => {
       state.value.authentification.token = action.payload;
-    }
+    },
+    logout: (state) => {
+      state.value.infos = null;
+      state.value.description = null;
+      state.value.preferences = null;
+    },
   },
 });
 
-export const { updatePosition, addPhoto, removePhoto,updateLunchTime, updateProfile, addToken } = userSlice.actions;
+export const { updatePosition, addPhoto, removePhoto,updateLunchTime, updateProfile, addToken, logout } = userSlice.actions;
 export default userSlice.reducer;

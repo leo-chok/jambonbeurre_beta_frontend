@@ -122,8 +122,13 @@ export default function ProfileScreen({ navigation }) {
       <TouchableOpacity
         onPress={() => handleEditAvatar()}
         style={styles.avatarContainer}
-      >
-        <Image style={styles.avatar} source={avatar && { uri: `${avatar}` }} />
+      > {avatar === "" ? (
+                  <Image
+                    source={require("./../assets/logo/sandwichNoir.png")}
+                    style={styles.avatar}
+                  />
+                ) : (
+        <Image style={styles.avatar} source={avatar && { uri: `${avatar}` }} /> )}
       </TouchableOpacity>
       <ScrollView style={styles.inputs_container}>
         <Text style={styles.title}>Mes informations</Text>
@@ -242,7 +247,6 @@ const styles = StyleSheet.create({
   },
   mainTitle: {
     fontSize: 30,
-    fontWeight: "bold",
     fontWeight: "bold",
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",

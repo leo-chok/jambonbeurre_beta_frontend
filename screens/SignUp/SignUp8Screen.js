@@ -103,6 +103,10 @@ export default function SignUp8Screen({ navigation }) {
       });
   };
 
+  const handleIgnore = () => {
+    navigation.navigate("SignUp9");
+  };
+
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
@@ -186,13 +190,20 @@ export default function SignUp8Screen({ navigation }) {
             ))}
           </View>
         </ScrollView>
-         <Button
-                onPress={() => handleSuivant()}
-                mode={"contained"}
-                style={styles.Button}
-              >
-                <Text style={styles.Active}>Suivant</Text>
-              </Button>
+        <Button
+          onPress={() => handleSuivant()}
+          mode={"contained"}
+          style={styles.Button}
+        >
+          <Text style={styles.Active}>Suivant</Text>
+        </Button>
+        <Button
+          onPress={() => handleIgnore()}
+          mode={"outlined"}
+          style={styles.Button}
+        >
+          <Text style={styles.ignoreButtonActive}>Ignorer</Text>
+        </Button>
       </View>
     </SafeAreaView>
   );
@@ -227,9 +238,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: "center",
   },
- Button: {
+  Button: {
     width: 250,
-    margin: 30,
+    marginTop: 20,
+    marginHorizontal: "auto",
   },
   Active: {
     color: "white",
@@ -240,6 +252,10 @@ const styles = StyleSheet.create({
   },
   badgeButtonActive: {
     color: "white",
+  },
+  ignoreButtonActive: {
+    color: "#fe5747",
+    fontSize: 20,
   },
   badgeButtonDisable: {
     color: "black",
