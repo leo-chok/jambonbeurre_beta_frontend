@@ -26,6 +26,7 @@ import FilterRestaurant from "../components/FilterRestaurant";
 import Restaurant from "../components/Restaurant";
 import mapStyle from "../assets/data/mapStyle";
 import { BACKEND_ADRESS } from "../.config";
+import {Alert} from "react-native"
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import OthersProfileScreen from "./OthersProfileScreen";
 
@@ -53,21 +54,35 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     (async () => {
-      const result = await Location.requestForegroundPermissionsAsync();
-      const status = result?.status;
-
-      if (status === "granted") {
-        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-          const latitude = location.coords.latitude;
-          const longitude = location.coords.longitude;
-
-          // Mise à jour du state local
-          setCurrentPosition({ latitude, longitude });
-
-          // Dispatch directement les nouvelles coordonnées
-          dispatch(updatePosition([longitude, latitude])); // Redux stocke les coordonnées sous forme de tableau [longitude, latitude]
-        });
-      }
+      // Afficher une alerte explicative avant la demande de permission
+      Alert.alert(
+        "Autorisation de localisation",
+        "Nous avons besoin de ta position pour te proposer les meilleurs restaurants autour de toi.",
+        [
+          {
+            text: "Annuler",
+            style: "cancel",
+          },
+          {
+            text: "Autoriser",
+            onPress: async () => {
+              const result = await Location.requestForegroundPermissionsAsync();
+              if (result.status === "granted") {
+                Location.watchPositionAsync(
+                  { distanceInterval: 10 },
+                  (location) => {
+                    const latitude = location.coords.latitude;
+                    const longitude = location.coords.longitude;
+  
+                    setCurrentPosition({ latitude, longitude });
+                    dispatch(updatePosition([longitude, latitude]));
+                  }
+                );
+              } 
+            },
+          },
+        ]
+      );
     })();
   }, []);
 
