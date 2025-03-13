@@ -138,7 +138,7 @@ export default function AgendaScreen({ navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.header}>
-        <Text style={styles.headerText}>Mon Agenda 🗓️ </Text>
+        <Text style={styles.headerText}>Mon agenda 🗓️ </Text>
       </View>
       <View style={{ flex: 1.3, width: "100%" }}>
         <Text style={styles.section}>
@@ -239,11 +239,18 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
   },
   headerText: {
-    marginTop: 50,
+    marginTop: 40,
+    fontSize: 30,
+    color: "#fe5747",
+    fontFamily: "LeagueSpartan-Bold",  },
+
+  mainTitle: {
     fontSize: 30,
     fontWeight: "bold",
-    color: "rgb(254, 87, 71)",
-    fontFamily: "LeagueSpartan-SemiBold",
+    color: "#fe5747",
+    fontFamily: "LeagueSpartan-Bold",
+    alignText: "center",
+    marginRight: 20,
   },
   reservationContainer: {
     width: 330,

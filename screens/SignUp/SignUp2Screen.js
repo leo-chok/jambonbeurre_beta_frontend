@@ -186,11 +186,11 @@ const styles = StyleSheet.create({
   },
   badgeButton: {
     width: 250,
-    margin: 10,
+    margin: 8,
   },
   photoButton: {
     width: 250,
-    margin: 10,
+    margin: 8,
   },
   badgeButtonActive: {
     color: "white",

@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   badgeButton: {
     width: 250,
-    marginTop: 20,
+    marginTop: 16,
     marginHorizontal: "auto",
   },
   badgeButtonActive: {
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   inputField: {
     width: 350,
     height: 50,
-    marginTop: 20,
+    marginBlock: 20,
     borderRadius: 20,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,

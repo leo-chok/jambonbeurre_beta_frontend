@@ -76,23 +76,25 @@ export default function SignUp6Screen({ navigation }) {
       style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View>
+      <View style={styles.main}>
         <Text style={styles.title}>Ton profil 🧑‍💻</Text>
         <Text style={styles.text}>
           Indique nous tes disponibilités, {"\n"}on te proposera des
           utilisateurs {"\n"}sur les mêmes crénaux !
         </Text>
-        {!isLoading ? (
-          <ScrollView style={styles.inputs_container}>
-            <List.Accordion title="Créneaux Déjeuner" style={styles.inputList}>
+        <ScrollView style={styles.inputs_container}>
+            <List.Accordion title="Créneaux déjeuner" style={styles.inputList}>
               <Schedule data={userData?.preferences?.lunchtime} />
             </List.Accordion>
           </ScrollView>
+        {/* {!isLoading ? (
+
         ) : (
           <View style={{ width: 180, height: 180, marginHorizontal: "auto" }}>
-            <Gif />
+            <Gif></Gif>
           </View>
-        )}
+        )} */}
+        <View style={styles.btngroup}>
         <Button
           onPress={() => handleSuivant()}
           mode={"contained"}
@@ -108,6 +110,7 @@ export default function SignUp6Screen({ navigation }) {
           <Text style={styles.ignoreButtonActive}>Ignorer</Text>
         </Button>
       </View>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -119,6 +122,7 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "flex-start",
     alignItems: "center",
+    paddingBlock: 20,
   },
   title: {
     marginTop: 50,
@@ -129,6 +133,14 @@ const styles = StyleSheet.create({
     letterSpacing: -1,
     textAlign: "center",
   },
+  inputs_container: {
+    height: "80%",
+  },
+  btngroup : {
+    position: "absolute",
+    bottom: 30,
+    left: 20,
+  },
   text: {
     fontSize: 20,
     marginBottom: 10,
@@ -137,7 +149,7 @@ const styles = StyleSheet.create({
   },
   badgeButton: {
     width: 250,
-    marginBottom: 20,
+    marginBottom: 15,
   },
   badgeButtonActive: {
     color: "white",

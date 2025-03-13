@@ -112,7 +112,7 @@ console.log(avatar)
     >
       <View style={styles.mainContainer}>
         <View style={styles.topContainer}>
-          <Text style={styles.mainTitle}>Mon Profil 🧑‍💻</Text>
+          <Text style={styles.mainTitle}>Mon profil 🧑‍💻</Text>
           <Button mode="outlined" onPress={() => handleEditProfile()}>
             <Text style={{ color: "#fe5747" }}>Modifier</Text>
           </Button>

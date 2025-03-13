@@ -36,8 +36,8 @@ export default function ChatNewConversationScreen({ navigation }) {
   const token = useSelector((state) => state.user.value.authentification.token);
   const username = useSelector((state) => state.user.value.infos.username);
   const [search, setSearch] = useState("");
- console.log("username : " + username);
-  
+  console.log("username : " + username);
+
   const [listeDesSelectioner, setlisteDesSelectioner] = useState([]); //liste des utilisateurs selectionnés pour la conversation
   let title = "";
 
@@ -99,18 +99,54 @@ export default function ChatNewConversationScreen({ navigation }) {
 
   function FstyleSelectionner(idUser) {
     if (listeDesSelectioner.some((element) => element.id == idUser))
-      return styles.viewSelected;
+      return [styles.viewSelected, styles.textSelected];
     else return styles.view;
   }
 
   // Fonction Searchbar: rechercher un utilisateur
-
 
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      <View style={styles.main}>
+        <Text style={styles.mainTitle}>Mes buddies 💃🕺</Text>
+
+        <Searchbar style={styles.searchbar}
+                placeholder="Rechercher un buddy"
+                onChangeText={(value) => setSearch(value)}
+                value={search}
+      
+              />
+        <ScrollView style={styles.scrollView}>
+          {users &&
+            users
+              .filter((element) => element.infos.username !== username)
+              .filter((element) => element.infos.username.includes(search))
+              .map((element) => (
+                <TouchableOpacity
+                  key={element._id}
+                  style={FstyleSelectionner(element._id)}
+                  onPress={() =>
+                    FselectionneUser(element._id, element.infos.username)
+                  }
+                >
+                  <Text style={styles.textmessage}>
+                    {element.infos.username}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+        </ScrollView>
+        <Button
+          key="footer"
+          style={styles.footer}
+          mode={"contained"}
+          onPress={() => Fvalide()}
+        >
+          <Text style={styles.textButton}>Écrire</Text>
+        </Button>
+      </View>
       <Searchbar style={styles.searchbar}
                 placeholder="Rechercher un buddy"
                 onChangeText={(value) => setSearch(value)}
@@ -156,47 +192,61 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  mainTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#fe5747",
+    fontFamily: "LeagueSpartan-Bold",
+    alignText: "center",
+    marginRight: 20,
+    marginBottom: 16,
+  },
+  main: {
+    width: "100%",
+    paddingTop: 120,
+    paddingBottom: 65,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   scrollView: {
     marginTop: 10,
-    marginBottom: 70,
+    marginBottom: 20,
   },
   footer: {
-    position: "absolute", // Positionne le bouton en bas de l'écran
-    bottom: 0, // Fixe le bouton en bas
+    position: "relative",
+    bottom: 0,
     width: "70%",
     marginHorizontal: "auto",
     marginBottom: 20,
   },
   view: {
-    width: 250,
-    backgroundColor: "rgb(255, 218, 213)", //vert
-    margin: 2,
-    padding: 10,
-    borderRadius: 20,
+    backgroundColor: "rgb(255, 218, 213)",
+    margin: 4,
+    padding: 12,
+    borderRadius: 12,
   },
   viewSelected: {
-    width: 250,
-    backgroundColor: "pink", //vert
-    margin: 20,
-    padding: 10,
-    borderRadius: 20,
+    backgroundColor: "#fe5747",
+    margin: 4,
+    padding: 12,
+    borderRadius: 12,
   },
+
   textmessage: {
-    width: 230,
+    width: 300,
     fontSize: 20,
-    backgroundColor: "rgb(255, 218, 213)", //vert
-    color: "darkGrey",
     fontFamily: "LeagueSpartan-SemiBold",
-    borderRadius: 20,
+    borderRadius: 12,
     textAlign: "center",
-    paddingLeft: 10,
+    padding: 8,
+    color: "20"
   },
+  
   textButton: {
     color: "white",
     fontSize: 20,
   },
   searchbar: {
-    marginTop: 50,
     width: "80%",
     height: 50,
     backgroundColor: "white",
@@ -205,6 +255,6 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderRadius: 30,
     borderTopRightRadius: 30,
-    borderTopLeftRadius: 30,  
+    borderTopLeftRadius: 30,
   },
 });

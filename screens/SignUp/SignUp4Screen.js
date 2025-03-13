@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   badgeButton: {
     width: 250,
-    marginTop: 20,
+    marginTop: 16,
     marginHorizontal: "auto",
   },
   badgeButtonActive: {
