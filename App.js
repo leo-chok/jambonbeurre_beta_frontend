@@ -31,7 +31,7 @@ import UnsubscribeScreen from "./screens/UnsubscribeScreen";
 import ModifyPhotoScreen from "./screens/ModifyPhotoScreen";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { PaperProvider } from "react-native-paper";
+import { PaperProvider, configureFonts, MD2LightTheme } from "react-native-paper";
 
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
@@ -108,6 +108,8 @@ const TabNavigator = () => {
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+
+ 
   const theme = {
     colors: {
       primary: "rgb(254, 87, 71)",

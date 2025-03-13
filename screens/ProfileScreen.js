@@ -51,7 +51,7 @@ export default function ProfileScreen({ navigation }) {
   const lastLunchTime = useSelector(
     (state) => state.user.value.preferences.lunchtime
   );
-console.log(avatar)
+
   // On vient récupérer les informations de l'utilisateur pour les afficher dans les champs
   useEffect(() => {
     // fetch user data
@@ -90,15 +90,15 @@ console.log(avatar)
     return (
       <View key={i} style={styles.creneauxContainer}>
         <View style={styles.creneauxLigne}>
-          <Text>{data.name}</Text>
+          <Text style={styles.creneauxText}>{data.name}</Text>
           {data.worked ? (
             <View style={styles.creneauxLigne}>
-              <Text>{data.start} à </Text>
-              <Text>{data.stop}</Text>
+              <Text style={styles.creneauxText}>{data.start} à </Text>
+              <Text style={styles.creneauxText}>{data.stop}</Text>
             </View>
           ) : (
             <View style={styles.creneauxLigne}>
-              <Text>Indisponible </Text>
+              <Text style={styles.creneauxText}>Indisponible</Text>
             </View>
           )}
         </View>
@@ -162,7 +162,7 @@ console.log(avatar)
           <View style={styles.vacancesContainer}>
             {vacancy && <Text>En vacances</Text>}
           </View>
-          {!vacancy && displayCreneaux}
+          <View style={styles.gloia}>{!vacancy && displayCreneaux}</View>
           <Divider style={{ marginTop: 20, marginBottom: 20 }} />
           <Text style={styles.title}>Types de cuisine préférés</Text>
           <View style={styles.typeFoodContainer}>
@@ -230,6 +230,7 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "flex-start",
     alignItems: "center",
+    fontFamily: "Montserrat-Medium",
   },
   mainContainer: {
     flex: 1,
@@ -276,18 +277,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     marginBottom: 10,
+    fontFamily: "Montserrat-Medium",
   },
   infos_title: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-start",
     fontSize: 16,
+    fontFamily: "Montserrat-Medium",
     fontWeight: "bold",
     width: "40%",
   },
   infos_data: {
     fontSize: 15,
     fontWeight: 300,
+    fontFamily: "Montserrat-Medium",
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
@@ -303,6 +307,7 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign: "left",
     marginBottom: 10,
+    fontFamily: "Montserrat-Medium",
   },
   inputs_container: {
     width: "80%",
@@ -311,22 +316,37 @@ const styles = StyleSheet.create({
   inputField: {
     marginTop: 10,
     width: "100%",
+    fontFamily: "Montserrat-Medium",
   },
   vacancesContainer: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    fontFamily: "Montserrat-Medium",
+  },
+  gloia: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "100%",
+    fontFamily: "Montserrat-Medium",
   },
   creneauxContainer: {
     display: "flex",
     flexDirection: "column",
-    width: "100%",
+    width: "80%",
+    fontFamily: "Montserrat-Medium",
   },
   creneauxLigne: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
+    fontFamily: "Montserrat-Medium",
+  },
+  creneauxText: {
+    fontFamily: "Montserrat-Medium",
+    
   },
   inputList: {
     marginTop: 10,

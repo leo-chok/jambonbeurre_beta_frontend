@@ -56,7 +56,7 @@ export default function MakeReservation(props) {
       });
 
       const data = await response.json();
-      console.log(reservationData);
+      
 
       if (data.result) {
         setReservationConfirmed(true);

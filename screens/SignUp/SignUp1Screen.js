@@ -42,9 +42,7 @@ export default function SignUp1Screen({ navigation }) {
   const userdata = { email: email, password: password };
 
   const hasErrors = () => {
-    
-      return !email.includes("@");
-    
+    return !email.includes("@");
   };
   const handleSuivant = () => {
     if (password !== password2) {
@@ -57,9 +55,12 @@ export default function SignUp1Screen({ navigation }) {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
-          dispatch(addToken(data.newUser));
-          navigation.navigate("SignUp2");
+          if (data.result) {
+            dispatch(addToken(data.newUser));
+            navigation.navigate("SignUp2");
+          }else{
+             alert("Un compte utilise déjà cette adresse email");
+          }
         })
         .catch((error) => {
           console.error("Erreur:", error);
@@ -87,12 +88,12 @@ export default function SignUp1Screen({ navigation }) {
             style={styles.inputField}
             underlineColor="transparent"
           />
-          {email.length > 3 && 
+          {email.length > 3 && (
             <HelperText type="error" visible={hasErrors()}>
               Email address is invalid!
             </HelperText>
-          }
-          
+          )}
+
           <Text style={styles.fieldTitle}>Ton mot de passe</Text>
           <TextInput
             placeholder={"Ton mot de passe"}
@@ -114,7 +115,7 @@ export default function SignUp1Screen({ navigation }) {
           <View style={styles.submitContainer}>
             <Button
               // Le mode du bouton change si les 3 champs sont remplis
-              mode={(isValid ? "contained" : "contained-tonal")}
+              mode={isValid ? "contained" : "contained-tonal"}
               onPress={() => handleSuivant()}
               style={styles.badgeButton}
             >
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    },
+  },
   submitContainer: {
     display: "flex",
     justifyContent: "center",
