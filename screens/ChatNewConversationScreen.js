@@ -23,14 +23,14 @@ import {
   Snackbar,
   useTheme,
 } from "react-native-paper";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { addDiscussionToStore } from "../reducers/discussions";
 
 import { BACKEND_ADRESS } from "../.config";
 import { ScreenStackHeaderSearchBarView } from "react-native-screens";
 export default function ChatNewConversationScreen({ navigation }) {
   const theme = useTheme();
-  const dispatch = useDispatch();
+
 
   const [users, setusers] = useState([]);
   const token = useSelector((state) => state.user.value.authentification.token);
@@ -76,6 +76,7 @@ export default function ChatNewConversationScreen({ navigation }) {
         console.log(data.Discussion);
         // dispatch(addDiscussionToStore(data.Discussion));
         //console.log("dispatch");
+        setlisteDesSelectioner([]);
         navigation.navigate("ChatConversation", data.Discussion);
       }); //then fetch
   } //function
@@ -83,6 +84,7 @@ export default function ChatNewConversationScreen({ navigation }) {
   function FselectionneUser(idUser, username) {
     console.log("selectionne user");
     if (listeDesSelectioner.some((element) => element.id == idUser)) {
+      //deselection du user
       setlisteDesSelectioner((listeDesSelectioner) =>
         listeDesSelectioner.filter((element) => element.id !== idUser)
       );
@@ -109,13 +111,14 @@ export default function ChatNewConversationScreen({ navigation }) {
       style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <TextInput
-        style={styles.searchbar}
-        placeholder="Rechercher un buddy"
-        onChangeText={(value) => setSearch(value)}
-        value={search}
-        underlineColor="transparent"
-      />
+      <Searchbar style={styles.searchbar}
+                placeholder="Rechercher un buddy"
+                onChangeText={(value) => setSearch(value)}
+                value={search}
+               // onIconPress={handleSearch}
+               // onSubmitEditing={handleSearch}
+              />
+     
       <ScrollView style={styles.scrollView}>
         {users &&
           users
@@ -195,6 +198,7 @@ const styles = StyleSheet.create({
   searchbar: {
     marginTop: 50,
     width: "80%",
+    height: 50,
     backgroundColor: "white",
     shadowOpacity: 0.5,
     shadowRadius: 6,
