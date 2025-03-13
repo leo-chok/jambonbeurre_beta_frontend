@@ -38,8 +38,8 @@ export default function ChatNewConversationScreen({ navigation }) {
   const [search, setSearch] = useState("");
   console.log("username : " + username);
   const me = useSelector((state) => state.user.value);
-  const suggestBuddies = users.slice(0,3)
-const restBuddies = users.slice(3)
+  const suggestBuddies = users.slice(0, 3);
+  const restBuddies = users.slice(3);
 
   const [listeDesSelectioner, setlisteDesSelectioner] = useState([]); //liste des utilisateurs selectionnés pour la conversation
   let title = "";
@@ -60,7 +60,7 @@ const restBuddies = users.slice(3)
             ) {
               score += 1;
             }
-            
+
             if (
               me.preferences.languages.some((languages) =>
                 user.preferences.languages.includes(languages)
@@ -131,7 +131,7 @@ const restBuddies = users.slice(3)
       return styles.viewSelected;
     else return styles.view;
   }
-console.log(users)
+  console.log(users);
   // Fonction Searchbar: rechercher un utilisateur
 
   return (
@@ -146,56 +146,65 @@ console.log(users)
         value={search}
         underlineColor="transparent"
       />
-      <Text style={styles.section} >Suggestions Buddies : </Text>
-      <ScrollView style={{ flex: 1, width: "100%", paddingTop : 20}}>
-      <View style={styles.buddies}>
-        {users &&
-          suggestBuddies
-            .filter((element) => element.infos.username !== username)
-            .filter((element) => element.infos.username.includes(search))
-            .map((element) => (
-              <TouchableOpacity
-            
-                key={element._id}
-                style={FstyleSelectionner(element._id)}
-                onPress={() =>
-                  FselectionneUser(element._id, element.infos.username)
-                }
-              >
-                <Image
-                                source={{ uri: element.infos.avatar }}
-                                style={styles.avatar}
-                              />
-                <Text style={styles.textmessage}>{element.infos.username}</Text>
-              </TouchableOpacity>
-            ))}
-            </View>
+      <Text style={styles.section}>Suggestions Buddies : </Text>
+      <ScrollView style={{ flex: 1, width: "100%", paddingTop: 20 }}>
+        <View style={styles.buddies}>
+          {users &&
+            suggestBuddies
+              .filter((element) => element.infos.username !== username)
+              .filter((element) => element.infos.username.includes(search))
+              .map((element) => (
+                <TouchableOpacity
+                  key={element._id}
+                  style={FstyleSelectionner(element._id)}
+                  onPress={() =>
+                    FselectionneUser(element._id, element.infos.username)
+                  }
+                >
+                  <Image
+                    source={{ uri: element.infos.avatar }}
+                    style={styles.avatar}
+                  />
+                  <Text style={styles.textmessage}>
+                    {element.infos.username}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+        </View>
       </ScrollView>
       <Text style={styles.section2}>Contacts : </Text>
-      <ScrollView style={{ flex: 1, width: "100%", paddingBottom: 230, paddingTop : 7, marginBottom: 80,}}>
-       
+      <ScrollView
+        style={{
+          flex: 1,
+          width: "100%",
+          paddingBottom: 230,
+          paddingTop: 7,
+          marginBottom: 80,
+        }}
+      >
         <View style={styles.buddies}>
-          
           {users &&
-          restBuddies
-            .filter((element) => element.infos.username !== username)
-            .filter((element) => element.infos.username.includes(search))
-            .map((element) => (
-              <TouchableOpacity
-                key={element._id}
-                style={FstyleSelectionner(element._id)}
-                onPress={() =>
-                  FselectionneUser(element._id, element.infos.username)
-                }
-              >
-                <Image
-                                source={{ uri: element.infos.avatar }}
-                                style={styles.avatar}
-                              />
-                <Text style={styles.textmessage}>{element.infos.username}</Text>
-              </TouchableOpacity>
-            ))}
-            </View>
+            restBuddies
+              .filter((element) => element.infos.username !== username)
+              .filter((element) => element.infos.username.includes(search))
+              .map((element) => (
+                <TouchableOpacity
+                  key={element._id}
+                  style={FstyleSelectionner(element._id)}
+                  onPress={() =>
+                    FselectionneUser(element._id, element.infos.username)
+                  }
+                >
+                  <Image
+                    source={{ uri: element.infos.avatar }}
+                    style={styles.avatar}
+                  />
+                  <Text style={styles.textmessage}>
+                    {element.infos.username}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+        </View>
       </ScrollView>
       <Button
         key="footer"
@@ -227,7 +236,7 @@ const styles = StyleSheet.create({
   view: {
     width: 330,
     height: 100,
-    backgroundColor: "rgb(255, 218, 213)", 
+    backgroundColor: "rgb(255, 218, 213)",
     margin: 2,
     padding: 10,
     borderRadius: 20,
@@ -243,14 +252,14 @@ const styles = StyleSheet.create({
     width: 230,
     paddingVertical: 20,
     paddingHorizontal: 20,
-     position: "absolute",
-     marginLeft: 80,
+    position: "absolute",
+    marginLeft: 80,
     height: 60,
     fontSize: 20,
     color: "darkGrey",
     fontFamily: "LeagueSpartan-SemiBold",
     borderRadius: 20,
-    textAlign: 'justify',
+    textAlign: "justify",
     paddingLeft: 30,
     paddingTop: 40,
   },
@@ -286,8 +295,8 @@ const styles = StyleSheet.create({
     color: "rgb(0, 108, 72)",
     fontFamily: "LeagueSpartan-SemiBold",
   },
-  buddies : {
-    alignItems: 'center',
+  buddies: {
+    alignItems: "center",
   },
   avatar: {
     marginRight: 245,
