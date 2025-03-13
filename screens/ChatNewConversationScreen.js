@@ -190,10 +190,11 @@ const styles = StyleSheet.create({
   },
   main: {
     width: "100%",
-    paddingTop: 160,
-    paddingBottom: 65,
+    paddingTop: 90,
+    paddingBottom: 20,
     justifyContent: "center",
     alignItems: "center",
+    height: "100%",
   },
   scrollView: {
     marginTop: 10,
