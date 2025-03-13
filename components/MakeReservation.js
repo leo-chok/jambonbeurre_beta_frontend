@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Image,
   Platform,
+  ScrollView,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSelector } from "react-redux";
@@ -73,44 +74,7 @@ export default function MakeReservation(props) {
       setLoading(false);
     }
   };
-  // // Fonction pour formater la date de la réservation au format souhaité
 
-  // let reservationDate = reservationData.data?.[0].date;
-  // const formatDate = (dateString) => {
-  //   const jours = [
-  //     "Dimanche",
-  //     "Lundi",
-  //     "Mardi",
-  //     "Mercredi",
-  //     "Jeudi",
-  //     "Vendredi",
-  //     "Samedi",
-  //   ];
-  //   const mois = [
-  //     "Janvier",
-  //     "Février",
-  //     "Mars",
-  //     "Avril",
-  //     "Mai",
-  //     "Juin",
-  //     "Juillet",
-  //     "Août",
-  //     "Septembre",
-  //     "Octobre",
-  //     "Novembre",
-  //     "Décembre",
-  //   ];
-
-  //   const date = new Date(dateString);
-
-  //   const jourSemaine = jours[date.getUTCDay()];
-  //   const jour = date.getUTCDate();
-  //   const moisNom = mois[date.getUTCMonth()];
-  //   const heures = date.getUTCHours().toString().padStart(2, "0");
-  //   const minutes = date.getUTCMinutes().toString().padStart(2, "0");
-
-  //   return `${jourSemaine} ${jour} ${moisNom} - ${heures}h${minutes}`;
-  // };
 
   const selectTimePicker = () => {
     if (Platform.OS === "ios") {
@@ -170,7 +134,7 @@ export default function MakeReservation(props) {
           </View>
 
           {showPicker && timepicker}
-
+            <ScrollView>
           <View style={styles.gallery}>
             {reservationConfirmed ? (
               <View style={styles.row}>
@@ -206,6 +170,7 @@ export default function MakeReservation(props) {
               </View>
             )}
           </View>
+          </ScrollView>
         </View>
       </View>
     </View>

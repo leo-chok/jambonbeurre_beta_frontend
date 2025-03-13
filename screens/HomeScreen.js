@@ -38,7 +38,6 @@ export default function HomeScreen({ navigation }) {
   const filterRestaurant = useSelector((state) => state.restaurantFilter.value);
   const userReducer = useSelector((state) => state.user.value);
 
-
   const [currentPosition, setCurrentPosition] = useState({
     latitude: 0,
     longitude: 0,
@@ -258,7 +257,7 @@ export default function HomeScreen({ navigation }) {
         });
 
         setVisible(true); // Afficher la modale
-        setSearchQuery("")
+        setSearchQuery("");
 
         // Décaler la vue vers le haut pour éviter que le marker soit caché
         if (restaurantLocation) {
@@ -274,7 +273,6 @@ export default function HomeScreen({ navigation }) {
         }
       })
       .catch((error) => console.error("Erreur lors de la recherche :", error));
-      
   };
 
   //////////////////////MODAL DES FILTRES//////////////////////
@@ -480,11 +478,11 @@ export default function HomeScreen({ navigation }) {
           value={searchQuery}
         />
         <View style={styles.mapActions}>
-          <TouchableOpacity activeOpacity={0.8} onPress={() => handleCenter()}>
-            <Ionicons name="locate" size={32} color="#202020" />
-          </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.8} onPress={() => handleFilter()}>
             <Ionicons name="options-outline" size={32} color="#202020" />
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.8} onPress={() => handleCenter()}>
+            <Ionicons name="locate" size={32} color="#202020" />
           </TouchableOpacity>
         </View>
       </View>
@@ -520,9 +518,15 @@ const styles = StyleSheet.create({
   },
   mapActions: {
     position: "absolute",
-    top: "65%",
-    right: 28,
+    top: "15%",
+    right: 16,
     gap: 16,
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 50,
+    shadowOpacity: 0.5,
+    shadowRadius: 6,
+    elevation: 5,
   },
 
   modalStyle: {
