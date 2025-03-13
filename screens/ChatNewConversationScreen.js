@@ -36,24 +36,58 @@ export default function ChatNewConversationScreen({ navigation }) {
   const token = useSelector((state) => state.user.value.authentification.token);
   const username = useSelector((state) => state.user.value.infos.username);
   const [search, setSearch] = useState("");
- console.log("username : " + username);
-  
+  console.log("username : " + username);
+  const me = useSelector((state) => state.user.value);
+  const suggestBuddies = users.slice(0,3)
+const restBuddies = users.slice(3)
+
   const [listeDesSelectioner, setlisteDesSelectioner] = useState([]); //liste des utilisateurs selectionnés pour la conversation
   let title = "";
 
   useEffect(() => {
     console.log("new conversation");
     //chargement de tous les utilisateurs
-    fetch(`${BACKEND_ADRESS}/chats/allUsers`)
+    fetch(`${BACKEND_ADRESS}/users/all`)
       .then((response) => response.json())
       .then((data) => {
-        setusers(data.listUsers); //memorise la liste de tous les utilisateurs
-        // console.log(data);
-      }); //fetch
+        const filteredUsers = data.listUsers
+          .map((user) => {
+            let score = 0;
+            if (
+              me.preferences.hobbies.some((hobby) =>
+                user.preferences.hobbies.includes(hobby)
+              )
+            ) {
+              score += 1;
+            }
+            
+            if (
+              me.preferences.languages.some((languages) =>
+                user.preferences.languages.includes(languages)
+              )
+            ) {
+              score += 1;
+            }
+            if (
+              me.preferences.favFood.some((favFood) =>
+                user.preferences.favFood.includes(favFood)
+              )
+            ) {
+              score += 1;
+            }
+            return { ...user, score };
+          })
+          .sort((a, b) => b.score - a.score);
+        setusers(filteredUsers); //memorise la liste de tous les utilisateurs
+        if (filteredUsers.length === 0) {
+          setusers(data.listUsers);
+        } else {
+          setusers(filteredUsers);
+        }
+      });
   }, []);
 
   function Fvalide() {
-    console.log("fonction valide");
     let title = listeDesSelectioner
       .map((element) => element.username)
       .join("  -  ");
@@ -71,9 +105,6 @@ export default function ChatNewConversationScreen({ navigation }) {
     }) //fetch
       .then((response) => response.json())
       .then((data) => {
-        console.log("conversation creer : ");
-        // console.log(data);
-        console.log(data.Discussion);
         // dispatch(addDiscussionToStore(data.Discussion));
         //console.log("dispatch");
         navigation.navigate("ChatConversation", data.Discussion);
@@ -100,9 +131,8 @@ export default function ChatNewConversationScreen({ navigation }) {
       return styles.viewSelected;
     else return styles.view;
   }
-
+console.log(users)
   // Fonction Searchbar: rechercher un utilisateur
-
 
   return (
     <KeyboardAvoidingView
@@ -116,9 +146,38 @@ export default function ChatNewConversationScreen({ navigation }) {
         value={search}
         underlineColor="transparent"
       />
-      <ScrollView style={styles.scrollView}>
+      <Text style={styles.section} >Suggestions Buddies : </Text>
+      <ScrollView style={{ flex: 1, width: "100%", paddingTop : 20}}>
+      <View style={styles.buddies}>
         {users &&
-          users
+          suggestBuddies
+            .filter((element) => element.infos.username !== username)
+            .filter((element) => element.infos.username.includes(search))
+            .map((element) => (
+              <TouchableOpacity
+            
+                key={element._id}
+                style={FstyleSelectionner(element._id)}
+                onPress={() =>
+                  FselectionneUser(element._id, element.infos.username)
+                }
+              >
+                <Image
+                                source={{ uri: element.infos.avatar }}
+                                style={styles.avatar}
+                              />
+                <Text style={styles.textmessage}>{element.infos.username}</Text>
+              </TouchableOpacity>
+            ))}
+            </View>
+      </ScrollView>
+      <Text style={styles.section2}>Contacts : </Text>
+      <ScrollView style={{ flex: 1, width: "100%", paddingBottom: 230, paddingTop : 7, marginBottom: 80,}}>
+       
+        <View style={styles.buddies}>
+          
+          {users &&
+          restBuddies
             .filter((element) => element.infos.username !== username)
             .filter((element) => element.infos.username.includes(search))
             .map((element) => (
@@ -129,9 +188,14 @@ export default function ChatNewConversationScreen({ navigation }) {
                   FselectionneUser(element._id, element.infos.username)
                 }
               >
+                <Image
+                                source={{ uri: element.infos.avatar }}
+                                style={styles.avatar}
+                              />
                 <Text style={styles.textmessage}>{element.infos.username}</Text>
               </TouchableOpacity>
             ))}
+            </View>
       </ScrollView>
       <Button
         key="footer"
@@ -139,7 +203,7 @@ export default function ChatNewConversationScreen({ navigation }) {
         mode={"contained"}
         onPress={() => Fvalide()}
       >
-        <Text style={styles.textButton}>Écrire</Text>
+        <Text style={styles.textButton}>Nouveau message</Text>
       </Button>
     </KeyboardAvoidingView>
   );
@@ -153,40 +217,42 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  scrollView: {
-    marginTop: 10,
-    marginBottom: 70,
-  },
   footer: {
-    position: "absolute", // Positionne le bouton en bas de l'écran
-    bottom: 0, // Fixe le bouton en bas
+    position: "absolute",
+    bottom: 0,
     width: "70%",
     marginHorizontal: "auto",
     marginBottom: 20,
   },
   view: {
-    width: 250,
-    backgroundColor: "rgb(255, 218, 213)", //vert
+    width: 330,
+    height: 100,
+    backgroundColor: "rgb(255, 218, 213)", 
     margin: 2,
     padding: 10,
     borderRadius: 20,
   },
   viewSelected: {
     width: 250,
-    backgroundColor: "pink", //vert
+    backgroundColor: "pink",
     margin: 20,
     padding: 10,
     borderRadius: 20,
   },
   textmessage: {
     width: 230,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+     position: "absolute",
+     marginLeft: 80,
+    height: 60,
     fontSize: 20,
-    backgroundColor: "rgb(255, 218, 213)", //vert
     color: "darkGrey",
     fontFamily: "LeagueSpartan-SemiBold",
     borderRadius: 20,
-    textAlign: "center",
-    paddingLeft: 10,
+    textAlign: 'justify',
+    paddingLeft: 30,
+    paddingTop: 40,
   },
   textButton: {
     color: "white",
@@ -201,6 +267,35 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderRadius: 30,
     borderTopRightRadius: 30,
-    borderTopLeftRadius: 30,  
+    borderTopLeftRadius: 30,
+  },
+  section: {
+    paddingTop: 40,
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "rgb(0, 108, 72)",
+    fontFamily: "LeagueSpartan-SemiBold",
+  },
+  section2: {
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    paddingTop: 10,
+    color: "rgb(0, 108, 72)",
+    fontFamily: "LeagueSpartan-SemiBold",
+  },
+  buddies : {
+    alignItems: 'center',
+  },
+  avatar: {
+    marginRight: 245,
+    width: 65,
+    height: 65,
+    borderRadius: 50,
+    marginTop: 8,
+    marginBottom: 10,
+    marginLeft: 10,
   },
 });
