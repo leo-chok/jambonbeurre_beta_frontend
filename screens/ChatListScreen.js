@@ -27,6 +27,7 @@ import { chargeDiscussions } from "../reducers/discussions";
 import { BACKEND_ADRESS } from "../.config";
 import Feather from "@expo/vector-icons/Feather";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
+import Gif from "../components/Gif";
 
 export default function ChatListScreen({ navigation }) {
   const theme = useTheme();
@@ -35,7 +36,6 @@ export default function ChatListScreen({ navigation }) {
     (state) => state.discussions.value.discussions
   );
 
-
   const token = useSelector((state) => state.user.value.authentification.token);
   const dispatch = useDispatch();
 
@@ -43,7 +43,6 @@ export default function ChatListScreen({ navigation }) {
   useEffect(() => {
     // Créer un timer pour actualiser toutes les 5 secondes
     const interval = setInterval(() => {
-
       fetch(`${BACKEND_ADRESS}/chats/getAllChat/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -59,6 +58,11 @@ export default function ChatListScreen({ navigation }) {
     return () => clearInterval(interval);
   }, []);
 
+  let isLoading = true;
+  if (discussions.length > 0) {
+    isLoading = false;
+  }
+
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
@@ -72,9 +76,20 @@ export default function ChatListScreen({ navigation }) {
           onPress={() => navigation.navigate("ChatNewConversation")}
           mode={"contained"}
         >
-
           <Text style={styles.textNewMessage}> Nouveau message </Text>
         </Button>
+        {isLoading && (
+          <View
+            style={{
+              width: 180,
+              height: 180,
+              marginHorizontal: "auto",
+              marginBlock: "auto",
+            }}
+          >
+            <Gif />
+          </View>
+        )}
         <ScrollView style={styles.scrollView}>
           {discussions
             .slice()
@@ -149,7 +164,6 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
     alignContent: "center",
     alignItems: "center",
-
   },
 
   textNewMessage: {
