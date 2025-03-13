@@ -34,6 +34,7 @@ export default function ChatListScreen({ navigation }) {
     (state) => state.discussions.value.discussions
   );
 
+
   const token = useSelector((state) => state.user.value.authentification.token);
   //console.log("mytoken");
   //console.log(token);
