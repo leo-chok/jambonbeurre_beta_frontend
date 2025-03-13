@@ -6,7 +6,7 @@ const initialState = {
       username: "",
       firstname: "",
       lastname: "",
-      avatar: "",
+      avatar: "https://res.cloudinary.com/drwls8kx4/image/upload/v1741857431/utqbtzyo2dmoenyl5czv.png",
       online: true,
       location: {
         type: "Point",
@@ -108,7 +108,7 @@ export const userSlice = createSlice({
           username: "",
           firstname: "",
           lastname: "",
-          avatar: "",
+          avatar: "https://res.cloudinary.com/drwls8kx4/image/upload/v1741857431/utqbtzyo2dmoenyl5czv.png",
           online: true,
           location: {
             type: "Point",
