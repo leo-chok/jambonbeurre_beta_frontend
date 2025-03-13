@@ -7,6 +7,7 @@ import {
   Alert,
   ActivityIndicator,
   Image,
+  Platform,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSelector } from "react-redux";
@@ -110,6 +111,37 @@ export default function MakeReservation(props) {
 
   //   return `${jourSemaine} ${jour} ${moisNom} - ${heures}h${minutes}`;
   // };
+
+  const selectTimePicker = () => {
+    if (Platform.OS === "ios") {
+      return (
+        <DateTimePicker
+          value={date}
+          mode="datetime"
+          display="default"
+          onChange={(event, selectedDate) => {
+            setShowPicker(false);
+            if (selectedDate) setDate(selectedDate);
+          }}
+        />
+      );
+    } else {
+      return (
+      <DateTimePicker
+        value={date}
+        mode="time"
+        display="default"
+        onChange={(event, selectedDate) => {
+          setShowPicker(false);
+          if (selectedDate) setDate(selectedDate);
+        }}
+      />
+      )
+    }
+  };
+
+  const timepicker = selectTimePicker();
+
   return (
     <View style={styles.container}>
       <View style={styles.main}>
@@ -137,17 +169,7 @@ export default function MakeReservation(props) {
             )}
           </View>
 
-          {showPicker && (
-            <DateTimePicker
-              value={date}
-              mode="datetime"
-              display="default"
-              onChange={(event, selectedDate) => {
-                setShowPicker(false);
-                if (selectedDate) setDate(selectedDate);
-              }}
-            />
-          )}
+          {showPicker && timepicker}
 
           <View style={styles.gallery}>
             {reservationConfirmed ? (
