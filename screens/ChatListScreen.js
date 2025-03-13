@@ -37,28 +37,20 @@ export default function ChatListScreen({ navigation }) {
 
 
   const token = useSelector((state) => state.user.value.authentification.token);
-  //console.log("mytoken");
-  //console.log(token);
-  //console.log("useselector discussion :");
-  //console.log(discussions);
   const dispatch = useDispatch();
 
   //chargement de toutes les discussions de l'utilisateur à partir de son token
   useEffect(() => {
-    console.log("chat list screen ");
     // Créer un timer pour actualiser toutes les 5 secondes
     const interval = setInterval(() => {
-      console.log("actualisation de la liste des conversations");
-      //console.log("username : "+username);
+
       fetch(`${BACKEND_ADRESS}/chats/getAllChat/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: token }),
-      }) //fetch
+      })
         .then((response) => response.json())
         .then((data) => {
-          // console.log(data.discussion);
-          // console.log("data : "+token);
           if (data.discussion) {
             dispatch(chargeDiscussions(data.discussion));
           }

@@ -36,27 +36,18 @@ export default function ChatConversationScreen({ route }) {
   const token = useSelector((state) => state.user.value.authentification.token);
 
   useEffect(() => {
-    console.log("chat conversation");
     setdiscussion(route.params);
-
-    console.log("discussion par params");
-    //console.log(discussion);
-    //console.log(route.params);
 
     fetch(`${BACKEND_ADRESS}/users/${token}`)
       .then((response) => response.json())
       .then((data) => {
-        // console.log("data conversation fetch : ");
-        //console.log("iduserr  : "+data.userInfos[0]._id);
         setIdUser(data.userInfos[0]._id); //memorise l'id de l'utilisateur
       }); //then fetch
 
     // Créer un timer pour actualiser toutes les 5 secondes
     const interval = setInterval(() => {
-      console.log("actualisation de la conversation");
       if (discussion._id == undefined) return;
 
-      console.log("id discussion : " + discussion._id);
       fetch(`${BACKEND_ADRESS}/chats/afficheUneDiscussion/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -64,8 +55,6 @@ export default function ChatConversationScreen({ route }) {
       }) //fetch
         .then((response) => response.json())
         .then((data) => {
-          //console.log("data conversation fetch : ");
-          console.log(data.discussion);
           setdiscussion(data.discussion);
         }); //fetch
     }, 5000);
@@ -74,7 +63,6 @@ export default function ChatConversationScreen({ route }) {
 
   function handleSubmit() {
     if(inputnouveauMessage=="") return;
-    console.log("nouveau message");
     fetch(`${BACKEND_ADRESS}/chats/creerUnMessage/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -95,15 +83,11 @@ export default function ChatConversationScreen({ route }) {
         }) //fetch
           .then((response) => response.json())
           .then((data) => {
-            //console.log("data conversation fetch : ");
-            //console.log(data);
             setdiscussion(data.discussion);
           }); //fetch
       });
   }
   function FstyleMessage(element) {
-    // console.log("sender : "+ element.idSender);
-    // console.log("idUser : "+idUser);
     if (element.idSender == idUser) return styles.myMessage;
     else return styles.notmyMessage;
   }
@@ -194,6 +178,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     alignSelf: "flex-end",
     margin: 2,
+
   },
   notmyMessage: {
     width: 250,
@@ -204,16 +189,15 @@ const styles = StyleSheet.create({
     margin: 2,
   },
   title: {
-    marginTop: 50,
+    marginTop: 80,
     marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,  
     marginHorizontal: "auto",
-    width: "100%",
     textAlign: "center",
-    fontSize: 30,
-    fontWeight: "bold",
     color: "#fe5747",
-    fontFamily: "LeagueSpartan-SemiBold",
-    letterSpacing: -1,
+    fontSize: 30,
+    fontFamily: "LeagueSpartan-Bold",
   },
   buttonEnvoyer: {
     width: 250,
