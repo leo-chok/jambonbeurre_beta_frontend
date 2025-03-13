@@ -23,10 +23,10 @@ export default function AgendaInvitListScreen({ route, navigation }) {
   const { reservationId } = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [inviteUser, setInviteUser] = useState();
-  const me = useSelector((state) => state.user.value)
-const suggestBuddies = users.slice(0,3)
-const restBuddies = users.slice(3)
-  
+  const me = useSelector((state) => state.user.value);
+  const suggestBuddies = users.slice(0, 3);
+  const restBuddies = users.slice(3);
+
   useEffect(() => {
     fetch(BACKEND_ADRESS + "/users/all")
       .then((response) => response.json())
@@ -87,7 +87,7 @@ const restBuddies = users.slice(3)
         <Text style={styles.headerText}>Mes Contacts 👥</Text>
       </View>
       <Text style={styles.section}>Mes suggestions : </Text>
-      <ScrollView style={{ flex: 1, width: "100%", paddingBottom: 300, paddingTop : 5,}}>
+      <View style={{ height: 300, width: 360, paddingTop: 20 }}>
         {users.length > 0 ? (
           suggestBuddies.map((user) => (
             <View key={user._id} style={styles.userItem}>
@@ -125,6 +125,7 @@ const restBuddies = users.slice(3)
                   })
                 }
               >
+                
                 <Text style={styles.userText}>{user.infos.username}</Text>
               </Button>
               <Button
@@ -140,9 +141,11 @@ const restBuddies = users.slice(3)
         ) : (
           <Text style={styles.noUsers}>Aucun utilisateur trouvé</Text>
         )}
-      </ScrollView>
-<Text style={[styles.section2, styles.otherList]}>Autres contacts : </Text>
-      <ScrollView style={{ flex: 1, width: "100%", paddingBottom: 300, paddingTop : 5, marginBottom: 5, backgroundColor:'red'}}>
+      </View>
+      <Text style={styles.section2}>Autres contacts : </Text>
+      <ScrollView
+        style={{ height: "100%", width: 360, marginTop: 10, flex: 1 }}
+      >
         {users.length > 0 ? (
           restBuddies.map((user) => (
             <View key={user._id} style={styles.userItem}>
@@ -211,7 +214,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "#fcf4e9",
   },
   header: {
@@ -229,24 +231,23 @@ const styles = StyleSheet.create({
     fontFamily: "LeagueSpartan-SemiBold",
   },
   userItem: {
-    // height: 80,
-    width: 350,
-    paddingBottom: 20,
+    display: "flex",
+    flexDirection: "row",
+    paddingHorizontal: 20, 
     marginVertical: 8,
     backgroundColor: "rgb(255, 218, 213)",
     borderRadius: 10,
     alignItems: "center",
-    marginLeft: 20
-  },
-  otherList: {
-
+    justifyContent: "space-between",
+    height: 70,
+    padding: 10,
   },
   userText: {
-    marginTop: 50,
     fontSize: 20,
     fontWeight: "bold",
     flexWrap: "wrap",
-    maxWidth: 200,
+    maxWidth: 150,
+    textAlign: "center",
     textDecorationLine: "underline",
     fontFamily: "LeagueSpartan-SemiBold",
     color: "rgb(254, 87, 71)",
@@ -258,9 +259,8 @@ const styles = StyleSheet.create({
     color: "#888",
   },
   goBackButton: {
-    flex: 1,
-    marginTop: 170,
-    padding: 20,
+    marginBottom: 40,
+
     backgroundColor: "#fcf4e9",
     borderRadius: 10,
   },
@@ -271,16 +271,10 @@ const styles = StyleSheet.create({
     fontFamily: "LeagueSpartan-SemiBold",
   },
   btnInvite: {
-    flex: 1,
-    marginLeft: "70%",
     borderRadius: 10,
   },
-  btnUsername: {
-    marginTop: -195,
-    marginBottom: 50,
-  },
+  btnUsername: {},
   avatar: {
-    marginRight: 245,
     width: 65,
     height: 65,
     borderRadius: 50,
@@ -311,19 +305,20 @@ const styles = StyleSheet.create({
     color: "rgb(0, 108, 72)",
   },
   section: {
+    paddingTop: 10,
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
     color: "rgb(0, 108, 72)",
-    paddingBottom: 20,
     fontFamily: "LeagueSpartan-SemiBold",
   },
   section2: {
     textAlign: "center",
     fontSize: 24,
     fontWeight: "bold",
+    paddingTop: 6,
+    paddingBottom: 10,
     color: "rgb(0, 108, 72)",
-    paddingBottom: 20,
     fontFamily: "LeagueSpartan-SemiBold",
   },
 });

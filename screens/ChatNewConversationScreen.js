@@ -31,7 +31,6 @@ import { ScreenStackHeaderSearchBarView } from "react-native-screens";
 export default function ChatNewConversationScreen({ navigation }) {
   const theme = useTheme();
 
-
   const [users, setusers] = useState([]);
   const token = useSelector((state) => state.user.value.authentification.token);
   const username = useSelector((state) => state.user.value.infos.username);
@@ -144,15 +143,17 @@ export default function ChatNewConversationScreen({ navigation }) {
       <View style={styles.main}>
         <Text style={styles.mainTitle}>Mes buddies 💃🕺</Text>
 
-        <Searchbar style={styles.searchbar}
-                placeholder="Rechercher un buddy"
-                onChangeText={(value) => setSearch(value)}
-                value={search}
-      
-              />
-        <ScrollView style={styles.scrollView}>
+        <Searchbar
+          style={styles.searchbar}
+          placeholder="Rechercher un buddy"
+          onChangeText={(value) => setSearch(value)}
+          value={search}
+        />
+        <Text style={styles.section}>Suggestions Buddies : </Text>
+
+        <ScrollView style={{ flex: 1, width: 360, paddingTop: 20 }}>
           {users &&
-            users
+            suggestBuddies
               .filter((element) => element.infos.username !== username)
               .filter((element) => element.infos.username.includes(search))
               .map((element) => (
@@ -166,8 +167,40 @@ export default function ChatNewConversationScreen({ navigation }) {
                   <Text style={styles.textmessage}>
                     {element.infos.username}
                   </Text>
+                  <Image
+                    source={{ uri: element.infos.avatar }}
+                    style={styles.avatar}
+                  />
                 </TouchableOpacity>
               ))}
+        </ScrollView>
+        <Text style={styles.section2}>Contacts : </Text>
+        <ScrollView
+          style={{
+            flex: 1,
+            width: 360,
+            marginTop: -190,
+          }}
+        >
+      {users &&
+          restBuddies
+            .filter((element) => element.infos.username !== username)
+            .filter((element) => element.infos.username.includes(search))
+            .map((element) => (
+              <TouchableOpacity
+                key={element._id}
+                style={FstyleSelectionner(element._id)}
+                onPress={() =>
+                  FselectionneUser(element._id, element.infos.username)
+                }
+              >
+                <Image
+                    source={{ uri: element.infos.avatar }}
+                    style={styles.avatar}
+                  />
+                <Text style={styles.textmessage}>{element.infos.username}</Text>
+              </TouchableOpacity>
+            ))}
         </ScrollView>
         <Button
           key="footer"
@@ -178,11 +211,9 @@ export default function ChatNewConversationScreen({ navigation }) {
           <Text style={styles.textButton}>Écrire</Text>
         </Button>
       </View>
-
-     
       <ScrollView style={styles.scrollView}>
         {users &&
-          users
+          restBuddies
             .filter((element) => element.infos.username !== username)
             .filter((element) => element.infos.username.includes(search))
             .map((element) => (
@@ -197,14 +228,6 @@ export default function ChatNewConversationScreen({ navigation }) {
               </TouchableOpacity>
             ))}
       </ScrollView>
-      <Button
-        key="footer"
-        style={styles.footer}
-        mode={"contained"}
-        onPress={() => Fvalide()}
-      >
-        <Text style={styles.textButton}>Nouveau message</Text>
-      </Button>
     </KeyboardAvoidingView>
   );
 }
@@ -263,11 +286,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "LeagueSpartan-SemiBold",
     borderRadius: 12,
-    textAlign: "center",
+    textAlign: 'center',
+    marginLeft: 34,
     padding: 8,
-    color: "20"
+    color: "20",
+
   },
-  
+
   textButton: {
     color: "white",
     fontSize: 20,
@@ -296,8 +321,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
-    paddingTop: 10,
+    marginBottom: 210,
+    paddingTop: 6,
+    paddingBottom: -30,
     color: "rgb(0, 108, 72)",
     fontFamily: "LeagueSpartan-SemiBold",
   },
@@ -305,11 +331,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   avatar: {
+    position: "absolute",
     marginRight: 245,
-    width: 65,
-    height: 65,
+    width: 55,
+    height: 55,
     borderRadius: 50,
-    marginTop: 8,
+    marginTop: 3,
     marginBottom: 10,
     marginLeft: 10,
   },
