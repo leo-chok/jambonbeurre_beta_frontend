@@ -1,26 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
-  Image,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from "react-native";
 
 import {
   TextInput,
-  List,
-  RadioButton,
-  Checkbox,
   Text,
-  Divider,
   Button,
-  Switch,
-  Chip,
-  Snackbar,
   useTheme,
 } from "react-native-paper";
 
@@ -38,6 +28,7 @@ export default function SignInScreen({ navigation }) {
   // Fetch la route SignIn (se connecter)
   const userdata = { email: email, password: password };
 
+  // Bouton Connexion
   const handleSubmit = () => {
     fetch(BACKEND_ADRESS + "/users/signin", {
       method: "POST",

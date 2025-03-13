@@ -1,26 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
-  Image,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from "react-native";
 
 import {
   TextInput,
-  List,
-  RadioButton,
-  Checkbox,
   Text,
-  Divider,
   Button,
-  Switch,
-  Chip,
-  Snackbar,
   HelperText,
   useTheme,
 } from "react-native-paper";
@@ -44,6 +34,8 @@ export default function SignUp1Screen({ navigation }) {
   const hasErrors = () => {
     return !email.includes("@");
   };
+
+  // Bouton Suivant
   const handleSuivant = () => {
     if (password !== password2) {
       alert("Les mots de passe ne correspondent pas");

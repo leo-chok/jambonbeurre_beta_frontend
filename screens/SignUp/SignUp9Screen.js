@@ -1,26 +1,13 @@
-import { useEffect, useState } from "react";
-
 import {
-  Image,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from "react-native";
 
 import {
-  TextInput,
-  List,
-  RadioButton,
-  Checkbox,
   Text,
-  Divider,
   Button,
-  Switch,
-  Chip,
-  Snackbar,
   useTheme,
 } from "react-native-paper";
 
@@ -35,8 +22,7 @@ export default function SignUp9Screen({ navigation }) {
   const userReducer = useSelector((state) => state.user.value);
   const theme = useTheme();
 
-  console.log(userReducer);
-
+  // Bouton démarrer
   const handleDemarrer = () => {
     navigation.navigate("TabNavigator", { screen: "Home" });
   };
@@ -49,17 +35,16 @@ export default function SignUp9Screen({ navigation }) {
       <View>
         <Text style={styles.title}>Ton profil est créé ✨</Text>
         <Text style={styles.text}>
-          Super {username} ! 🎉 {"\n"}Tu peux commencer à te connecter {"\n"}avec les
-          utilisateurs qui t'entourent !
+          Super {username} ! 🎉 {"\n"}Tu peux commencer à te connecter {"\n"}
+          avec les utilisateurs qui t'entourent !
         </Text>
-                 <Button
-                        onPress={() => handleDemarrer()}
-                        mode={"contained"}
-                        style={styles.badgeButton}
-                      >
-                        <Text style={styles.badgeButtonActive}>Démarrer</Text>
-                      </Button>
-
+        <Button
+          onPress={() => handleDemarrer()}
+          mode={"contained"}
+          style={styles.badgeButton}
+        >
+          <Text style={styles.badgeButtonActive}>Démarrer</Text>
+        </Button>
       </View>
     </KeyboardAvoidingView>
   );

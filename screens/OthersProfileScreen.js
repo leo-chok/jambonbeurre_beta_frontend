@@ -78,15 +78,15 @@ export default function OthersProfileScreen({ navigation, route }) {
     return (
       <View key={i} style={styles.creneauxContainer}>
         <View style={styles.creneauxLigne}>
-          <Text>{data.name}</Text>
+          <Text style={styles.creneauxText}>{data.name}</Text>
           {data.worked ? (
             <View style={styles.creneauxLigne}>
-              <Text>{data.start} à </Text>
-              <Text>{data.stop}</Text>
+              <Text style={styles.creneauxText}>{data.start} à </Text>
+              <Text style={styles.creneauxText}>{data.stop}</Text>
             </View>
           ) : (
             <View style={styles.creneauxLigne}>
-              <Text>Indisponible </Text>
+              <Text style={styles.creneauxText}>Indisponible</Text>
             </View>
           )}
         </View>
@@ -135,7 +135,7 @@ export default function OthersProfileScreen({ navigation, route }) {
         <View style={styles.vacancesContainer}>
           {vacancy && <Text>En vacances</Text>}
         </View>
-        {!vacancy && displayCreneaux}
+          <View style={styles.mainCreneaux}>{!vacancy && displayCreneaux}</View>
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
         <Text style={styles.title}>Types de cuisine préférés</Text>
         <View style={styles.typeFoodContainer}>
@@ -153,7 +153,7 @@ export default function OthersProfileScreen({ navigation, route }) {
         <Text style={styles.title}>Mes centres d'intérêts</Text>
         <View style={styles.hobbiesContainer}>
           {hobbies.length === 0 ? (
-              <Text style={styles.noInfos}>Aucun centre d'intérêt</Text>
+              <Text style={styles.noInfos}>Aucun centre d'intérêt sélectionné</Text>
                     ) : (hobbies.map((type) => (
             <Button
               key={type}
@@ -171,7 +171,7 @@ export default function OthersProfileScreen({ navigation, route }) {
         <Text style={styles.title}>Mes langues</Text>
         <View style={styles.languageContainer}>
           {languages.length === 0 ? (
-              <Text style={styles.noInfos}>Aucune langue parlée</Text>
+              <Text style={styles.noInfos}>Aucune langue sélectionnée</Text>
                     ) : (languages.map((type) => (
             <Button
               key={type}
@@ -224,6 +224,7 @@ const styles = StyleSheet.create({
     fontFamily: "LeagueSpartan-Bold",
     alignText: "center",
     marginRight: 20,
+    marginTop: 25,
   },
   title: {
     fontSize: 25,
@@ -238,6 +239,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     marginBottom: 10,
+    fontFamily: "Montserrat-Medium",
   },
   infos_title: {
     display: "flex",
@@ -246,10 +248,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     width: "40%",
+    fontFamily: "Montserrat-Medium",
+
   },
   infos_data: {
     fontSize: 15,
     fontWeight: 300,
+    fontFamily: "Montserrat-Medium",
     display: "flex",
     flexDirection: 'row',
     flexWrap: "wrap",
@@ -265,6 +270,7 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign: "left",
     marginBottom: 10,
+    fontFamily: "Montserrat-Medium",
   },
   inputs_container: {
     width: "80%",
@@ -273,6 +279,13 @@ const styles = StyleSheet.create({
   inputField: {
     marginTop: 10,
     width: "100%",
+  },
+  mainCreneaux: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "100%",
+    fontFamily: "Montserrat-Medium",
   },
   vacancesContainer: {
     display: "flex",
@@ -283,12 +296,18 @@ const styles = StyleSheet.create({
   creneauxContainer: {
     display: "flex",
     flexDirection: "column",
-    width: "100%",
+    width: "80%",
+    fontFamily: "Montserrat-Medium",
   },
   creneauxLigne: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
+    fontFamily: "Montserrat-Medium",
+  },
+  creneauxText: {
+    fontFamily: "Montserrat-Medium",
+    
   },
   inputList: {
     marginTop: 10,
@@ -312,6 +331,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 10,
     marginTop: 10,
+    fontFamily: "Montserrat-Medium",
   },
   hobbiesContainer: {
     width: "100%",
@@ -321,6 +341,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 10,
     marginTop: 10,
+    fontFamily: "Montserrat-Medium",
   },
   languageContainer: {
     width: "100%",
@@ -331,6 +352,7 @@ const styles = StyleSheet.create({
     gap: 10,
     marginTop: 10,
     marginBottom: 20,
+    fontFamily: "Montserrat-Medium",
   },
   submitContainer: {
     width: "100%",

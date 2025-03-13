@@ -1,33 +1,25 @@
-import { useState } from "react";
 import {
   Image,
-  KeyboardAvoidingView,
-  Platform,
   StyleSheet,
   TouchableOpacity,
   View,
 } from "react-native";
+
 import {
-  TextInput,
-  List,
-  RadioButton,
-  Checkbox,
   Text,
-  Divider,
   Button,
-  Switch,
-  Chip,
-  Snackbar,
   useTheme
 } from "react-native-paper";
 
 export default function SignUpScreen({ navigation }) {
   const theme = useTheme();
 
+  // Renvoie vers la page de création de compte
   const handleSignUp = () => {
     navigation.navigate("SignUp1");
   };
 
+  // Renvoie vers la page de connexion
   const handleSignIn = () => {
     navigation.navigate("SignIn");
   };

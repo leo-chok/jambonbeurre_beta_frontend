@@ -1,30 +1,18 @@
 import { useState } from "react";
 import {
-  Image,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   StyleSheet,
-  TouchableOpacity,
-  useDispatch,
   View,
 } from "react-native";
 import {
   TextInput,
-  List,
-  RadioButton,
-  Checkbox,
   Text,
-  Divider,
   Button,
-  Switch,
-  Chip,
   useTheme,
 } from "react-native-paper";
 import { BACKEND_ADRESS } from "../.config";
 import { TABBAR_SIZE } from "../constants";
-import Gif from "../components/Gif";
-import { useSelector } from "react-redux";
 
 export default function UnsubscribeScreen({ navigation }) {
   const theme = useTheme();

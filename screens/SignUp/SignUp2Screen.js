@@ -1,21 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   Image,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from "react-native";
 
 import {
-  
   Text,
-
   Button,
-  
   useTheme,
 } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
