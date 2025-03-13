@@ -37,6 +37,9 @@ export default function ChatNewConversationScreen({ navigation }) {
   const username = useSelector((state) => state.user.value.infos.username);
   const [search, setSearch] = useState("");
   console.log("username : " + username);
+  const me = useSelector((state) => state.user.value);
+  const suggestBuddies = users.slice(0, 3);
+  const restBuddies = users.slice(3);
 
   const [listeDesSelectioner, setlisteDesSelectioner] = useState([]); //liste des utilisateurs selectionnés pour la conversation
   let title = "";
@@ -44,16 +47,47 @@ export default function ChatNewConversationScreen({ navigation }) {
   useEffect(() => {
     console.log("new conversation");
     //chargement de tous les utilisateurs
-    fetch(`${BACKEND_ADRESS}/chats/allUsers`)
+    fetch(`${BACKEND_ADRESS}/users/all`)
       .then((response) => response.json())
       .then((data) => {
-        setusers(data.listUsers); //memorise la liste de tous les utilisateurs
-        // console.log(data);
-      }); //fetch
+        const filteredUsers = data.listUsers
+          .map((user) => {
+            let score = 0;
+            if (
+              me.preferences.hobbies.some((hobby) =>
+                user.preferences.hobbies.includes(hobby)
+              )
+            ) {
+              score += 1;
+            }
+
+            if (
+              me.preferences.languages.some((languages) =>
+                user.preferences.languages.includes(languages)
+              )
+            ) {
+              score += 1;
+            }
+            if (
+              me.preferences.favFood.some((favFood) =>
+                user.preferences.favFood.includes(favFood)
+              )
+            ) {
+              score += 1;
+            }
+            return { ...user, score };
+          })
+          .sort((a, b) => b.score - a.score);
+        setusers(filteredUsers); //memorise la liste de tous les utilisateurs
+        if (filteredUsers.length === 0) {
+          setusers(data.listUsers);
+        } else {
+          setusers(filteredUsers);
+        }
+      });
   }, []);
 
   function Fvalide() {
-    console.log("fonction valide");
     let title = listeDesSelectioner
       .map((element) => element.username)
       .join("  -  ");
@@ -71,9 +105,6 @@ export default function ChatNewConversationScreen({ navigation }) {
     }) //fetch
       .then((response) => response.json())
       .then((data) => {
-        console.log("conversation creer : ");
-        // console.log(data);
-        console.log(data.Discussion);
         // dispatch(addDiscussionToStore(data.Discussion));
         //console.log("dispatch");
         setlisteDesSelectioner([]);
@@ -102,7 +133,7 @@ export default function ChatNewConversationScreen({ navigation }) {
       return [styles.viewSelected, styles.textSelected];
     else return styles.view;
   }
-
+  console.log(users);
   // Fonction Searchbar: rechercher un utilisateur
 
   return (
@@ -166,7 +197,14 @@ export default function ChatNewConversationScreen({ navigation }) {
               </TouchableOpacity>
             ))}
       </ScrollView>
-
+      <Button
+        key="footer"
+        style={styles.footer}
+        mode={"contained"}
+        onPress={() => Fvalide()}
+      >
+        <Text style={styles.textButton}>Nouveau message</Text>
+      </Button>
     </KeyboardAvoidingView>
   );
 }
@@ -244,5 +282,35 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
+    borderTopLeftRadius: 30,
+  },
+  section: {
+    paddingTop: 40,
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "rgb(0, 108, 72)",
+    fontFamily: "LeagueSpartan-SemiBold",
+  },
+  section2: {
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    paddingTop: 10,
+    color: "rgb(0, 108, 72)",
+    fontFamily: "LeagueSpartan-SemiBold",
+  },
+  buddies: {
+    alignItems: "center",
+  },
+  avatar: {
+    marginRight: 245,
+    width: 65,
+    height: 65,
+    borderRadius: 50,
+    marginTop: 8,
+    marginBottom: 10,
+    marginLeft: 10,
   },
 });

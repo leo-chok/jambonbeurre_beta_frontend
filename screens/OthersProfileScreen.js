@@ -140,7 +140,7 @@ export default function OthersProfileScreen({ navigation, route }) {
         <Text style={styles.title}>Types de cuisine préférés</Text>
         <View style={styles.typeFoodContainer}>
           {favFood.length === 0 ? (
-              <Text style={styles.noInfos}>Aucun type de cuisine préféré</Text>
+              <Text style={styles.noInfos}>Aucun type de cuisine sélectionné</Text>
             ) : (favFood.map((type) => (
             <Button key={type} mode={"contained"} style={styles.badgeButton}>
               <Text style={styles.badgeButtonActive}>{type}</Text>

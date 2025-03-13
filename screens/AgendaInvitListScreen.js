@@ -23,7 +23,10 @@ export default function AgendaInvitListScreen({ route, navigation }) {
   const { reservationId } = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [inviteUser, setInviteUser] = useState();
-
+  const me = useSelector((state) => state.user.value)
+const suggestBuddies = users.slice(0,3)
+const restBuddies = users.slice(3)
+  
   useEffect(() => {
     fetch(BACKEND_ADRESS + "/users/all")
       .then((response) => response.json())
@@ -33,7 +36,7 @@ export default function AgendaInvitListScreen({ route, navigation }) {
           .map((user) => {
             let score = 0;
             if (
-              user.preferences.hobbies.some(
+              me.preferences.hobbies.some(
                 (
                   hobby //Vérifie les hobbies en communs
                 ) => user.preferences.hobbies.includes(hobby)
@@ -43,7 +46,6 @@ export default function AgendaInvitListScreen({ route, navigation }) {
             }
             return { ...user, score }; //Ajoute le score à l'utilisateur
           })
-          .filter((user) => user.score > 0) //Garder uniquement ceux qui ont des similitudes
           .sort((a, b) => b.score - a.score); //Trier par pertinence (score décroissant)
         setUsers(filteredUsers);
         if (filteredUsers.length === 0) {
@@ -84,9 +86,65 @@ export default function AgendaInvitListScreen({ route, navigation }) {
       <View style={styles.header}>
         <Text style={styles.headerText}>Mes Contacts 👥</Text>
       </View>
-      <ScrollView style={styles.userList}>
+      <Text style={styles.section}>Mes suggestions : </Text>
+      <ScrollView style={{ flex: 1, width: "100%", paddingBottom: 300, paddingTop : 5,}}>
         {users.length > 0 ? (
-          users.map((user) => (
+          suggestBuddies.map((user) => (
+            <View key={user._id} style={styles.userItem}>
+              <Image
+                source={
+                  user.infos.avatar
+                    ? { uri: user.infos.avatar }
+                    : require("../assets/logo/logoSeul.png")
+                }
+                style={styles.avatar}
+              />
+              <Portal>
+                <Modal
+                  visible={modalVisible}
+                  onDismiss={() => setModalVisible(false)}
+                  contentContainerStyle={styles.modalStyle}
+                >
+                  <View style={styles.modalContent}>
+                    <Text style={styles.modalText}> Utilisateur invité !</Text>
+                    <Button
+                      mode="contained"
+                      onPress={() => setModalVisible(false)}
+                    >
+                      OK
+                    </Button>
+                  </View>
+                </Modal>
+              </Portal>
+              <Button
+                style={styles.btnUsername}
+                mode="text"
+                onPress={() =>
+                  navigation.navigate("ChatConversation", {
+                    userId: user._id,
+                  })
+                }
+              >
+                <Text style={styles.userText}>{user.infos.username}</Text>
+              </Button>
+              <Button
+                style={styles.btnInvite}
+                mode={"contained"}
+                onPress={() => handleInviteUser(reservationId, user._id)}
+              >
+                <AntDesign name="adduser" size={21} color="black" />
+                <Text style={styles.title}></Text>
+              </Button>
+            </View>
+          ))
+        ) : (
+          <Text style={styles.noUsers}>Aucun utilisateur trouvé</Text>
+        )}
+      </ScrollView>
+<Text style={[styles.section2, styles.otherList]}>Autres contacts : </Text>
+      <ScrollView style={{ flex: 1, width: "100%", paddingBottom: 300, paddingTop : 5, marginBottom: 5, backgroundColor:'red'}}>
+        {users.length > 0 ? (
+          restBuddies.map((user) => (
             <View key={user._id} style={styles.userItem}>
               <Image
                 source={
@@ -170,18 +228,18 @@ const styles = StyleSheet.create({
     color: "rgb(254, 87, 71)",
     fontFamily: "LeagueSpartan-SemiBold",
   },
-  userList: {
-    width: "100%",
-    paddingHorizontal: 20,
-    backgroundColor: "#fcf4e9",
-  },
   userItem: {
-    height: 80,
+    // height: 80,
+    width: 350,
     paddingBottom: 20,
     marginVertical: 8,
     backgroundColor: "rgb(255, 218, 213)",
     borderRadius: 10,
     alignItems: "center",
+    marginLeft: 20
+  },
+  otherList: {
+
   },
   userText: {
     marginTop: 50,
@@ -252,8 +310,20 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: "rgb(0, 108, 72)",
   },
-  searchbar: {
-    height: 50,
-    width: 340,
+  section: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "rgb(0, 108, 72)",
+    paddingBottom: 20,
+    fontFamily: "LeagueSpartan-SemiBold",
+  },
+  section2: {
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "rgb(0, 108, 72)",
+    paddingBottom: 20,
+    fontFamily: "LeagueSpartan-SemiBold",
   },
 });

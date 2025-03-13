@@ -160,7 +160,7 @@ export default function ProfileScreen({ navigation }) {
           <Text style={styles.title}>Types de cuisine préférés</Text>
           <View style={styles.typeFoodContainer}>
             {favFood.length === 0 ? (
-              <Text style={styles.noInfos}>Aucun type de cuisine préféré</Text>
+              <Text style={styles.noInfos}>Aucun type de cuisine sélectionné</Text>
             ) : (
               favFood.map((type) => (
                 <Button

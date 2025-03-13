@@ -197,7 +197,7 @@ export default function ProfileEditionScreen({ navigation }) {
               underlineColor="transparent"
             />
             <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-            <Text style={styles.title}>Présente toi ! </Text>
+            <Text style={styles.title}>Présente-toi ! </Text>
             <TextInput
               label="Métier / Etudes"
               value={work}
@@ -230,7 +230,7 @@ export default function ProfileEditionScreen({ navigation }) {
               )}
             </View>
             <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-            <Text style={styles.title}>Types de cuisine préférés</Text>
+            <Text style={styles.title}>Types de cuisine sélectionné</Text>
             <View style={styles.typeFoodContainer}>
               {foodType.map((type) => (
                 <Button
