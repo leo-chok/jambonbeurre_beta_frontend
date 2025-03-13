@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",
     letterSpacing: -1,
-    marginBottom: 20,
+    marginBottom: 16,
     textAlign: "center",
   },
   fieldTitle: {
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     letterSpacing: -1,
     color: "#397a5b",
     marginBottom: 10,
-    marginTop: 20,
+    marginTop: 16,
     textAlign: "center",
   },
   inputField: {

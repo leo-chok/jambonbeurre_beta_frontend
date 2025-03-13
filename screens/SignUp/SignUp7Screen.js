@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "red",
   },
   title: {
     fontSize: 35,
@@ -126,12 +127,14 @@ const styles = StyleSheet.create({
   },
   badgeButton: {
     width: 250,
-    marginTop: 20,
     marginHorizontal: "auto",
+    marginTop: 16,
+
   },
   badgeButtonActive: {
     color: "white",
     fontSize: 20,
+
   },
   ignoreButtonActive: {
     color: "#fe5747",
@@ -144,5 +147,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
+    marginBottom: 4,
   },
 });

@@ -75,12 +75,12 @@ const styles = StyleSheet.create({
   logo: {
     width: 350,
     height: 180,
-    marginBottom: 20,
-    marginTop: 20,
+    marginBottom: 12,
+    marginTop: 0,
   },
   badgeButton: {
     width: "60%",
-    margin: 10,
+    margin: 8,
   },
   badgeButtonActive: {
     color: "white",

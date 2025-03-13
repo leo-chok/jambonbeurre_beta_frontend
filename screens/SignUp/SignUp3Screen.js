@@ -73,7 +73,7 @@ export default function SignUp3Screen({ navigation }) {
           buddies !
         </Text>
         <TextInput
-          placeholder={"pseudo"}
+          placeholder={"Pseudo"}
           value={pseudo}
           onChangeText={(e) => setPseudo(e)}
           style={styles.inputField}

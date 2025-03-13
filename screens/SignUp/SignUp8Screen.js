@@ -111,7 +111,7 @@ export default function SignUp8Screen({ navigation }) {
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-      <View>
+      <View style={styles.main}>
         <Text style={styles.mainTitle}>Ton profil 🧑‍💻</Text>
         <Text style={styles.text}>
           Dernière étape ! {"\n"}Aide-nous à te trouver le buddy idéal !
@@ -217,6 +217,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  main: {
+    marginTop: 20,
+  },
   mainTitle: {
     fontSize: 30,
     fontWeight: "bold",
@@ -240,7 +243,7 @@ const styles = StyleSheet.create({
   },
   Button: {
     width: 250,
-    marginTop: 20,
+    marginTop: 16,
     marginHorizontal: "auto",
   },
   Active: {
@@ -290,6 +293,6 @@ const styles = StyleSheet.create({
   },
   inputs_container: {
     width: "80%",
-    gap: 20,
+    gap: 16,
   },
 });

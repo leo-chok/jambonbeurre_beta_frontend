@@ -26,6 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { chargeDiscussions } from "../reducers/discussions";
 import { BACKEND_ADRESS } from "../.config";
 import Feather from "@expo/vector-icons/Feather";
+import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 
 export default function ChatListScreen({ navigation }) {
   const theme = useTheme();
@@ -70,33 +71,36 @@ export default function ChatListScreen({ navigation }) {
       style={[styles.container, { backgroundColor: theme.colors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Text style={styles.header}>Mes conversations 💬</Text>
+      <View style={styles.main}>
+        <Text style={styles.header}>Mes conversations 💬</Text>
 
-      <Button
-        style={styles.btnNewMessage}
-        onPress={() => navigation.navigate("ChatNewConversation")}
-        mode={"contained"}
-      >
-        <Text style={styles.textNewMessage}> Nouveau message </Text>
-      </Button>
-      <ScrollView style={styles.scrollView}>
-        {discussions
-          .slice()
-          .reverse()
-          .map((element) => (
-            <TouchableOpacity
-              key={element._id}
-              style={styles.ConversationContainer}
-              onPress={() => navigation.navigate("ChatConversation", element)}
-            >
-              <Image
-                source={{ uri: element.users[0].infos.avatar }}
-                style={styles.avatar}
-              />
-              <Text style={styles.titleConversation}>{element.title}</Text>
-            </TouchableOpacity>
-          ))}
-      </ScrollView>
+        <Button
+          style={styles.btnNewMessage}
+          onPress={() => navigation.navigate("ChatNewConversation")}
+          mode={"contained"}
+        >
+
+          <Text style={styles.textNewMessage}> Nouveau message </Text>
+        </Button>
+        <ScrollView style={styles.scrollView}>
+          {discussions
+            .slice()
+            .reverse()
+            .map((element) => (
+              <TouchableOpacity
+                key={element._id}
+                style={styles.ConversationContainer}
+                onPress={() => navigation.navigate("ChatConversation", element)}
+              >
+                <Image
+                  source={{ uri: element.users[0].infos.avatar }}
+                  style={styles.avatar}
+                />
+                <Text style={styles.titleConversation}>{element.title}</Text>
+              </TouchableOpacity>
+            ))}
+        </ScrollView>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -106,30 +110,38 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
+  main: {
+    paddingTop: 30,
+    paddingBottom: 20,
+  },
   ConversationContainer: {
-    height: 120,
-    width: 350,
-    backgroundColor: "rgb(0, 108, 72)",
+    height: 100,
+    width: 345,
+    backgroundColor: "#397a5b",
     borderRadius: 20,
-    marginBottom: 20,
+    marginBottom: 12,
     flexDirection: "row",
     alignItems: "center",
-    padding: 10,
+    padding: 8,
   },
   scrollView: {
-    marginTop: 30,
+    marginTop: 24,
     marginBottom: 90,
   },
   header: {
     width: "100%",
-    padding: 34,
+    padding: 16,
+    paddingLeft: 5,
     paddingTop: 40,
     textAlign: "center",
-    borderBottomColor: "rgb(0, 108, 72)",
-    color: "rgb(0, 108, 72)",
+    borderBottomColor: "#397a5b",
+    color: "#fe5747",
     fontSize: 30,
-    fontFamily: "LeagueSpartan-SemiBold",
+    fontFamily: "LeagueSpartan-Bold",
+    marginHorizontal: "auto",
   },
+
   titleConversation: {
     color: "white",
     fontSize: 20,
@@ -138,13 +150,17 @@ const styles = StyleSheet.create({
   },
   btnNewMessage: {
     height: "5%",
-    width: "80%",
     borderRadius: 20,
     backgroundColor: "rgb(254, 87, 71)",
+    justifyContent: "center",
+    marginHorizontal: "auto",
+    alignContent: "center",
+    alignItems: "center",
+
   },
+
   textNewMessage: {
     fontSize: 20,
-    fontFamily: "LeagueSpartan-SemiBold",
     color: "white",
   },
   avatar: {

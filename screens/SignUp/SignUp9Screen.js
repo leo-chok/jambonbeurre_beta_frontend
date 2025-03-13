@@ -87,12 +87,13 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     marginBottom: 10,
-    marginTop: 20,
+    marginTop: 12,
     textAlign: "center",
   },
   badgeButton: {
     width: 250,
-    margin: 30,
+    marginTop: 16,
+    marginHorizontal: "auto",
   },
   badgeButtonActive: {
     color: "white",

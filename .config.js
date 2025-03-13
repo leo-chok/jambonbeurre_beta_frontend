@@ -1,2 +1,3 @@
-export const BACKEND_ADRESS = "http://10.1.2.153:3000"
+export const BACKEND_ADRESS = "https://jambonbeurre-alpha-backend.vercel.app"
 //"https://jambonbeurre-alpha-backend.vercel.app"
+// "http://10.1.2.153:3000"
