@@ -22,7 +22,7 @@ import {
 } from "react-native-paper";
 import { TABBAR_SIZE } from "../constants";
 import Gif from "../components/Gif";
-import { logout } from '../reducers/user';
+import { logout } from "../reducers/user";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function SettingsScreen({ navigation }) {
@@ -49,10 +49,12 @@ export default function SettingsScreen({ navigation }) {
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-        <Text style={styles.mainTitle}>Paramètres 🧑‍🔧</Text>
-      <Image source={require("../assets/logo/logoGifOrange.gif")} style={styles.logo} />
-      <View style={styles.topContainer}>
-      </View>
+      <Text style={styles.mainTitle}>Paramètres 🧑‍🔧</Text>
+      <Image
+        source={require("../assets/logo/logoGifOrange.gif")}
+        style={styles.logo}
+      />
+      <View style={styles.topContainer}></View>
       <Button
         onPress={() => handleModify()}
         mode={"contained"}
