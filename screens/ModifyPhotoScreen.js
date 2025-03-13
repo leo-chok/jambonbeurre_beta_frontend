@@ -10,21 +10,14 @@ import {
   View,
 } from "react-native";
 
-import {
-  
-  Text,
-
-  Button,
-  
-  useTheme,
-} from "react-native-paper";
+import { Text, Button, useTheme } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
-
 import { BACKEND_ADRESS } from "./../.config";
 import { useDispatch, useSelector } from "react-redux";
 import { addToken, addPhoto } from "./../reducers/user";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Gif from "../components/Gif";
 
 export default function ModifyPhotoScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -33,9 +26,6 @@ export default function ModifyPhotoScreen({ navigation }) {
   const imageReducer = useSelector((state) => state.user.value.infos.avatar);
   const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
-
-  console.log(userReducer);
-  console.log(imageReducer)
 
   // --------------------- FONCTION POUR CHOISIR UNE PHOTO DE SON TELEPHONE ---------------------------------
   const pickImage = async () => {
@@ -77,7 +67,6 @@ export default function ModifyPhotoScreen({ navigation }) {
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log(data);
               setIsLoading(false);
             });
         })
@@ -93,14 +82,11 @@ export default function ModifyPhotoScreen({ navigation }) {
     navigation.navigate("Camera", { from: "ProfileScreen" });
   };
 
+  // --------------------- FONCTION POUR PRENDRE UNE PHOTO ---------------------------------
 
- // --------------------- FONCTION POUR PRENDRE UNE PHOTO ---------------------------------
-
-
- const handleSuivant = () => {
+  const handleSuivant = () => {
     navigation.navigate("TabNavigator", { screen: "ProfileScreen" });
   };
-
 
   // --------------------- RENDER ---------------------------------
 
@@ -109,60 +95,57 @@ export default function ModifyPhotoScreen({ navigation }) {
       // style={styles.container}
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-      <Text style={styles.title}>Choisis ta photo {'\n'}de profil 📸</Text>
-      <View style={styles.main}>
-        <View style={styles.containerImage}>
-          {imageReducer === "" ? (
-            <Image
-              source={require("./../assets/logo/avatar_defaut.png")}
-              style={styles.image}
-            />
-          ) : (
-            <Image source={{ uri: imageReducer }} style={styles.image} />
-          )}
+      {isLoading && (
+        <View style={{ width: 180, height: 180, marginBlock: "auto" }}>
+          <Gif />
         </View>
-        {isLoading && (
-          <ActivityIndicator size={120} animating={true} color={"white"} />
-        )}
-        {!isLoading && (
-          <View>
-            <Button
-              onPress={pickImage}
-              mode={"outlined"}
-              style={styles.photoButton}
-            >
-              <Text style={styles.photoButtonActive}>Depuis son téléphone</Text>
-            </Button>
+      )}
+      {!isLoading && (
+        <>
+          <Text style={styles.title}>Choisis ta photo {"\n"}de profil 📸</Text>
+          <View style={styles.main}>
+            <View style={styles.containerImage}>
+              {imageReducer === "" ? (
+                <Image
+                  source={require("./../assets/logo/avatar_defaut.png")}
+                  style={styles.image}
+                />
+              ) : (
+                <Image source={{ uri: imageReducer }} style={styles.image} />
+              )}
+            </View>
 
+            <View>
+              <Button
+                onPress={pickImage}
+                mode={"outlined"}
+                style={styles.photoButton}
+              >
+                <Text style={styles.photoButtonActive}>
+                  Depuis son téléphone
+                </Text>
+              </Button>
+
+              <Button
+                onPress={() => handleTakePhoto()}
+                mode={"outlined"}
+                style={styles.photoButton}
+              >
+                <Text style={styles.photoButtonActive}>Prendre une photo</Text>
+              </Button>
+            </View>
+          </View>
+          <View style={styles.navigationBottom}>
             <Button
-              onPress={() => handleTakePhoto()}
-              mode={"outlined"}
-              style={styles.photoButton}
+              onPress={() => handleSuivant()}
+              mode={"contained"}
+              style={styles.badgeButton}
             >
-              <Text style={styles.photoButtonActive}>Prendre une photo</Text>
+              <Text style={styles.badgeButtonActive}>Valider</Text>
             </Button>
           </View>
-        )}
-      </View>
-      <View style={styles.navigationBottom}>
-        {imageReducer === "" ? (
-          <Button
-            onPress={() => handleSuivant()}
-            mode={"contained"}
-            style={styles.badgeButton}
-          >
-            <Text style={styles.badgeButtonActive}>Ignorer</Text>
-          </Button>
-        ) : (
-          <Button
-            onPress={() => handleSuivant()}
-            mode={"contained"}
-            style={styles.badgeButton}
-          >
-            <Text style={styles.badgeButtonActive}>Suivant</Text>
-          </Button>
-        )}
-      </View>
+        </>
+      )}
     </SafeAreaView>
   );
 }

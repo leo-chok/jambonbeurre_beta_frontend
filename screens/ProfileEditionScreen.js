@@ -44,23 +44,19 @@ export default function ProfileEditionScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
 
-  console.log("userdata", userData)
   // On récupère le lunchtime depuis le reducer car il est modifié dans le composant Schedule
   const lastLunchTime = useSelector(
     (state) => state.user.value.preferences.lunchtime
   );
-  
+
   const onToggleSwitch = () => setVacancy(!vacancy);
-  console.log(vacancy);
-  
+
   // On vient récupérer les informations de l'utilisateur pour les afficher dans les champs
   useEffect(() => {
-    console.log("token", token)
     // fetch user data
     fetch(BACKEND_ADRESS + "/users/" + token)
       .then((response) => response.json())
       .then((data) => {
-        console.log("User found");
         setUserData(data.userInfos[0]);
       });
   }, []);
@@ -143,7 +139,6 @@ export default function ProfileEditionScreen({ navigation }) {
 
     // On envoie les données modifiées au reducer User
     dispatch(updateProfile(dataReducer));
-    console.log("User updated in reducer");
 
     // On envoie les données modifiées au backend
 
@@ -156,8 +151,6 @@ export default function ProfileEditionScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("User updated in BDD");
-        console.log(data);
         setIsLoading(false);
         navigation.navigate("Profile");
       });
@@ -169,151 +162,164 @@ export default function ProfileEditionScreen({ navigation }) {
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
       >
-        <Text style={styles.mainTitle}>Modifie tes informations</Text>
-        {!isLoading && (
-          <ScrollView style={styles.inputs_container}>
-            <Text style={styles.title}>Comment t'appelles-tu ?</Text>
-            <TextInput
-              placeholder={username}
-              label={"Pseudo"}
-              value={username}
-              onChangeText={(e) => setUsername(e)}
-              style={styles.inputField}
-              underlineColor="transparent"
-            />
-            <TextInput
-              label="Nom"
-              value={firstname}
-              onChangeText={(firstname) => setFirstname(firstname)}
-              style={styles.inputField}
-              underlineColor="transparent"
-            />
-            <TextInput
-              label="Prénom"
-              value={lastname}
-              onChangeText={(lastname) => setLastname(lastname)}
-              style={styles.inputField}
-              underlineColor="transparent"
-            />
-            <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-            <Text style={styles.title}>Présente-toi ! </Text>
-            <TextInput
-              label="Métier / Etudes"
-              value={work}
-              onChangeText={(work) => setWork(work)}
-              style={styles.inputField}
-              underlineColor="transparent"
-            />
-            <TextInput
-              label="Bio / Description"
-              value={bio}
-              onChangeText={(bio) => setBio(bio)}
-              style={styles.inputField}
-              underlineColor="transparent"
-            />
-            <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-
-            <Text style={styles.title}>Mes disponibilités</Text>
-            <View style={styles.vacancesContainer}>
-              <Text>Mode vacances</Text>
-              <Switch value={vacancy} onValueChange={onToggleSwitch} />
-            </View>
-            <View style={styles.list}>
-              {!vacancy && (
-                <List.Accordion
-                  title="Créneaux Déjeuner"
-                  style={styles.inputList}
-                >
-                  <Schedule data={userData?.preferences?.lunchtime} />
-                </List.Accordion>
-              )}
-            </View>
-            <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-            <Text style={styles.title}>Types de cuisine sélectionné</Text>
-            <View style={styles.typeFoodContainer}>
-              {foodType.map((type) => (
-                <Button
-                  key={type}
-                  mode={(favFood.includes(type) && "contained") || "outlined"}
-                  onPress={() => addTypeFood(type)}
-                  style={styles.badgeButton}
-                >
-                  <Text
-                    style={[
-                      styles.badgeButtonActive,
-                      favFood.includes(type)
-                        ? styles.badgeButtonActive
-                        : styles.badgeButtonDisable,
-                    ]}
-                  >
-                    {type}
-                  </Text>
-                </Button>
-              ))}
-            </View>
-
-            <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-            <Text style={styles.title}>Mes centres d'intérêts</Text>
-            <View style={styles.hobbiesContainer}>
-              {hobbiesList.map((type) => (
-                <Button
-                  key={type}
-                  // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
-                  mode={(hobbies.includes(type) && "contained") || "outlined"}
-                  onPress={() => addHobbies(type)}
-                  style={styles.badgeButton}
-                >
-                  <Text
-                    style={[
-                      styles.badgeButtonActive,
-                      hobbies.includes(type)
-                        ? styles.badgeButtonActive
-                        : styles.badgeButtonDisable,
-                    ]}
-                  >
-                    {type}
-                  </Text>
-                </Button>
-              ))}
-            </View>
-
-            <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-            <Text style={styles.title}>Mes langues parlées</Text>
-            <View style={styles.languageContainer}>
-              {languagesList.map((type) => (
-                <Button
-                  key={type}
-                  // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
-                  mode={(languages.includes(type) && "contained") || "outlined"}
-                  onPress={() => addLanguages(type)}
-                  style={styles.badgeButton}
-                >
-                  <Text
-                    style={[
-                      styles.badgeButtonActive,
-                      languages.includes(type)
-                        ? styles.badgeButtonActive
-                        : styles.badgeButtonDisable,
-                    ]}
-                  >
-                    {type}
-                  </Text>
-                </Button>
-              ))}
-            </View>
-          </ScrollView>
-        )}
         {isLoading && (
-          <View style={{ width: 180, height: 180, marginHorizontal: "auto" }}>
+          <View
+            style={{
+              width: 180,
+              height: 180,
+              marginHorizontal: "auto",
+              marginBlock: "auto",
+            }}
+          >
             <Gif />
           </View>
         )}
-        <View style={styles.submitContainer}>
-          <Button mode="contained" onPress={() => handleSubmit()}>
-            <Text style={{ color: "white", fontSize: 20 }}>Modifier</Text>
-          </Button>
-        </View>
+        {!isLoading && (
+          <>
+            <Text style={styles.mainTitle}>Modifie tes informations</Text>
+            <ScrollView style={styles.inputs_container}>
+              <Text style={styles.title}>Comment t'appelles-tu ?</Text>
+              <TextInput
+                placeholder={username}
+                label={"Pseudo"}
+                value={username}
+                onChangeText={(e) => setUsername(e)}
+                style={styles.inputField}
+                underlineColor="transparent"
+              />
+              <TextInput
+                label="Nom"
+                value={firstname}
+                onChangeText={(firstname) => setFirstname(firstname)}
+                style={styles.inputField}
+                underlineColor="transparent"
+              />
+              <TextInput
+                label="Prénom"
+                value={lastname}
+                onChangeText={(lastname) => setLastname(lastname)}
+                style={styles.inputField}
+                underlineColor="transparent"
+              />
+              <Divider style={{ marginTop: 20, marginBottom: 20 }} />
+              <Text style={styles.title}>Présente-toi ! </Text>
+              <TextInput
+                label="Métier / Etudes"
+                value={work}
+                onChangeText={(work) => setWork(work)}
+                style={styles.inputField}
+                underlineColor="transparent"
+              />
+              <TextInput
+                label="Bio / Description"
+                value={bio}
+                onChangeText={(bio) => setBio(bio)}
+                style={styles.inputField}
+                underlineColor="transparent"
+              />
+              <Divider style={{ marginTop: 20, marginBottom: 20 }} />
+
+              <Text style={styles.title}>Mes disponibilités</Text>
+              <View style={styles.vacancesContainer}>
+                <Text>Mode vacances</Text>
+                <Switch value={vacancy} onValueChange={onToggleSwitch} />
+              </View>
+              <View style={styles.list}>
+                {!vacancy && (
+                  <List.Accordion
+                    title="Créneaux Déjeuner"
+                    style={styles.inputList}
+                  >
+                    <Schedule data={userData?.preferences?.lunchtime} />
+                  </List.Accordion>
+                )}
+              </View>
+              <Divider style={{ marginTop: 20, marginBottom: 20 }} />
+              <Text style={styles.title}>Types de cuisine sélectionné</Text>
+              <View style={styles.typeFoodContainer}>
+                {foodType.map((type) => (
+                  <Button
+                    key={type}
+                    mode={(favFood.includes(type) && "contained") || "outlined"}
+                    onPress={() => addTypeFood(type)}
+                    style={styles.badgeButton}
+                  >
+                    <Text
+                      style={[
+                        styles.badgeButtonActive,
+                        favFood.includes(type)
+                          ? styles.badgeButtonActive
+                          : styles.badgeButtonDisable,
+                      ]}
+                    >
+                      {type}
+                    </Text>
+                  </Button>
+                ))}
+              </View>
+
+              <Divider style={{ marginTop: 20, marginBottom: 20 }} />
+              <Text style={styles.title}>Mes centres d'intérêts</Text>
+              <View style={styles.hobbiesContainer}>
+                {hobbiesList.map((type) => (
+                  <Button
+                    key={type}
+                    // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
+                    mode={(hobbies.includes(type) && "contained") || "outlined"}
+                    onPress={() => addHobbies(type)}
+                    style={styles.badgeButton}
+                  >
+                    <Text
+                      style={[
+                        styles.badgeButtonActive,
+                        hobbies.includes(type)
+                          ? styles.badgeButtonActive
+                          : styles.badgeButtonDisable,
+                      ]}
+                    >
+                      {type}
+                    </Text>
+                  </Button>
+                ))}
+              </View>
+
+              <Divider style={{ marginTop: 20, marginBottom: 20 }} />
+              <Text style={styles.title}>Mes langues parlées</Text>
+              <View style={styles.languageContainer}>
+                {languagesList.map((type) => (
+                  <Button
+                    key={type}
+                    // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
+                    mode={
+                      (languages.includes(type) && "contained") || "outlined"
+                    }
+                    onPress={() => addLanguages(type)}
+                    style={styles.badgeButton}
+                  >
+                    <Text
+                      style={[
+                        styles.badgeButtonActive,
+                        languages.includes(type)
+                          ? styles.badgeButtonActive
+                          : styles.badgeButtonDisable,
+                      ]}
+                    >
+                      {type}
+                    </Text>
+                  </Button>
+                ))}
+              </View>
+            </ScrollView>
+
+            <View style={styles.submitContainer}>
+              <Button mode="contained" onPress={() => handleSubmit()}>
+                <Text style={{ color: "white", fontSize: 20 }}>Modifier</Text>
+              </Button>
+            </View>
+          </>
+        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -365,9 +371,9 @@ const styles = StyleSheet.create({
     // marginTop: 10,
     width: "100%",
   },
-//   list: {
-// flex: 1,
-//   },
+  //   list: {
+  // flex: 1,
+  //   },
   checkBox: {
     width: 30,
     height: 30,
@@ -407,7 +413,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   submitContainer: {
-    // marginTop: 2,
+    height: 80,
+    justifyContent: "center",
   },
   badgeButton: {
     width: "40%",

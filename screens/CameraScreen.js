@@ -31,7 +31,7 @@ export default function CameraScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const { goBack } = navigation;
   const theme = useTheme();
-  console.log(goBack);
+
   useEffect(() => {
     (async () => {
       const result = await Camera.requestCameraPermissionsAsync();
@@ -69,7 +69,6 @@ export default function CameraScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         dispatch(addPhoto(data.url));
 
         const dataUpdate = { token: token, avatar: data.url };
@@ -81,7 +80,6 @@ export default function CameraScreen({ navigation }) {
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
             setIsLoading(false);
             goBack();
           });
@@ -90,45 +88,51 @@ export default function CameraScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={styles.settingContainer}>
-        <TouchableOpacity
-          style={styles.settingButton}
-          onPress={toggleFlashStatus}
-        >
-          <FontAwesome
-            name="flash"
-            size={25}
-            color={flashStatus === "on" ? "#e8be4b" : "black"}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.settingButton}
-          onPress={toggleCameraFacing}
-        >
-          <FontAwesome name="rotate-right" size={25} color="black" />
-        </TouchableOpacity>
-      </View>
-      {!isLoading && (
-        <View style={styles.preview}>
-          <CameraView
-            style={styles.camera}
-            ref={(ref) => (cameraRef.current = ref)}
-            facing={facing}
-            flash={flashStatus}
-          ></CameraView>
-        </View>
-      )}
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       {isLoading && (
-        <View style={{ width: 180, height: 180 }}>
+        <View style={{ width: 180, height: 180, marginBlock: "auto" }}>
           <Gif />
         </View>
       )}
-      <View style={styles.snapContainer}>
-        <TouchableOpacity style={styles.snapButton} onPress={takePicture}>
-          <FontAwesome name="circle-thin" size={95} color="black" />
-        </TouchableOpacity>
-      </View>
+      {!isLoading && (
+        <>
+          <View style={styles.settingContainer}>
+            <TouchableOpacity
+              style={styles.settingButton}
+              onPress={toggleFlashStatus}
+            >
+              <FontAwesome
+                name="flash"
+                size={25}
+                color={flashStatus === "on" ? "#e8be4b" : "black"}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.settingButton}
+              onPress={toggleCameraFacing}
+            >
+              <FontAwesome name="rotate-right" size={25} color="black" />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.preview}>
+            <CameraView
+              style={styles.camera}
+              ref={(ref) => (cameraRef.current = ref)}
+              facing={facing}
+              flash={flashStatus}
+            ></CameraView>
+          </View>
+
+          <View style={styles.snapContainer}>
+            <TouchableOpacity style={styles.snapButton} onPress={takePicture}>
+              <FontAwesome name="circle-thin" size={95} color="black" />
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </SafeAreaView>
   );
 }
@@ -138,7 +142,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    backgroundColor: "pink",
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",

@@ -84,7 +84,6 @@ export default function FilterRestaurant(props) {
       textButton = "A emporter";
     } else if (type === "japanese_restaurant") {
       textButton = "Japonais";
-    } else {
     }
 
     return (

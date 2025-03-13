@@ -21,10 +21,12 @@ import { BACKEND_ADRESS } from "../.config";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import { useSelector } from "react-redux";
 import JoinReservation from "../components/JoinReservation";
+import restaurantsTypes from "../assets/data/restaurantsTypes";
 
 export default function Restaurant(props) {
-    let restaurantId = props.id;
-    let restaurantName = props.name;
+  let restaurantId = props.id;
+  let restaurantName = props.name;
+  let restaurantType = props.type;
   // Image sur la modale
   const restaurantImages = {
     hamburger_restaurant: require("../assets/restaurants_img/burger.jpg"),
@@ -53,6 +55,65 @@ export default function Restaurant(props) {
     meal_takeaway: require("../assets/restaurants_img/take-away.jpg"),
     japanese_restaurant: require("../assets/restaurants_img/japanese.jpg"),
   };
+
+  const typeInFrench = (restaurantType) => {
+    let textButton = "Restaurant";
+    if (restaurantType === "hamburger_restaurant") {
+      textButton = "Hamburger";
+    } else if (restaurantType === "bakery") {
+      textButton = "Boulangerie / Pâtisserie";
+    } else if (restaurantType === "sports_activity_location") {
+      textButton = "Lieu de sport";
+    } else if (restaurantType === "coffee_shop") {
+      textButton = "Café";
+    } else if (restaurantType === "video_arcade") {
+      textButton = "Salle d'arcade";
+    } else if (restaurantType === "hotel") {
+      textButton = "Hotel";
+    } else if (restaurantType === "bar") {
+      textButton = "Bar";
+    } else if (restaurantType === "italian_restaurant") {
+      textButton = "Italien";
+    } else if (restaurantType === "movie_theater") {
+      textButton = "Cinéma";
+    } else if (restaurantType === "shopping_mall") {
+      textButton = "Centre Commercial";
+    } else if (restaurantType === "supermarket") {
+      textButton = "Supermarché";
+    } else if (restaurantType === "store") {
+      textButton = "Boutique";
+    } else if (restaurantType === "brunch_restaurant") {
+      textButton = "Restaurant Brunch";
+    } else if (restaurantType === "casino") {
+      textButton = "Casino";
+    } else if (restaurantType === "pizza_restaurant") {
+      textButton = "Pizza";
+    } else if (restaurantType === "restaurant") {
+      textButton = "Restaurant";
+    } else if (restaurantType === "thai_restaurant") {
+      textButton = "Thailandais";
+    } else if (restaurantType === "food_store") {
+      textButton = "Magasin";
+    } else if (restaurantType === "chinese_restaurant") {
+      textButton = "Chinois";
+    } else if (restaurantType === "french_restaurant") {
+      textButton = "Grastronomie Française";
+    } else if (restaurantType === "sandwich_shop") {
+      textButton = "Sandwicherie";
+    } else if (restaurantType === "fast_food_restaurant") {
+      textButton = "Fast Food";
+    } else if (restaurantType === "tea_house") {
+      textButton = "Salon de Thé";
+    } else if (restaurantType === "meal_takeaway") {
+      textButton = "A emporter";
+    } else if (restaurantType === "japanese_restaurant") {
+      textButton = "Japonais";
+    }
+
+    return textButton;
+  };
+
+  const textType = typeInFrench(restaurantType)
 
   const restaurantImage =
     restaurantImages[props.type] ||
@@ -89,8 +150,6 @@ export default function Restaurant(props) {
     );
   };
 
-
-
   return (
     <View style={styles.container}>
       <Image source={restaurantImage} style={styles.image}></Image>
@@ -100,7 +159,7 @@ export default function Restaurant(props) {
         <View style={styles.header}>
           <View style={styles.left}>
             <View style={styles.basicInfos}>
-              <Text style={styles.semibold}>{capitalize(props.type)}</Text>
+              <Text style={styles.semibold}>{textType}</Text>
 
               {props.priceLevel === "PRICE_LEVEL_EXPENSIVE" && (
                 <View style={styles.budget}>
@@ -182,7 +241,10 @@ export default function Restaurant(props) {
         </View>
         <View></View>
 
-        <JoinReservation restaurantId={restaurantId} restaurantName={restaurantName}/>
+        <JoinReservation
+          restaurantId={restaurantId}
+          restaurantName={restaurantName}
+        />
       </View>
     </View>
   );
