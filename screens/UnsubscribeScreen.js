@@ -56,11 +56,11 @@ export default function UnsubscribeScreen({ navigation }) {
      >
       <View style={styles.topContainer}>
         <Text style={styles.mainTitle}>
-          Nous sommes tristes de te voir partir 😢
+          Nous sommes tristes{"\n"} de te voir partir 😢
         </Text>
       </View>
       <Text style={styles.text}>
-        Pour supprimer ton compte définitivement, renseigne tes identifiants
+        Pour supprimer ton compte {"\n"}définitivement, renseigne tes identifiants
       </Text>
       <Text style={styles.fieldTitle}>Ton adresse e-mail</Text>
       <TextInput
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   deleteButtonActive: {
-    color: "red",
+    color: "#fe5747",
     fontSize: 20,
   },
 });

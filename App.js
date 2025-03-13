@@ -29,6 +29,7 @@ import SignUp8Screen from "./screens/SignUp/SignUp8Screen";
 import SignUp9Screen from "./screens/SignUp/SignUp9Screen";
 import UnsubscribeScreen from "./screens/UnsubscribeScreen";
 import ModifyPhotoScreen from "./screens/ModifyPhotoScreen";
+import AgendaPastScreen from "./screens/AgendaPastScreen";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { PaperProvider } from "react-native-paper";
@@ -48,7 +49,14 @@ const store = configureStore({
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
+const StackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false, }}>
+    <Stack.Screen name="Agenda" component={AgendaScreen} />
+    <Stack.Screen name="AgendaPast" component={AgendaPastScreen} />
+    </Stack.Navigator>
+  )
+}
 const TabNavigator = () => {
   return (
     <Tab.Navigator
@@ -99,7 +107,7 @@ const TabNavigator = () => {
       <Tab.Screen name="Profile" component={ProfileScreen} />
       <Tab.Screen name="Chat" component={ChatListScreen} />
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Agenda" component={AgendaScreen} />
+      <Tab.Screen name="Agenda" component={StackNavigator} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
   );

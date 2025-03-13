@@ -112,14 +112,7 @@ export default function SignUp2Screen({ navigation }) {
       <Text style={styles.title}>Choisis ta photo {'\n'}de profil 📸</Text>
       <View style={styles.main}>
         <View style={styles.containerImage}>
-          {imageReducer === "" ? (
-            <Image
-              source={require("../../assets/logo/avatar_defaut.png")}
-              style={styles.image}
-            />
-          ) : (
             <Image source={{ uri: imageReducer }} style={styles.image} />
-          )}
         </View>
         {isLoading && (
           <ActivityIndicator size={120} animating={true} color={"white"} />

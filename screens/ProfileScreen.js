@@ -121,17 +121,10 @@ console.log(avatar)
           onPress={() => handleEditAvatar()}
           style={styles.avatarContainer}
         >
-          {avatar === "avatar_01.png" ? (
-            <Image
-              source={require("./../assets/logo/avatar_defaut.png")}
-              style={styles.avatar}
-            />
-          ) : (
             <Image
               style={styles.avatar}
               source={avatar && { uri: `${avatar}` }}
             />
-          )}
         </TouchableOpacity>
         <ScrollView style={styles.inputs_container}>
           <Text style={styles.title}>Mes informations</Text>

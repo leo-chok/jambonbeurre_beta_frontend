@@ -17,7 +17,6 @@ import {
   Text,
   useTheme,
 } from "react-native-paper";
-import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewReservation,
@@ -28,7 +27,7 @@ import { BACKEND_ADRESS } from "../.config";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-export default function AgendaScreen({ navigation }) {
+export default function AgendaPastScreen({ navigation }) {
   const reservations = useSelector(
     (state) => state.reservations.value.reservations
   );
@@ -134,11 +133,6 @@ export default function AgendaScreen({ navigation }) {
     ); // Formate en jj/mm/aaaa
   };
 
-  // Lien vers Reservations passées
-  const handlePast = () => {
-    navigation.navigate("AgendaPast");
-  }
-
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
@@ -147,64 +141,29 @@ export default function AgendaScreen({ navigation }) {
       <View style={styles.header}>
         <Text style={styles.headerText}>Mon Agenda 🗓️ </Text>
       </View>
-      <View style={{ flex: 1, width: "100%", marginBottom: 170, }}>
-        <Text style={styles.section}>
-          Réservation(s) prévue(s) : {upcomingReservations.length}
+      <View style={{ flex: 1, width: "100%", paddingBottom: 60 }}>
+        <Text style={styles.section2}>
+          Réservation(s) passée(s) : {pastReservations.length}
         </Text>
-        <ScrollView style={styles.scrollView}>
-          {upcomingReservations.map((reservation) => (
-            <View key={reservation._id} style={styles.reservationContainer}>
+        <ScrollView style={styles.scrollView2}>
+          {pastReservations.map((reservation) => (
+            <View
+              key={reservation._id}
+              style={[styles.reservationContainerPast, { opacity: 0.7 }]}
+            >
               <Text style={styles.textName}>{reservation.name}</Text>
               <Text style={styles.textDate}>
                 {formatDate(reservation.date)}
               </Text>
-              <Text style={styles.textConversation}>
-                {reservation.conversation}
-              </Text>
-              <Button
-                style={styles.btnInvite}
-                mode="contained"
-                contentStyle={styles.buttonContent} // Appliquer un style d'alignement
-                onPress={() =>
-                  navigation.navigate("AgendaInvitListScreen", {
-                    reservationId: reservation._id,
-                  })
-                }
-              >
-                <AntDesign
-                  name="adduser"
-                  size={21}
-                  color="white"
-                  style={styles.buttonIcon}
-                />
-                {/* <Text style={styles.buttonText}>Inviter</Text> */}
-              </Button>
-              <Button
-                style={styles.btnLeaveReservation}
-                mode="contained"
-                contentStyle={styles.buttonContent}
-                onPress={() => leaveReservation(reservation._id, token)}
-              >
-                <FontAwesome
-                  name="remove"
-                  size={20}
-                  color="white"
-                  style={styles.buttonIcon}
-                />
-                {/* <Text style={styles.buttonText}>Quitter</Text> */}
-              </Button>
-              {reservations.length === 0 && (
-                <Text style={styles.noReserv}>Aucune réservation trouvée</Text>
-              )}
             </View>
           ))}
         </ScrollView>
       </View>
-      <View style={styles.past}>
-      <Button mode="outlined" onPress={() => handlePast()}>
-            <Text style={{ color: "#fe5747", fontSize: 18, }}>Réservations Passées</Text>
-          </Button>
-      </View>
+            <View style={styles.past}>
+            <Button mode="outlined" onPress={() => navigation.navigate("Agenda")}>
+                  <Text style={{ color: "#fe5747", fontSize: 18, }}>Réservations Prévues</Text>
+                </Button>
+            </View>
       <Button
         style={styles.btnAddReservation}
         mode={"contained"}
@@ -228,6 +187,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: "100%",
+    backgroundColor: "#fcf4e9",
     padding: 30,
     alignItems: "center",
     borderBottomColor: "#ddd",
@@ -237,20 +197,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",
-  },
-  reservationContainer: {
-    width: 330,
-    height: 110,
-    backgroundColor: "rgb(255, 218, 213)",
-    borderRadius: 30,
-    shadowColor: "#000",
-    shadowRadius: 4,
-    alignItems: "center",
-    marginTop: 20,
-    marginBottom: 15,
-    paddingBottom: 10,
-    paddingTop: 10,
-    marginHorizontal: "auto",
   },
   reservationContainerPast: {
     width: 330,
@@ -263,6 +209,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     marginTop: 10,
     padding: 18,
+    marginHorizontal: "auto",
   },
   btnAddReservation: {
     position: "absolute",
@@ -313,11 +260,13 @@ const styles = StyleSheet.create({
   section2: {
     textAlign: "center",
     fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
     paddingTop: 5,
-    color: "#fe5747",
+    color: "#397a5b",
     fontFamily: "LeagueSpartan-SemiBold",
     letterSpacing: -1,
-    textDecorationLine: 1,
+
   },
   noReserv: {
     textAlign: "center",

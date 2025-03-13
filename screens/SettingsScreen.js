@@ -49,11 +49,9 @@ export default function SettingsScreen({ navigation }) {
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-      <View style={{ width: 180, height: 180 }}>
-        <Gif />
-      </View>
-      <View style={styles.topContainer}>
         <Text style={styles.mainTitle}>Paramètres 🧑‍🔧</Text>
+      <Image source={require("../assets/logo/logoGifOrange.gif")} style={styles.logo} />
+      <View style={styles.topContainer}>
       </View>
       <Button
         onPress={() => handleModify()}
@@ -102,6 +100,11 @@ const styles = StyleSheet.create({
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",
     marginRight: 20,
+  },
+  logo: {
+    width: 180,
+    height: 180,
+    marginTop: 60,
   },
   badgeButton: {
     width: "70%",
