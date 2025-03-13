@@ -26,7 +26,7 @@ import FilterRestaurant from "../components/FilterRestaurant";
 import Restaurant from "../components/Restaurant";
 import mapStyle from "../assets/data/mapStyle";
 import { BACKEND_ADRESS } from "../.config";
-import {Alert} from "react-native"
+import { Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import OthersProfileScreen from "./OthersProfileScreen";
 
@@ -38,11 +38,6 @@ export default function HomeScreen({ navigation }) {
   const filterRestaurant = useSelector((state) => state.restaurantFilter.value);
   const userReducer = useSelector((state) => state.user.value);
 
-  const [restaurantFilter, setRestaurantFilter] = useState([
-    "coffee_shop",
-    "hamburger_restaurant",
-    "restaurant",
-  ]);
 
   const [currentPosition, setCurrentPosition] = useState({
     latitude: 0,
@@ -68,17 +63,13 @@ export default function HomeScreen({ navigation }) {
             onPress: async () => {
               const result = await Location.requestForegroundPermissionsAsync();
               if (result.status === "granted") {
-                Location.watchPositionAsync(
-                  { distanceInterval: 10 },
-                  (location) => {
-                    const latitude = location.coords.latitude;
-                    const longitude = location.coords.longitude;
-  
-                    setCurrentPosition({ latitude, longitude });
-                    dispatch(updatePosition([longitude, latitude]));
-                  }
-                );
-              } 
+                const location = await Location.getCurrentPositionAsync({});
+                const latitude = location.coords.latitude;
+                const longitude = location.coords.longitude;
+
+                setCurrentPosition({ latitude, longitude });
+                dispatch(updatePosition([longitude, latitude]));
+              }
             },
           },
         ]
@@ -94,7 +85,7 @@ export default function HomeScreen({ navigation }) {
       // Récupérer les restaurants, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
       fetch(
         BACKEND_ADRESS +
-          "/restaurants/near/100000?longitude=" +
+          "/restaurants/near/1000?longitude=" +
           currentPosition.longitude +
           "&latitude=" +
           currentPosition.latitude
@@ -221,7 +212,7 @@ export default function HomeScreen({ navigation }) {
   };
 
   //////////////////////BARRE DE RECHERCHE//////////////////////
-  const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = () => {
     if (!searchQuery.trim()) return; // Éviter les recherches vides
@@ -267,6 +258,7 @@ export default function HomeScreen({ navigation }) {
         });
 
         setVisible(true); // Afficher la modale
+        setSearchQuery("")
 
         // Décaler la vue vers le haut pour éviter que le marker soit caché
         if (restaurantLocation) {
@@ -282,6 +274,7 @@ export default function HomeScreen({ navigation }) {
         }
       })
       .catch((error) => console.error("Erreur lors de la recherche :", error));
+      
   };
 
   //////////////////////MODAL DES FILTRES//////////////////////
@@ -432,7 +425,6 @@ export default function HomeScreen({ navigation }) {
           onDismiss={handleFilter}
           contentContainerStyle={styles.filterModalStyle}
         >
-        
           <Ionicons
             style={styles.closemodale}
             name="close-outline"
@@ -479,13 +471,13 @@ export default function HomeScreen({ navigation }) {
         {nearUsersMarkers}
       </MapView>
       <View style={styles.wrapper}>
-        <Searchbar style={styles.searchbar}
+        <Searchbar
+          style={styles.searchbar}
           placeholder="Rechercher un restaurant"
           onChangeText={setSearchQuery}
           onIconPress={handleSearch}
           onSubmitEditing={handleSearch}
           value={searchQuery}
-
         />
         <View style={styles.mapActions}>
           <TouchableOpacity activeOpacity={0.8} onPress={() => handleCenter()}>
