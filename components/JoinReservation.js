@@ -7,12 +7,14 @@ import {
   Text,
   Alert,
   Image,
+  ScrollView,
 } from "react-native";
 import { useSelector } from "react-redux";
 
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import { BACKEND_ADRESS } from "../.config";
 import MakeReservation from "../components/MakeReservation";
+
 
 export default function JoinReservation(props) {
   let restaurantId = props.restaurantId;
@@ -131,10 +133,30 @@ export default function JoinReservation(props) {
     const jourSemaine = jours[date.getUTCDay()];
     const jour = date.getUTCDate();
     const moisNom = mois[date.getUTCMonth()];
-    const heures = date.getUTCHours().toString().padStart(2, "0");
+    const heures = date.getHours().toString().padStart(2, "0");
     const minutes = date.getUTCMinutes().toString().padStart(2, "0");
 
     return `${jourSemaine} ${jour} ${moisNom} - ${heures}h${minutes}`;
+  };
+
+  // Fonction pour récupérer la date du jour
+
+  const isToday = (dateString) => {
+    const today = new Date();
+    const date = new Date(dateString);
+
+    return (
+      today.getFullYear() === date.getFullYear() &&
+      today.getMonth() === date.getMonth() &&
+      today.getDate() === date.getDate()
+    );
+  };
+
+  const formatHour = (dateString) => {
+    const date = new Date(dateString);
+    const heures = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    return `${heures}h${minutes}`;
   };
 
   return (
@@ -143,6 +165,7 @@ export default function JoinReservation(props) {
         <View>
           <View style={styles.whitecard}>
             <Text style={styles.h2}>{formatDate(reservationDate)}</Text>
+            <ScrollView style={styles.scrollView} horizontal={true}>
             <View style={styles.gallery}>
               {!joinReservationConfirmed && (
                 <View>
@@ -155,7 +178,9 @@ export default function JoinReservation(props) {
                     </View>
                   </TouchableOpacity>
                   <Text style={styles.btnlegend}>Je m'inscrit</Text>
+              
                 </View>
+
               )}
               {isReserved && (
                 <View style={styles.registeredusers}>
@@ -171,6 +196,7 @@ export default function JoinReservation(props) {
                 </View>
               )}
             </View>
+            </ScrollView>
           </View>
         </View>
       ) : (
@@ -179,6 +205,8 @@ export default function JoinReservation(props) {
           restaurantName={restaurantName}
         />
       )}
+             
+
     </View>
   );
 }
@@ -204,7 +232,10 @@ const styles = StyleSheet.create({
     height: "auto",
     alignItems: "center",
   },
-
+  scrollView: {
+    height: 110,
+    flexDirection: "row",
+  },
   h2: {
     fontSize: 16,
     marginBottom: 8,
@@ -238,6 +269,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-end",
     textAlign: "center",
+    height: "auto",
   },
   registeredusers: {
     flexDirection: "row",
