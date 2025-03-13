@@ -147,13 +147,7 @@ export default function ChatNewConversationScreen({ navigation }) {
           <Text style={styles.textButton}>Écrire</Text>
         </Button>
       </View>
-      <Searchbar style={styles.searchbar}
-                placeholder="Rechercher un buddy"
-                onChangeText={(value) => setSearch(value)}
-                value={search}
-               // onIconPress={handleSearch}
-               // onSubmitEditing={handleSearch}
-              />
+
      
       <ScrollView style={styles.scrollView}>
         {users &&
@@ -172,14 +166,7 @@ export default function ChatNewConversationScreen({ navigation }) {
               </TouchableOpacity>
             ))}
       </ScrollView>
-      <Button
-        key="footer"
-        style={styles.footer}
-        mode={"contained"}
-        onPress={() => Fvalide()}
-      >
-        <Text style={styles.textButton}>Écrire</Text>
-      </Button>
+
     </KeyboardAvoidingView>
   );
 }
@@ -203,7 +190,7 @@ const styles = StyleSheet.create({
   },
   main: {
     width: "100%",
-    paddingTop: 120,
+    paddingTop: 160,
     paddingBottom: 65,
     justifyContent: "center",
     alignItems: "center",
