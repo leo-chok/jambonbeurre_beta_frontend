@@ -84,7 +84,7 @@ export default function AgendaInvitListScreen({ route, navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.header}>
-        <Text style={styles.headerText}>Mes Contacts 👥</Text>
+        <Text style={styles.headerText}>Mes contacts 👥</Text>
       </View>
       <Text style={styles.section}>Mes suggestions : </Text>
       <View style={{ height: 300, width: 360, paddingTop: 20 }}>
@@ -133,7 +133,7 @@ export default function AgendaInvitListScreen({ route, navigation }) {
                 mode={"contained"}
                 onPress={() => handleInviteUser(reservationId, user._id)}
               >
-                <AntDesign name="adduser" size={21} color="black" />
+                <AntDesign name="adduser" size={21} color="white" />
                 <Text style={styles.title}></Text>
               </Button>
             </View>
@@ -190,7 +190,7 @@ export default function AgendaInvitListScreen({ route, navigation }) {
                 mode={"contained"}
                 onPress={() => handleInviteUser(reservationId, user._id)}
               >
-                <AntDesign name="adduser" size={21} color="black" />
+                <AntDesign name="adduser" size={21} color="white" />
                 <Text style={styles.title}></Text>
               </Button>
             </View>
@@ -201,7 +201,7 @@ export default function AgendaInvitListScreen({ route, navigation }) {
       </ScrollView>
       <Button
         style={styles.goBackButton}
-        mode={"contained"}
+        mode={"outlined"}
         title="Go Back"
         onPress={() => navigation.navigate("Agenda")}
       >
@@ -224,11 +224,10 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
   },
   headerText: {
-    marginTop: 50,
+    marginTop: 40,
     fontSize: 30,
-    fontWeight: "bold",
     color: "rgb(254, 87, 71)",
-    fontFamily: "LeagueSpartan-SemiBold",
+    fontFamily: "LeagueSpartan-Bold",
   },
   userItem: {
     display: "flex",
@@ -259,16 +258,12 @@ const styles = StyleSheet.create({
     color: "#888",
   },
   goBackButton: {
-    marginBottom: 40,
-
-    backgroundColor: "#fcf4e9",
-    borderRadius: 10,
+    marginTop: 5,
+    marginBottom: 35,
   },
   btnText: {
-    fontSize: 20,
-    marginTop: 29,
+    fontSize: 18,
     color: "rgb(254, 87, 71)",
-    fontFamily: "LeagueSpartan-SemiBold",
   },
   btnInvite: {
     borderRadius: 10,
@@ -305,20 +300,19 @@ const styles = StyleSheet.create({
     color: "rgb(0, 108, 72)",
   },
   section: {
-    paddingTop: 10,
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 25,
     textAlign: "center",
-    color: "rgb(0, 108, 72)",
+    color: "#397a5b",
     fontFamily: "LeagueSpartan-SemiBold",
+    letterSpacing: -1,
   },
   section2: {
     textAlign: "center",
-    fontSize: 24,
-    fontWeight: "bold",
-    paddingTop: 6,
+    fontSize: 25,
     paddingBottom: 10,
-    color: "rgb(0, 108, 72)",
+    color: "#397a5b",
     fontFamily: "LeagueSpartan-SemiBold",
+    letterSpacing: -1,
+
   },
 });

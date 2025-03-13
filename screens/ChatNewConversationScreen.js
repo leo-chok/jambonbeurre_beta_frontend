@@ -242,7 +242,6 @@ const styles = StyleSheet.create({
   },
   mainTitle: {
     fontSize: 30,
-    fontWeight: "bold",
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",
     alignText: "center",
@@ -266,7 +265,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: "70%",
     marginHorizontal: "auto",
-    marginBottom: 20,
+    marginBottom: 10,
+    marginTop: 5,
   },
   view: {
     backgroundColor: "rgb(255, 218, 213)",
@@ -292,14 +292,12 @@ const styles = StyleSheet.create({
     color: "20",
 
   },
-
   textButton: {
     color: "white",
     fontSize: 20,
   },
   searchbar: {
     width: "80%",
-    height: 50,
     backgroundColor: "white",
     shadowOpacity: 0.5,
     shadowRadius: 6,
@@ -308,14 +306,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     borderTopLeftRadius: 30,
-  },
+    },
   section: {
     paddingTop: 40,
     fontSize: 24,
-    fontWeight: "bold",
     textAlign: "center",
-    color: "rgb(0, 108, 72)",
+    color: "#397a5b",
     fontFamily: "LeagueSpartan-SemiBold",
+    letterSpacing: -1,
   },
   section2: {
     textAlign: "center",
@@ -324,8 +322,9 @@ const styles = StyleSheet.create({
     marginBottom: 210,
     paddingTop: 6,
     paddingBottom: -30,
-    color: "rgb(0, 108, 72)",
+    color: "#397a5b",
     fontFamily: "LeagueSpartan-SemiBold",
+    letterSpacing: -1,
   },
   buddies: {
     alignItems: "center",
@@ -336,7 +335,7 @@ const styles = StyleSheet.create({
     width: 55,
     height: 55,
     borderRadius: 50,
-    marginTop: 3,
+    marginTop: 1,
     marginBottom: 10,
     marginLeft: 10,
   },
