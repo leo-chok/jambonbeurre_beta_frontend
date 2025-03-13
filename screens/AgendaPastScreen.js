@@ -139,9 +139,9 @@ export default function AgendaPastScreen({ navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.header}>
-        <Text style={styles.headerText}>Mon Agenda 🗓️ </Text>
+        <Text style={styles.headerText}>Mon agenda 🗓️ </Text>
       </View>
-      <View style={{ flex: 1, width: "100%", paddingBottom: 60 }}>
+      <View style={{ flex: 1, width: "100%", paddingBottom: 160 }}>
         <Text style={styles.section2}>
           Réservation(s) passée(s) : {pastReservations.length}
         </Text>
@@ -161,7 +161,7 @@ export default function AgendaPastScreen({ navigation }) {
       </View>
             <View style={styles.past}>
             <Button mode="outlined" onPress={() => navigation.navigate("Agenda")}>
-                  <Text style={{ color: "#fe5747", fontSize: 18, }}>Réservations Prévues</Text>
+                  <Text style={{ color: "#fe5747", fontSize: 18, }}>Réservations prévues</Text>
                 </Button>
             </View>
       <Button
@@ -221,27 +221,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  btnLeaveReservation: {
-    marginTop: -41,
-    marginLeft: "45%",
-  },
   title: {
     color: "white",
     textAlign: "center",
-  },
-  btnInvite: {
-    marginRight: "45%",
   },
   buttonContent: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
-  // buttonText: {
-  //   color: "white",
-  //   fontSize: 16,
-  //   fontWeight: "bold",
-  // },
   textName: {
     fontSize: 20,
     fontWeight: "bold",
@@ -249,24 +237,14 @@ const styles = StyleSheet.create({
     color: "rgb(78, 68, 75))",
     fontFamily: "LeagueSpartan-SemiBold",
   },
-  section: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: "#397a5b",
-    fontFamily: "LeagueSpartan-SemiBold",
-    letterSpacing: -1,
-  },
   section2: {
     textAlign: "center",
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
-    paddingTop: 5,
     color: "#397a5b",
     fontFamily: "LeagueSpartan-SemiBold",
     letterSpacing: -1,
-
   },
   noReserv: {
     textAlign: "center",
@@ -278,11 +256,6 @@ const styles = StyleSheet.create({
     color: "white",
     marginHorizontal: "auto",
     marginVertical: "auto",
-  },
-  scrollView: {
-    flex: 1,
-    width: "100%",
-    paddingHorizontal: 20,
   },
   scrollView2: {
     flex: 1,

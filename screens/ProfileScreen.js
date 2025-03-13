@@ -155,7 +155,7 @@ export default function ProfileScreen({ navigation }) {
           <View style={styles.vacancesContainer}>
             {vacancy && <Text>En vacances</Text>}
           </View>
-          <View style={styles.gloia}>{!vacancy && displayCreneaux}</View>
+          <View style={styles.mainCreneaux}>{!vacancy && displayCreneaux}</View>
           <Divider style={{ marginTop: 20, marginBottom: 20 }} />
           <Text style={styles.title}>Types de cuisine préférés</Text>
           <View style={styles.typeFoodContainer}>
@@ -177,7 +177,7 @@ export default function ProfileScreen({ navigation }) {
           <Text style={styles.title}>Mes centres d'intérêts</Text>
           <View style={styles.hobbiesContainer}>
             {hobbies.length === 0 ? (
-              <Text style={styles.noInfos}>Aucun centre d'intérêt</Text>
+              <Text style={styles.noInfos}>Aucun centre d'intérêt sélectionné</Text>
             ) : (
               hobbies.map((type) => (
                 <Button
@@ -196,7 +196,7 @@ export default function ProfileScreen({ navigation }) {
           <Text style={styles.title}>Mes langues parlées</Text>
           <View style={styles.languageContainer}>
             {languages.length === 0 ? (
-              <Text style={styles.noInfos}>Aucune langue parlée</Text>
+              <Text style={styles.noInfos}>Aucune langue sélectionnée</Text>
             ) : (
               languages.map((type) => (
                 <Button
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     fontFamily: "Montserrat-Medium",
   },
-  gloia: {
+  mainCreneaux: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",

@@ -1,28 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToken, updateProfile } from "../../reducers/user";
 import { BACKEND_ADRESS } from "../../.config";
 import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from "react-native";
 
 import {
-  TextInput,
-  List,
-  RadioButton,
-  Checkbox,
   Text,
   Divider,
   Button,
-  Switch,
-  Chip,
-  Snackbar,
   useTheme,
 } from "react-native-paper";
 
@@ -40,8 +29,6 @@ export default function SignUp8Screen({ navigation }) {
   const [hobbies, setHobbies] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  console.log(userReducer);
 
   // ----- FUNCTIONS ------------------------------
 
@@ -70,6 +57,7 @@ export default function SignUp8Screen({ navigation }) {
     }
   }
 
+    // Bouton suivant
   const handleSuivant = () => {
     setIsLoading(true);
     const dataReducer = {
@@ -103,6 +91,7 @@ export default function SignUp8Screen({ navigation }) {
       });
   };
 
+    // Bouton ignorer
   const handleIgnore = () => {
     navigation.navigate("SignUp9");
   };

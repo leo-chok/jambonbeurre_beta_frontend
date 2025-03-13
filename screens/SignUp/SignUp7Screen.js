@@ -1,26 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
-  Image,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from "react-native";
 
 import {
   TextInput,
-  List,
-  RadioButton,
-  Checkbox,
   Text,
-  Divider,
   Button,
-  Switch,
-  Chip,
-  Snackbar,
   useTheme,
 } from "react-native-paper";
 
@@ -35,8 +25,7 @@ export default function SignUp7Screen({ navigation }) {
   const theme = useTheme();
   const [bio, setBio] = useState("");
 
-  console.log(userReducer);
-
+  // Bouton suivant
   const handleSuivant = () => {
     const dataReducer = {
       description: {
@@ -60,6 +49,7 @@ export default function SignUp7Screen({ navigation }) {
       });
   };
 
+    // Bouton ignorer
   const handleIgnore = () => {
     navigation.navigate("SignUp8");
   };

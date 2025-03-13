@@ -202,7 +202,7 @@ export default function AgendaScreen({ navigation }) {
       </View>
       <View style={styles.past}>
       <Button mode="outlined" onPress={() => handlePast()}>
-            <Text style={{ color: "#fe5747", fontSize: 18, }}>Réservations Passées</Text>
+            <Text style={{ color: "#fe5747", fontSize: 18, }}>Réservations passées</Text>
           </Button>
       </View>
       <Button

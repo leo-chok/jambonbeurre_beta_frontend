@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   topContainer: {
@@ -100,10 +100,11 @@ const styles = StyleSheet.create({
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",
     marginRight: 20,
+    marginTop: 20,
   },
   logo: {
-    width: 180,
-    height: 180,
+    width: 250,
+    height: 250,
     marginTop: 60,
   },
   badgeButton: {
