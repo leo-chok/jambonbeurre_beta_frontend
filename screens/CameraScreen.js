@@ -106,18 +106,18 @@ export default function CameraScreen({ navigation }) {
               <FontAwesome
                 name="flash"
                 size={25}
-                color={flashStatus === "on" ? "#e8be4b" : "black"}
+                color={flashStatus === "on" ? "#e8be4b" : theme.colors.primary}
               />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.settingButton}
               onPress={toggleCameraFacing}
             >
-              <FontAwesome name="rotate-right" size={25} color="black" />
+              <FontAwesome name="rotate-right" size={25} color={theme.colors.primary} />
             </TouchableOpacity>
           </View>
 
-          <View style={styles.preview}>
+          <View style={[styles.preview,{ borderColor: theme.colors.primary}]}>
             <CameraView
               style={styles.camera}
               ref={(ref) => (cameraRef.current = ref)}
@@ -128,7 +128,7 @@ export default function CameraScreen({ navigation }) {
 
           <View style={styles.snapContainer}>
             <TouchableOpacity style={styles.snapButton} onPress={takePicture}>
-              <FontAwesome name="circle-thin" size={95} color="black" />
+              <FontAwesome name="circle-thin" size={95} color={theme.colors.primary}/>
             </TouchableOpacity>
           </View>
         </>
@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
     width: 300,
     borderRadius: 150,
     overflow: "hidden",
+    borderWidth: 10,
   },
   camera: {
     flex: 1,

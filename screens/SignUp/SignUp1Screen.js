@@ -110,6 +110,7 @@ export default function SignUp1Screen({ navigation }) {
               mode={isValid ? "contained" : "contained-tonal"}
               onPress={() => handleSuivant()}
               style={styles.badgeButton}
+              disabled={!isValid}
             >
               <Text
                 style={[

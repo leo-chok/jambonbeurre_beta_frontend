@@ -1,18 +1,8 @@
 import { useState } from "react";
 
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 
-import {
-  TextInput,
-  Text,
-  Button,
-  useTheme,
-} from "react-native-paper";
+import { TextInput, Text, Button, useTheme } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../../.config";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,8 +14,7 @@ export default function SignUp3Screen({ navigation }) {
   const userReducer = useSelector((state) => state.user.value);
   const theme = useTheme();
   const [pseudo, setPseudo] = useState("");
-
-  console.log(userReducer);
+  let isValid = false;
 
   // Création du pseudo
 
@@ -51,6 +40,11 @@ export default function SignUp3Screen({ navigation }) {
         navigation.navigate("SignUp4");
       });
   };
+
+  if (pseudo !== "") {
+    isValid = true;
+  }
+
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
@@ -69,13 +63,14 @@ export default function SignUp3Screen({ navigation }) {
           style={styles.inputField}
           underlineColor="transparent"
         />
-          <Button
-                onPress={() => handleSuivant()}
-                mode={"contained"}
-                style={styles.badgeButton}
-              >
-                <Text style={styles.badgeButtonActive}>Suivant</Text>
-              </Button>
+        <Button
+          onPress={() => handleSuivant()}
+          mode={"contained"}
+          style={styles.badgeButton}
+          disabled={!isValid}
+        >
+          <Text style={styles.badgeButtonActive}>Suivant</Text>
+        </Button>
       </View>
     </KeyboardAvoidingView>
   );
@@ -88,37 +83,37 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-    title: {
-      fontSize: 35,
-      fontWeight: "bold",
-      color: "#fe5747",
-      fontFamily: "LeagueSpartan-Bold",
-      letterSpacing: -1,
-      marginTop: 20,
-      textAlign: "center",
-    },
-    text: {
-      fontSize: 20,
-      marginBottom: 10,
-      marginTop: 20,
-      textAlign: "center",
-    },
-    badgeButton: {
-      width: 250,
-      margin: 30,
-      marginHorizontal: "auto",
-    },
-    badgeButtonActive: {
-      color: "white",
-      fontSize: 20,
-    },
+  title: {
+    fontSize: 35,
+    fontWeight: "bold",
+    color: "#fe5747",
+    fontFamily: "LeagueSpartan-Bold",
+    letterSpacing: -1,
+    marginTop: 20,
+    textAlign: "center",
+  },
+  text: {
+    fontSize: 20,
+    marginBottom: 10,
+    marginTop: 20,
+    textAlign: "center",
+  },
+  badgeButton: {
+    width: 250,
+    margin: 30,
+    marginHorizontal: "auto",
+  },
+  badgeButtonActive: {
+    color: "white",
+    fontSize: 20,
+  },
   inputField: {
     marginTop: 10,
     marginHorizontal: "auto",
-      width: 350,
-      height: 50,
-      borderRadius: 20,
-      borderTopRightRadius: 20,
-      borderTopLeftRadius: 20,
+    width: 350,
+    height: 50,
+    borderRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
   },
 });
