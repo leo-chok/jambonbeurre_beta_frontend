@@ -130,7 +130,7 @@ export default function HomeScreen({ navigation }) {
       // Récupérer les autres utilisateurs, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
       fetch(
         BACKEND_ADRESS +
-          "/users/near/10000?longitude=" +
+          "/users/near/1000?longitude=" +
           currentPosition.longitude +
           "&latitude=" +
           currentPosition.latitude

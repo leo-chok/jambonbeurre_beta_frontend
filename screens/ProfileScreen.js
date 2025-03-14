@@ -133,11 +133,11 @@ export default function ProfileScreen({ navigation }) {
             <Text style={styles.infos_data}>{username}</Text>
           </View>
           <View style={styles.infos_container}>
-            <Text style={styles.infos_title}>Nom</Text>
+            <Text style={styles.infos_title}>Prénom</Text>
             <Text style={styles.infos_data}>{firstname}</Text>
           </View>
           <View style={styles.infos_container}>
-            <Text style={styles.infos_title}>Prénom</Text>
+            <Text style={styles.infos_title}>Nom</Text>
             <Text style={styles.infos_data}>{lastname}</Text>
           </View>
           <Divider style={{ marginTop: 20, marginBottom: 20 }} />

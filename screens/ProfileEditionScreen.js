@@ -190,14 +190,14 @@ export default function ProfileEditionScreen({ navigation }) {
                 underlineColor="transparent"
               />
               <TextInput
-                label="Nom"
+                label="Prénom"
                 value={firstname}
                 onChangeText={(firstname) => setFirstname(firstname)}
                 style={styles.inputField}
                 underlineColor="transparent"
               />
               <TextInput
-                label="Prénom"
+                label="Nom"
                 value={lastname}
                 onChangeText={(lastname) => setLastname(lastname)}
                 style={styles.inputField}

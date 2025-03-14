@@ -112,11 +112,11 @@ export default function OthersProfileScreen({ navigation, route }) {
             <Text style={styles.infos_data}>{username}</Text>
             </View>
             <View style={styles.infos_container}>
-            <Text style={styles.infos_title}>Nom</Text>
+            <Text style={styles.infos_title}>Prénom</Text>
             <Text style={styles.infos_data}>{firstname}</Text>
             </View>
             <View style={styles.infos_container}>
-            <Text style={styles.infos_title}>Prénom</Text>
+            <Text style={styles.infos_title}>Nom</Text>
             <Text style={styles.infos_data}>{lastname}</Text>
             </View>
             <Divider style={{ marginTop: 20, marginBottom: 20 }} />
@@ -198,9 +198,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   topContainer: {
-    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    width: "100%",
     marginTop: 50,
     marginBottom: 20,
   },
@@ -219,12 +219,11 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 30,
     fontWeight: "bold",
-    fontWeight: "bold",
     color: "#fe5747",
     fontFamily: "LeagueSpartan-Bold",
-    alignText: "center",
-    marginRight: 20,
+    textAlign: "center",
     marginTop: 25,
+    marginHorizontal: "auto",
   },
   title: {
     fontSize: 25,
