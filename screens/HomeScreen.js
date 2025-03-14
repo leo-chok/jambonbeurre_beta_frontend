@@ -65,9 +65,24 @@ export default function HomeScreen({ navigation }) {
                 const location = await Location.getCurrentPositionAsync({});
                 const latitude = location.coords.latitude;
                 const longitude = location.coords.longitude;
-
                 setCurrentPosition({ latitude, longitude });
                 dispatch(updatePosition([longitude, latitude]));
+                dataBDD = {
+                  token: token,
+                  location: [longitude, latitude],
+                };
+
+                fetch(BACKEND_ADRESS + "/users/update", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(dataBDD),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    console.log(data);
+                  });
               }
             },
           },
@@ -115,7 +130,7 @@ export default function HomeScreen({ navigation }) {
       // Récupérer les autres utilisateurs, en temps réel, à proximité de l'utilisateur (dans un rayon de 500m)
       fetch(
         BACKEND_ADRESS +
-          "/users/near/1000?longitude=" +
+          "/users/near/10000?longitude=" +
           currentPosition.longitude +
           "&latitude=" +
           currentPosition.latitude
@@ -451,20 +466,6 @@ export default function HomeScreen({ navigation }) {
         style={styles.map}
         customMapStyle={mapStyle}
       >
-        {currentPosition && (
-          <Marker coordinate={currentPosition} title="Ma Position">
-            {/* <Image
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: 25,
-                borderWidth: 5,
-                borderColor: theme.colors.secondary,
-              }}
-              source={{ uri: userAvatar }}
-            /> */}
-          </Marker>
-        )}
         {restaurantsMarkers}
         {nearUsersMarkers}
       </MapView>
