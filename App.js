@@ -100,7 +100,7 @@ const TabNavigator = () => {
             />
           );
         },
-        tabBarActiveTintColor: "#FF6C47",
+        tabBarActiveTintColor: "#fe5747",
         tabBarInactiveTintColor: "#202020",
       })}
     >
