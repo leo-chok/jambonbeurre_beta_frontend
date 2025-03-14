@@ -116,18 +116,10 @@ export default function AgendaInvitListScreen({ route, navigation }) {
                   </View>
                 </Modal>
               </Portal>
-              <Button
-                style={styles.btnUsername}
-                mode="text"
-                onPress={() =>
-                  navigation.navigate("ChatConversation", {
-                    userId: user._id,
-                  })
-                }
-              >
+              
                 
                 <Text style={styles.userText}>{user.infos.username}</Text>
-              </Button>
+            
               <Button
                 style={styles.btnInvite}
                 mode={"contained"}
@@ -247,7 +239,6 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     maxWidth: 150,
     textAlign: "center",
-    textDecorationLine: "underline",
     fontFamily: "LeagueSpartan-SemiBold",
     color: "rgb(254, 87, 71)",
   },
