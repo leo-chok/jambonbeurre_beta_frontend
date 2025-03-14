@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   },
   dateText: { fontSize: 16 },
   registerbtn: {
-    backgroundColor: "#FF6C47",
+    backgroundColor: "#fe5747",
     width: 80,
     height: 80,
     borderRadius: 50,
