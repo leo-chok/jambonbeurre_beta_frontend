@@ -1,16 +1,6 @@
-import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  Alert,
-  ActivityIndicator,
-  Image,
-} from "react-native";
-import { useSelector } from "react-redux";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+
 import { Ionicons } from "@expo/vector-icons";
-import { BACKEND_ADRESS } from "../.config";
 
 // import { NavigationContainer } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";

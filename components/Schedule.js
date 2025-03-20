@@ -4,6 +4,8 @@ import { Checkbox, List, RadioButton, Divider, Text } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
 import { updateLunchTime } from "../reducers/user";
 
+// Component for Schedule of Lunch Time
+
 export default function Schedule(props) {
   const dispatch = useDispatch();
   const scheduleFromReducer = useSelector(
@@ -27,6 +29,8 @@ export default function Schedule(props) {
       stop: day.stop,
       worked: day.worked,
     }));
+
+    // Save to reducer User
 
     dispatch(updateLunchTime(deepCopySchedule));
   }, [schedule]);

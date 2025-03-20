@@ -10,18 +10,7 @@ import {
   View,
 } from "react-native";
 
-import {
-  TextInput,
-  List,
-  RadioButton,
-  Checkbox,
-  Text,
-  Divider,
-  Button,
-  Switch,
-  Chip,
-  useTheme,
-} from "react-native-paper";
+import { Text, Divider, Button, useTheme } from "react-native-paper";
 
 import { BACKEND_ADRESS } from "../.config";
 import { useDispatch, useSelector } from "react-redux";
@@ -107,82 +96,89 @@ export default function OthersProfileScreen({ navigation, route }) {
       </TouchableOpacity>
       <ScrollView style={styles.inputs_container}>
         <Text style={styles.title}>Mes informations</Text>
-     <View style={styles.infos_container}>
-            <Text style={styles.infos_title}>Pseudo</Text>
-            <Text style={styles.infos_data}>{username}</Text>
-            </View>
-            <View style={styles.infos_container}>
-            <Text style={styles.infos_title}>Prénom</Text>
-            <Text style={styles.infos_data}>{firstname}</Text>
-            </View>
-            <View style={styles.infos_container}>
-            <Text style={styles.infos_title}>Nom</Text>
-            <Text style={styles.infos_data}>{lastname}</Text>
-            </View>
-            <Divider style={{ marginTop: 20, marginBottom: 20 }} />
-            <Text style={styles.title}>Un peu plus sur moi</Text>
-            <View style={styles.infos_container}>
-            <Text style={styles.infos_title}>Mon travail / Mes études</Text>
-            <Text style={styles.infos_data}>{work}</Text>
-            </View>
-            <View style={styles.infos_container}>
-            <Text style={styles.infos_title}>Ma bio</Text>
-            <Text style={styles.infos_data}>{bio}</Text>
-            </View>
+        <View style={styles.infos_container}>
+          <Text style={styles.infos_title}>Pseudo</Text>
+          <Text style={styles.infos_data}>{username}</Text>
+        </View>
+        <View style={styles.infos_container}>
+          <Text style={styles.infos_title}>Prénom</Text>
+          <Text style={styles.infos_data}>{firstname}</Text>
+        </View>
+        <View style={styles.infos_container}>
+          <Text style={styles.infos_title}>Nom</Text>
+          <Text style={styles.infos_data}>{lastname}</Text>
+        </View>
+        <Divider style={{ marginTop: 20, marginBottom: 20 }} />
+        <Text style={styles.title}>Un peu plus sur moi</Text>
+        <View style={styles.infos_container}>
+          <Text style={styles.infos_title}>Mon travail / Mes études</Text>
+          <Text style={styles.infos_data}>{work}</Text>
+        </View>
+        <View style={styles.infos_container}>
+          <Text style={styles.infos_title}>Ma bio</Text>
+          <Text style={styles.infos_data}>{bio}</Text>
+        </View>
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
 
         <Text style={styles.title}>Mes créneaux pour déjeuner</Text>
         <View style={styles.vacancesContainer}>
           {vacancy && <Text>En vacances</Text>}
         </View>
-          <View style={styles.mainCreneaux}>{!vacancy && displayCreneaux}</View>
+        <View style={styles.mainCreneaux}>{!vacancy && displayCreneaux}</View>
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
         <Text style={styles.title}>Types de cuisine préférés</Text>
         <View style={styles.typeFoodContainer}>
           {favFood.length === 0 ? (
-              <Text style={styles.noInfos}>Aucun type de cuisine sélectionné</Text>
-            ) : (favFood.map((type) => (
-            <Button key={type} mode={"contained"} style={styles.badgeButton}>
-              <Text style={styles.badgeButtonActive}>{type}</Text>
-            </Button>
-          ))
-        )}
+            <Text style={styles.noInfos}>
+              Aucun type de cuisine sélectionné
+            </Text>
+          ) : (
+            favFood.map((type) => (
+              <Button key={type} mode={"contained"} style={styles.badgeButton}>
+                <Text style={styles.badgeButtonActive}>{type}</Text>
+              </Button>
+            ))
+          )}
         </View>
 
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
         <Text style={styles.title}>Mes centres d'intérêts</Text>
         <View style={styles.hobbiesContainer}>
           {hobbies.length === 0 ? (
-              <Text style={styles.noInfos}>Aucun centre d'intérêt sélectionné</Text>
-                    ) : (hobbies.map((type) => (
-            <Button
-              key={type}
-              // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
-              mode={"contained"}
-              style={styles.badgeButton}
-            >
-              <Text style={styles.badgeButtonActive}>{type}</Text>
-            </Button>
-          ))
-        )}
+            <Text style={styles.noInfos}>
+              Aucun centre d'intérêt sélectionné
+            </Text>
+          ) : (
+            hobbies.map((type) => (
+              <Button
+                key={type}
+                // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
+                mode={"contained"}
+                style={styles.badgeButton}
+              >
+                <Text style={styles.badgeButtonActive}>{type}</Text>
+              </Button>
+            ))
+          )}
         </View>
 
         <Divider style={{ marginTop: 20, marginBottom: 20 }} />
         <Text style={styles.title}>Mes langues</Text>
         <View style={styles.languageContainer}>
           {languages.length === 0 ? (
-              <Text style={styles.noInfos}>Aucune langue sélectionnée</Text>
-                    ) : (languages.map((type) => (
-            <Button
-              key={type}
-              // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
-              mode={"contained"}
-              style={styles.badgeButton}
-            >
-              <Text style={styles.badgeButtonActive}>{type}</Text>
-            </Button>
-          ))
-        )}
+            <Text style={styles.noInfos}>Aucune langue sélectionnée</Text>
+          ) : (
+            languages.map((type) => (
+              <Button
+                key={type}
+                // Le mode du bouton est en fonction de si le type de cuisine est dans le tableau favFood ou non
+                mode={"contained"}
+                style={styles.badgeButton}
+              >
+                <Text style={styles.badgeButtonActive}>{type}</Text>
+              </Button>
+            ))
+          )}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -234,7 +230,7 @@ const styles = StyleSheet.create({
   },
   infos_container: {
     flexDirection: "row",
-   justifyContent: "space-between",
+    justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
     marginBottom: 10,
@@ -242,27 +238,26 @@ const styles = StyleSheet.create({
   },
   infos_title: {
     display: "flex",
-    flexDirection: 'row',
+    flexDirection: "row",
     justifyContent: "flex-start",
     fontSize: 16,
     fontWeight: "bold",
     width: "40%",
     fontFamily: "Montserrat-Medium",
-
   },
   infos_data: {
     fontSize: 15,
     fontWeight: 300,
     fontFamily: "Montserrat-Medium",
     display: "flex",
-    flexDirection: 'row',
+    flexDirection: "row",
     flexWrap: "wrap",
     textAlign: "right",
     width: "60%",
   },
   noInfos: {
     display: "flex",
-    flexDirection: 'row',
+    flexDirection: "row",
     justifyContent: "center",
     fontSize: 15,
     fontWeight: 300,
@@ -306,7 +301,6 @@ const styles = StyleSheet.create({
   },
   creneauxText: {
     fontFamily: "Montserrat-Medium",
-    
   },
   inputList: {
     marginTop: 10,

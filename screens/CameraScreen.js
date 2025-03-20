@@ -2,22 +2,11 @@ import { useEffect, useState, useRef } from "react";
 import { CameraView, Camera } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { addPhoto, removePhoto } from "../reducers/user";
+import { addPhoto } from "../reducers/user";
 import { BACKEND_ADRESS } from "../.config";
-import { ActivityIndicator, MD2Colors, useTheme } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 import Gif from "../components/Gif";
 
 export default function CameraScreen({ navigation }) {
@@ -113,11 +102,15 @@ export default function CameraScreen({ navigation }) {
               style={styles.settingButton}
               onPress={toggleCameraFacing}
             >
-              <FontAwesome name="rotate-right" size={25} color={theme.colors.primary} />
+              <FontAwesome
+                name="rotate-right"
+                size={25}
+                color={theme.colors.primary}
+              />
             </TouchableOpacity>
           </View>
 
-          <View style={[styles.preview,{ borderColor: theme.colors.primary}]}>
+          <View style={[styles.preview, { borderColor: theme.colors.primary }]}>
             <CameraView
               style={styles.camera}
               ref={(ref) => (cameraRef.current = ref)}
@@ -128,7 +121,11 @@ export default function CameraScreen({ navigation }) {
 
           <View style={styles.snapContainer}>
             <TouchableOpacity style={styles.snapButton} onPress={takePicture}>
-              <FontAwesome name="circle-thin" size={95} color={theme.colors.primary}/>
+              <FontAwesome
+                name="circle-thin"
+                size={95}
+                color={theme.colors.primary}
+              />
             </TouchableOpacity>
           </View>
         </>

@@ -11,7 +11,7 @@ import { addToken, updateProfile } from "../../reducers/user";
 export default function SignUp3Screen({ navigation }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
-  const userReducer = useSelector((state) => state.user.value);
+
   const theme = useTheme();
   const [pseudo, setPseudo] = useState("");
   let isValid = false;

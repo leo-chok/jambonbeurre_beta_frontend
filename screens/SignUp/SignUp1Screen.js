@@ -1,11 +1,6 @@
 import { useState } from "react";
 
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 
 import {
   TextInput,
@@ -22,7 +17,7 @@ import { addToken } from "../../reducers/user";
 export default function SignUp1Screen({ navigation }) {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const userReducer = useSelector((state) => state.user.value);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -32,7 +27,7 @@ export default function SignUp1Screen({ navigation }) {
   const userdata = { email: email, password: password };
 
   const hasErrors = () => {
-    return !email.includes("@");
+    return !email.includes("@") || !email.includes(".");
   };
 
   // Bouton Suivant
@@ -50,8 +45,8 @@ export default function SignUp1Screen({ navigation }) {
           if (data.result) {
             dispatch(addToken(data.newUser));
             navigation.navigate("SignUp2");
-          }else{
-             alert("Un compte utilise déjà cette adresse email");
+          } else {
+            alert("Un compte utilise déjà cette adresse email");
           }
         })
         .catch((error) => {
@@ -59,6 +54,8 @@ export default function SignUp1Screen({ navigation }) {
         });
     }
   };
+
+  // On vérifie que les 3 chamsp de textes soient remplis
 
   if (email !== "" && password !== "" && password2 !== "") {
     isValid = true;
@@ -82,7 +79,7 @@ export default function SignUp1Screen({ navigation }) {
           />
           {email.length > 3 && (
             <HelperText type="error" visible={hasErrors()}>
-              Email address is invalid!
+              L'adresse email est invalide
             </HelperText>
           )}
 
@@ -106,7 +103,7 @@ export default function SignUp1Screen({ navigation }) {
           />
           <View style={styles.submitContainer}>
             <Button
-              // Le mode du bouton change si les 3 champs sont remplis
+              // Le mode du bouton change, et devient actif, si les 3 champs sont remplis
               mode={isValid ? "contained" : "contained-tonal"}
               onPress={() => handleSuivant()}
               style={styles.badgeButton}

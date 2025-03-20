@@ -2,26 +2,13 @@ import { useEffect, useState } from "react";
 
 import {
   Image,
-  KeyboardAvoidingView,
-  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
 } from "react-native";
 
-import {
-  TextInput,
-  List,
-  RadioButton,
-  Checkbox,
-  Text,
-  Divider,
-  Button,
-  Switch,
-  Chip,
-  useTheme,
-} from "react-native-paper";
+import { Text, Divider, Button, useTheme } from "react-native-paper";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -32,7 +19,6 @@ import { useIsFocused } from "@react-navigation/native";
 
 export default function ProfileScreen({ navigation }) {
   const isFocused = useIsFocused();
-  const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.authentification.token);
   const [userData, setUserData] = useState({});
   const [username, setUsername] = useState("");
@@ -121,10 +107,10 @@ export default function ProfileScreen({ navigation }) {
           onPress={() => handleEditAvatar()}
           style={styles.avatarContainer}
         >
-            <Image
-              style={styles.avatar}
-              source={avatar && { uri: `${avatar}` }}
-            />
+          <Image
+            style={styles.avatar}
+            source={avatar && { uri: `${avatar}` }}
+          />
         </TouchableOpacity>
         <ScrollView style={styles.inputs_container}>
           <Text style={styles.title}>Mes informations</Text>
@@ -160,7 +146,9 @@ export default function ProfileScreen({ navigation }) {
           <Text style={styles.title}>Types de cuisine préférés</Text>
           <View style={styles.typeFoodContainer}>
             {favFood.length === 0 ? (
-              <Text style={styles.noInfos}>Aucun type de cuisine sélectionné</Text>
+              <Text style={styles.noInfos}>
+                Aucun type de cuisine sélectionné
+              </Text>
             ) : (
               favFood.map((type) => (
                 <Button
@@ -177,7 +165,9 @@ export default function ProfileScreen({ navigation }) {
           <Text style={styles.title}>Mes centres d'intérêts</Text>
           <View style={styles.hobbiesContainer}>
             {hobbies.length === 0 ? (
-              <Text style={styles.noInfos}>Aucun centre d'intérêt sélectionné</Text>
+              <Text style={styles.noInfos}>
+                Aucun centre d'intérêt sélectionné
+              </Text>
             ) : (
               hobbies.map((type) => (
                 <Button
@@ -339,7 +329,6 @@ const styles = StyleSheet.create({
   },
   creneauxText: {
     fontFamily: "Montserrat-Medium",
-    
   },
   inputList: {
     marginTop: 10,

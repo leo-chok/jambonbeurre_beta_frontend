@@ -32,7 +32,7 @@ import ModifyPhotoScreen from "./screens/ModifyPhotoScreen";
 import AgendaPastScreen from "./screens/AgendaPastScreen";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { PaperProvider, configureFonts, MD2LightTheme } from "react-native-paper";
+import { PaperProvider } from "react-native-paper";
 
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
@@ -43,10 +43,14 @@ import restaurantFilter from "./reducers/restaurantFilter";
 
 import OthersProfileScreen from "./screens/OthersProfileScreen";
 
+
+// Init Redux Store
 const store = configureStore({
   reducer: { user, reservations, discussions, restaurantFilter },
 });
 
+
+// Init Navigations Stack and TAB
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const StackNavigator = () => {
@@ -113,11 +117,12 @@ const TabNavigator = () => {
   );
 };
 
+
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
 
- 
+// Init colors theme with React Paper
   const theme = {
     colors: {
       primary: "rgb(254, 87, 71)",
@@ -162,6 +167,8 @@ export default function App() {
       backdrop: "rgba(55, 46, 52, 0.4)",
     },
   };
+
+// Load Fonts for screens
   const [loaded, error] = useFonts({
     "OldStandard-Bold": require("./assets/fonts/OldStandardTT-Bold.ttf"),
     "Montserrat-Medium": require("./assets/fonts/Montserrat-Medium.ttf"),
@@ -172,6 +179,7 @@ export default function App() {
     "LeagueSpartan-SemiBold": require("./assets/fonts/LeagueSpartan-SemiBold.ttf"),
   });
 
+
   useEffect(() => {
     if (loaded || error) {
       SplashScreen.hideAsync();
@@ -181,6 +189,8 @@ export default function App() {
   if (!loaded && !error) {
     return null;
   }
+
+  
   return (
     <SafeAreaProvider>
       <Provider store={store}>

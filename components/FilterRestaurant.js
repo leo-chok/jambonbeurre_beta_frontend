@@ -1,10 +1,8 @@
-import { useEffect } from "react";
 import * as React from "react";
 
 import { View, ScrollView, StyleSheet } from "react-native";
 import { Button, Divider, Text, useTheme } from "react-native-paper";
-import { BACKEND_ADRESS } from "../.config";
-import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
+
 import { useDispatch, useSelector } from "react-redux";
 import restaurantsTypes from "../assets/data/restaurantsTypes";
 import {
@@ -18,7 +16,7 @@ export default function FilterRestaurant(props) {
   const dispatch = useDispatch();
   const filterRestaurant = useSelector((state) => state.restaurantFilter.value);
 
-  // On vient ajouter ou retirer un hobby dans le tableau hobbies
+  // On vient ajouter ou retirer un Type de restaurant dans le reducer filterRestaurant
   function updateList(type) {
     dispatch(setFilter(type));
   }
@@ -31,6 +29,7 @@ export default function FilterRestaurant(props) {
     dispatch(fillFilter());
   }
 
+// Traduction des types de restaurants Google en texte Français pour afficher les boutons.
   const buttons = restaurantsTypes.map((type) => {
     let textButton = "Restaurant";
 

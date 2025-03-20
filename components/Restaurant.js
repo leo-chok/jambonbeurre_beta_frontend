@@ -1,27 +1,17 @@
-import { useEffect } from "react";
 import * as React from "react";
 
 import {
   View,
-  ScrollView,
   StyleSheet,
   Image,
   Linking,
   TouchableOpacity,
 } from "react-native";
-import {
-  Checkbox,
-  List,
-  RadioButton,
-  Divider,
-  Text,
-  Dialog,
-} from "react-native-paper";
-import { BACKEND_ADRESS } from "../.config";
+import { Text } from "react-native-paper";
+
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import { useSelector } from "react-redux";
 import JoinReservation from "../components/JoinReservation";
-import restaurantsTypes from "../assets/data/restaurantsTypes";
 
 export default function Restaurant(props) {
   let restaurantId = props.id;
@@ -55,7 +45,7 @@ export default function Restaurant(props) {
     meal_takeaway: require("../assets/restaurants_img/take-away.jpg"),
     japanese_restaurant: require("../assets/restaurants_img/japanese.jpg"),
   };
-
+  // Traduction française des types de restaurants Google
   const typeInFrench = (restaurantType) => {
     let textButton = "Restaurant";
     if (restaurantType === "hamburger_restaurant") {
@@ -113,15 +103,11 @@ export default function Restaurant(props) {
     return textButton;
   };
 
-  const textType = typeInFrench(restaurantType)
+  const textType = typeInFrench(restaurantType);
 
   const restaurantImage =
     restaurantImages[props.type] ||
     require("../assets/restaurants_img/restaurant.jpg");
-
-  // Modifier le titre du restaurant
-
-  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
   // Créer la navigation vers le restaurant depuis Google maps
 

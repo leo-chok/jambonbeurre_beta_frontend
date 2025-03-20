@@ -1,12 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   Image,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -14,14 +10,12 @@ import { Text, Button, useTheme } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 import { BACKEND_ADRESS } from "./../.config";
 import { useDispatch, useSelector } from "react-redux";
-import { addToken, addPhoto } from "./../reducers/user";
-import { ActivityIndicator, MD2Colors } from "react-native-paper";
+import { addPhoto } from "./../reducers/user";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Gif from "../components/Gif";
 
 export default function ModifyPhotoScreen({ navigation }) {
   const dispatch = useDispatch();
-  const userReducer = useSelector((state) => state.user.value);
   const token = useSelector((state) => state.user.value.authentification.token);
   const imageReducer = useSelector((state) => state.user.value.infos.avatar);
   const [isLoading, setIsLoading] = useState(false);

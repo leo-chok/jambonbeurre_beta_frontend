@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { BACKEND_ADRESS } from "../.config";
 
-import Invitation from "../components/Invitation";
+
 
 export default function MakeReservation(props) {
   let restaurantId = props.restaurantId;

@@ -13,7 +13,6 @@ import {
   Divider,
   Button,
   Switch,
-  ActivityIndicator,
   useTheme,
 } from "react-native-paper";
 
