@@ -12,7 +12,7 @@ import {
 import { useSelector } from "react-redux";
 
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
-import { BACKEND_ADRESS } from "../.config";
+import { BACKEND_ADRESS } from "../config";
 import MakeReservation from "../components/MakeReservation";
 
 

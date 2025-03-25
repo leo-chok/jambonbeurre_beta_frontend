@@ -25,7 +25,7 @@ import {
 import FilterRestaurant from "../components/FilterRestaurant";
 import Restaurant from "../components/Restaurant";
 import mapStyle from "../assets/data/mapStyle";
-import { BACKEND_ADRESS } from "../.config";
+import { BACKEND_ADRESS } from "../config";
 import { Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import OthersProfileScreen from "./OthersProfileScreen";

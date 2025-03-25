@@ -26,7 +26,7 @@ import {
 import { useSelector } from "react-redux";
 import { addDiscussionToStore } from "../reducers/discussions";
 
-import { BACKEND_ADRESS } from "../.config";
+import { BACKEND_ADRESS } from "../config";
 import { ScreenStackHeaderSearchBarView } from "react-native-screens";
 export default function ChatNewConversationScreen({ navigation }) {
   const theme = useTheme();

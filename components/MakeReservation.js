@@ -13,7 +13,7 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
-import { BACKEND_ADRESS } from "../.config";
+import { BACKEND_ADRESS } from "../config";
 
 
 

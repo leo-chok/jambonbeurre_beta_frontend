@@ -15,7 +15,7 @@ import {
   displayReservations,
 } from "../reducers/reservations";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { BACKEND_ADRESS } from "../.config";
+import { BACKEND_ADRESS } from "../config";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function AgendaInvitListScreen({ route, navigation }) {

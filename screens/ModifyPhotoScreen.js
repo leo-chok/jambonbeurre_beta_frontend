@@ -8,7 +8,7 @@ import {
 
 import { Text, Button, useTheme } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
-import { BACKEND_ADRESS } from "./../.config";
+import { BACKEND_ADRESS } from "../config";
 import { useDispatch, useSelector } from "react-redux";
 import { addPhoto } from "./../reducers/user";
 import { SafeAreaView } from "react-native-safe-area-context";

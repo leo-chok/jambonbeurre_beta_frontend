@@ -12,7 +12,7 @@ import {
 
 import { Text, Divider, Button, useTheme } from "react-native-paper";
 
-import { BACKEND_ADRESS } from "../.config";
+import { BACKEND_ADRESS } from "../config";
 import { useDispatch, useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 

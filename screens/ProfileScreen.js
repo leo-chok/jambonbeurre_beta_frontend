@@ -12,7 +12,7 @@ import { Text, Divider, Button, useTheme } from "react-native-paper";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { BACKEND_ADRESS } from "../.config";
+import { BACKEND_ADRESS } from "../config";
 import { TABBAR_SIZE } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";

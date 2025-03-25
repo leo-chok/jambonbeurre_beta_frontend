@@ -24,7 +24,7 @@ import {
 } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { chargeDiscussions } from "../reducers/discussions";
-import { BACKEND_ADRESS } from "../.config";
+import { BACKEND_ADRESS } from "../config";
 import Feather from "@expo/vector-icons/Feather";
 import { Ionicons } from "@expo/vector-icons"; // Importer les icônes
 import Gif from "../components/Gif";

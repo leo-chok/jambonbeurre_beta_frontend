@@ -15,7 +15,7 @@ import {
   useTheme,
 } from "react-native-paper";
 
-import { BACKEND_ADRESS } from "../../.config";
+import { BACKEND_ADRESS } from "../../config";
 import { useDispatch, useSelector } from "react-redux";
 import { addToken } from "../../reducers/user";
 import Schedule from "../../components/Schedule";

@@ -20,7 +20,7 @@ import Schedule from "../components/Schedule";
 import foodType from "../assets/data/foodTypes";
 import hobbiesList from "../assets/data/hobbiesList";
 import languagesList from "../assets/data/languagesList";
-import { BACKEND_ADRESS } from "../.config";
+import { BACKEND_ADRESS } from "../config";
 
 import { updateProfile } from "../reducers/user";
 import { useDispatch, useSelector } from "react-redux";

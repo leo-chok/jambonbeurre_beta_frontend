@@ -11,7 +11,7 @@ import {
   Button,
   useTheme,
 } from "react-native-paper";
-import { BACKEND_ADRESS } from "../.config";
+import { BACKEND_ADRESS } from "../config";
 import { TABBAR_SIZE } from "../constants";
 
 export default function UnsubscribeScreen({ navigation }) {

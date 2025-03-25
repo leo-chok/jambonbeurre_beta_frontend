@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { addPhoto } from "../reducers/user";
-import { BACKEND_ADRESS } from "../.config";
+import { BACKEND_ADRESS } from "../config";
 import { useTheme } from "react-native-paper";
 import Gif from "../components/Gif";
 

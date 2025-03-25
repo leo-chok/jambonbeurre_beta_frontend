@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToken, updateProfile } from "../../reducers/user";
-import { BACKEND_ADRESS } from "../../.config";
+import { BACKEND_ADRESS } from "../../config";
 import {
   ScrollView,
   StyleSheet,

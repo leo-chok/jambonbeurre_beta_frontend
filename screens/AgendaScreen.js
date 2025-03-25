@@ -24,7 +24,7 @@ import {
   deleteReservation,
   displayReservations,
 } from "../reducers/reservations";
-import { BACKEND_ADRESS } from "./../.config";
+import { BACKEND_ADRESS } from "../config";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
